@@ -12,3 +12,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
  })
 
  export const { useGetKpisQuery } = api;
+
+
+//  //Mongo db 
+//  Username: hernandezbarriossamuel
+//  password: eco_07
+// IP: 189.234.144.161/32
+
