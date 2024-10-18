@@ -4,14 +4,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
     reducerPath: "main", 
     tagTypes: [],
     endpoints: (build) => ({
-        getKpis: build.query<void, void>({
-            query: () => "kpi/kpis/", 
-            providesTags: ["Kpis"]
+        getSensorData: build.query<void, void>({
+            query: () => "sensor/sensors/", 
+            providesTags: ["Sensors"]
         })
     })
  })
 
- export const { useGetKpisQuery } = api;
+ export const { useGetSensorDataQuery } = api;
 
 
 //  //Mongo db 
@@ -19,3 +19,5 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 //  password: eco_07
 // IP: 189.234.144.161/32
 
+//"kpi/kpis = sensor/sensors"
+//Kpis = Sensors
