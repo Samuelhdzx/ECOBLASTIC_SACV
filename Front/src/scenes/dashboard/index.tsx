@@ -5,20 +5,20 @@ import Row3 from './row3';
 
 
 
-const gridTemplateLargeScreens   = `
-    "a b c"
-    "a b c"
-    "a b c"
-    "a b c"
-    "a b c"
-    "d h i"
-    "d h i"
-    "d h i"
-    "d h i"
-    "d h i"
-
+const gridTemplateLargeScreens = `
+    "a b c d"
+    "a b c d"
+    "a b c d"
+    "a b c d"
+    "a b c d"
+    "a h i d"
+    "a h i d"
+    "a h i d"
+    "a h i d"
+    "a h i d"
 `;
-const gridTemplateSmallScreens   = `
+
+const gridTemplateSmallScreens = `
     "a"
     "a"
     "a"
@@ -35,20 +35,12 @@ const gridTemplateSmallScreens   = `
     "d"
     "e"
     "e"
-    "f"
-    "f"
-    "f"
-    "g"
-    "g"
-    "g"
     "h"
     "h"
     "h"
-    "h"
-    "i"
-    "i"
-    "j"
-    "j"
+    "c"
+    "c"
+    "c"
 `;
 
     const Dashboard = () => {
@@ -62,7 +54,7 @@ const gridTemplateSmallScreens   = `
       sx={
         isAboveMediumScreens
           ? {
-              gridTemplateColumns: "repeat(3, minmax(370px, 1fr))",
+              gridTemplateColumns: "repeat(4, minmax(370px, 1fr))",
               gridTemplateRows: "repeat(10, minmax(60px, 1fr))",
               gridTemplateAreas: gridTemplateLargeScreens,
             }
