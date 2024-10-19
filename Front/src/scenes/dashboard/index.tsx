@@ -1,21 +1,22 @@
 import { Box, useMediaQuery } from '@mui/material';
-import Row1 from './row1';
-import Row2 from './row2';
-import Row3 from './row3';
+import Row1 from './Row1';
+import Row2 from './Row2';
+import Row3 from './Row3';
 
 
 
 const gridTemplateLargeScreens = `
-    "a b c d"
-    "a b c d"
-    "a b c d"
-    "a b c d"
-    "a b c d"
-    "a h i d"
-    "a h i d"
-    "a h i d"
-    "a h i d"
-    "a h i d"
+   "a b c"
+    "a b c"
+    "a b c"
+    "a b c"
+    "a b c"
+    "d h c"
+    "d h c"
+    "d h c"
+    "d h c"
+    "d h c"
+
 `;
 
 const gridTemplateSmallScreens = `
@@ -41,7 +42,9 @@ const gridTemplateSmallScreens = `
     "c"
     "c"
     "c"
-`;
+    "c"
+    "g"
+    `;
 
     const Dashboard = () => {
     const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -54,8 +57,8 @@ const gridTemplateSmallScreens = `
       sx={
         isAboveMediumScreens
           ? {
-              gridTemplateColumns: "repeat(4, minmax(370px, 1fr))",
-              gridTemplateRows: "repeat(10, minmax(60px, 1fr))",
+              gridTemplateColumns: "repeat(3, minmax(370px, 1fr))",
+              gridTemplateRows: "repeat(10, minmax(55px, 1fr))",
               gridTemplateAreas: gridTemplateLargeScreens,
             }
           : {
