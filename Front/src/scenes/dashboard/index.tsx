@@ -6,45 +6,50 @@ import Row3 from './Row3';
 
 
 const gridTemplateLargeScreens = `
-   "a b c"
-    "a b c"
-    "a b c"
-    "a b c"
-    "a b c"
-    "d h c"
-    "d h c"
-    "d h c"
-    "d h c"
-    "d h c"
-
+  "a b c"
+  "a b c"
+  "a b c"
+  "a b c"
+  "a b c"
+  "d e c"
+  "d e c"
+  "d e c"
+  "d e c"
+  "d e c"
+`;
+const gridTemplateSmallScreens = `
+  "a"
+  "a"
+  "a"
+  "a"
+  "b"
+  "b"
+  "b"
+  "b"
+  "c"
+  "c"
+  "c"
+  "d"
+  "d"
+  "d"
+  "e"
+  "e"
+  "f"
+  "f"
+  "f"
+  "g"
+  "g"
+  "g"
+  "h"
+  "h"
+  "h"
+  "h"
+  "i"
+  "i"
+  "j"
+  "j"
 `;
 
-const gridTemplateSmallScreens = `
-    "a"
-    "a"
-    "a"
-    "a"
-    "b"
-    "b"
-    "b"
-    "b"
-    "c"
-    "c"
-    "c"
-    "d"
-    "d"
-    "d"
-    "e"
-    "e"
-    "h"
-    "h"
-    "h"
-    "c"
-    "c"
-    "c"
-    "c"
-    "g"
-    `;
 
     const Dashboard = () => {
     const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
@@ -58,7 +63,7 @@ const gridTemplateSmallScreens = `
         isAboveMediumScreens
           ? {
               gridTemplateColumns: "repeat(3, minmax(370px, 1fr))",
-              gridTemplateRows: "repeat(10, minmax(55px, 1fr))",
+              gridTemplateRows: "repeat(10, minmax(52px, 1fr))",
               gridTemplateAreas: gridTemplateLargeScreens,
             }
           : {
