@@ -5,6 +5,7 @@ const router = express.Router();
 
 //ENDPOINTS
 
+
 //create date
 router.post('/data_sensors', (req, res) => {
     const data_sensors = data_sensorsSchema(req.body);
@@ -16,10 +17,13 @@ router.post('/data_sensors', (req, res) => {
 
 // get all dates
 router.get('/data_sensors', (req, res) => {
+    console.log('GET request received for /data_sensors');
     data_sensorsSchema
     .find()
-    .then((data) => res.json(data))
-    .catch((error) => res.json({message: error}))
+    .then((data) => {
+        console.log('Data found:', data);
+        res.json(data);
+    }).catch((error) => res.json({message: error}))
 });
 
 // get a date
@@ -48,5 +52,8 @@ router.delete('/data_sensors/:id', (req, res) => {
     .then((data) => res.json(data))
     .catch((error) => res.json({message: error}))
 });
+
+
+
 
 export default router;

@@ -2,11 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
  export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_BASE_URL}),
     reducerPath: "main", 
-    tagTypes: [],
+    tagTypes: ["Sensors"],
     endpoints: (build) => ({
-        getSensorData: build.query<void, void>({
-            query: () => "sensor/sensors/", 
-            providesTags: ["Sensors"]
+        getSensorData: build.query({
+            query: () => "api/data_sensors/", 
+            providesTags: ["Sensors"],
         })
     })
  })

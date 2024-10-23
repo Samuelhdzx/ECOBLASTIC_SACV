@@ -2,14 +2,24 @@ import express from "express";
 import  dotenv from "dotenv";
 import mongoose from "mongoose";
 import data_sensorsRoutes from "./routes/data_sensors.js";
+import bodyParser from "body-parser";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+
 //configs
 dotenv.config();
+const app = express();
+app.use(express.json());
+app.use(morgan("common"));
+app.use(bodyParser.json());
+app.use(cors());
+app.use(helmet());
 
 // settings
-const app = express();
 const port = process.env.PORT || 9000;
 
-app.use(express.json());
+
 app.use('/api', data_sensorsRoutes);
 
 //routes
