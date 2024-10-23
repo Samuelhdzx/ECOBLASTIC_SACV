@@ -11,11 +11,11 @@ const gridTemplateLargeScreens = `
   "a b c"
   "a b c"
   "a b c"
-  "d e c"
-  "d e c"
-  "d e c"
-  "d e c"
-  "d e c"
+  "d b c"
+  "d h i"
+  "d h i"
+  "d h i"
+  "d h i"
 `;
 const gridTemplateSmallScreens = `
   "a"
@@ -51,6 +51,7 @@ const gridTemplateSmallScreens = `
 `;
 
 
+
     const Dashboard = () => {
     const isAboveMediumScreens = useMediaQuery("(min-width: 1200px)");
     return(
@@ -58,12 +59,13 @@ const gridTemplateSmallScreens = `
       width="100%"
       height="100%"
       display="grid"
-      gap="1.5rem"
+      gap="1.7rem"
+      
       sx={
         isAboveMediumScreens
           ? {
-              gridTemplateColumns: "repeat(3, minmax(370px, 1fr))",
-              gridTemplateRows: "repeat(10, minmax(52px, 1fr))",
+              gridTemplateColumns: "repeat(3, minmax(500px, 1fr))",
+              gridTemplateRows: "repeat(10, minmax(70px, 1fr))",
               gridTemplateAreas: gridTemplateLargeScreens,
             }
           : {

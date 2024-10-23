@@ -17,11 +17,9 @@ router.post('/data_sensors', (req, res) => {
 
 // get all dates
 router.get('/data_sensors', (req, res) => {
-    console.log('GET request received for /data_sensors');
     data_sensorsSchema
     .find()
     .then((data) => {
-        console.log('Data found:', data);
         res.json(data);
     }).catch((error) => res.json({message: error}))
 });
