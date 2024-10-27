@@ -4,24 +4,24 @@ Content-Type: application/json
 
 {
     "polymerUsage": {
-        "pet": 85,
-        "polypropylene": 20
+        "pet": 45,
+        "polypropylene": 67
     },
     "potentiometerEnergy": {
-        "used": 95,
-        "remaining": 5
-    },
-    "injectorEnergy": {
-        "used": 95,
+        "used": 65,
         "remaining": 25
     },
-    "moldUsage": {
-        "mold1": 58,
-        "mold2": 20,
-        "mold3": 30
+    "injectorEnergy": {
+        "used": 55,
+        "remaining": 5
     },
-    "temperature": 12,
-    "injectionTime": 29,
+    "moldUsage": {
+        "mold1": 8,
+        "mold2": 28,
+        "mold3": 50
+    },
+    "temperature": 78,
+    "injectionTime": 89,
     "date": "2024-01-15T08:00:00"
 }
 
