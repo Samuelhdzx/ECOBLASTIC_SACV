@@ -28,6 +28,8 @@ app.get("/", (req, res) => {
 });
 
 //mongo db connection
+console.log('Intentando conectar con URI:', process.env.MONGO_URI); // <- AQUÍ el nuevo console.log
+
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => console.log("Connected to MongoDB Atlas"))
