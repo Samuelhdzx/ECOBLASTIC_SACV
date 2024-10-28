@@ -1,3 +1,5 @@
+// "@" es la ruta hasta la carpeta de src
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useMemo } from "react";
 import { themeSettings } from "./theme";
