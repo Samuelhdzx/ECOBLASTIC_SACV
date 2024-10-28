@@ -10,11 +10,11 @@ const Navbar = (props: Props) => {
     const { palette } = useTheme();
     const [selected, setSelected] = useState("dashboard");
     return (
-    <FlexBetween mb="0.25rem" p="0-5rem 0rem" color={palette.grey[300]}>
+    <FlexBetween mb="0.25rem" p="2rem 0rem" color={palette.grey[300]}>
         {/* LEFT  */}
-        <FlexBetween gap="0.75rem">
-        <img src={logo} alt="Company Logo" style={{ height: '60px'}} /> {/* Adjust height as needed */}
-        <Typography variant="h4" fontSize="25px" color="#1d44ab">ECOBLASTIC</Typography>
+        <FlexBetween gap="1rem">
+        <img src={logo} alt="Company Logo" style={{ height: '30px'}} /> {/* Adjust height as needed */}
+        <Typography variant="h4" fontSize="25px" color="white">ECOBLASTIC</Typography>
         </FlexBetween>
 
         {/* RIGHT SIDE */}
@@ -27,6 +27,7 @@ const Navbar = (props: Props) => {
                style={{
                 color: selected === "inicio" ? "inherit" : palette.grey[700],
                 textDecoration: "inherit",
+                fontSize: "18px",
               }}
               >
               Inicio
@@ -39,6 +40,7 @@ const Navbar = (props: Props) => {
                style={{
                 color: selected === "dashboard" ? "inherit" : palette.grey[700],
                 textDecoration: "inherit",
+                fontSize: "18px",
               }}
               >
               Monitoreo 
@@ -51,6 +53,7 @@ const Navbar = (props: Props) => {
                style={{
                 color: selected === "predictions" ? "inherit" : palette.grey[700],
                 textDecoration: "inherit",
+                fontSize: "18px",
               }}
               >
               Prediccion
@@ -63,6 +66,7 @@ const Navbar = (props: Props) => {
                style={{
                 color: selected === "registers" ? "inherit" : palette.grey[700],
                 textDecoration: "inherit",
+                fontSize: "18px",
               }}
               >
               Registos
@@ -75,6 +79,7 @@ const Navbar = (props: Props) => {
                style={{
                 color: selected === "manuals" ? "inherit" : palette.grey[700],
                 textDecoration: "inherit",
+                fontSize: "18px",
               }}
               >
               Manuales
@@ -87,6 +92,7 @@ const Navbar = (props: Props) => {
                style={{
                 color: selected === "plastics" ? "inherit" : palette.grey[700],
                 textDecoration: "inherit",
+                fontSize: "18px",
               }}
               >
               Plásticos
