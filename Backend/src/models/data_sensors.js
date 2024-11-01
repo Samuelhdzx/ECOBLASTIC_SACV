@@ -23,6 +23,8 @@ const data_sensorsSchema = mongoose.Schema({
     date: { type: Date, default: Date.now }
 });
 
+
+
 export default mongoose.model('DataSensors', data_sensorsSchema);
 
 

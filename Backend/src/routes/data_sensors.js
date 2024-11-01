@@ -52,6 +52,6 @@ router.delete('/data_sensors/:id', (req, res) => {
 });
 
 
-
+    
 
 export default router;
