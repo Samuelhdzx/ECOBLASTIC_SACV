@@ -1,5 +1,5 @@
 import express from "express";
-import  dotenv from "dotenv";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 import data_sensorsRoutes from "./routes/data_sensors.js";
 import bodyParser from "body-parser";
@@ -11,7 +11,7 @@ import morgan from "morgan";
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(morgan("common"));
+app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cors());
 app.use(helmet());
@@ -37,3 +37,4 @@ mongoose
 
 // server listening
 app.listen(port, () => console.log("Server listening to", port));
+
