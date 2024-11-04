@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
     "polymerUsage": {
-        "pet": 67,
-        "polypropylene": 33
+        "pet": 69,
+        "polypropylene": 22
     },
     "potentiometerEnergy": {
         "used": 55,

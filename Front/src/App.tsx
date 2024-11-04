@@ -6,9 +6,8 @@ import { themeSettings } from "./theme";
 import { Box, CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "@/scenes/navbar/index";
-import Dashboard from "@/scenes/dashboard";
 import Inicio from "@/scenes/Inicio/index";
-
+import Dashboard from "@/scenes/dashboard";
 
 
 function App() {
@@ -21,8 +20,8 @@ function App() {
         <Box width="100%" height="100%" padding="1rem 2rem 4rem 2rem">
           <Navbar />
           <Routes>
-            <Route path="/" element={<Dashboard />}/> 
             <Route path="/inicio" element= {<Inicio />}/>
+            <Route path="/" element={<Dashboard />}/> 
             <Route path="/predictions" element={<div>Pre-Monitoreo</div>} />
             <Route path="/registers" element={<div>Registros</div>} />
             <Route path="/manuals" element={<div>Manuales</div>} />

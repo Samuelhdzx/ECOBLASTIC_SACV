@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, Typography, useTheme } from "@mui/material";
 import FlexBetween from "@/components/FlexBetween";
-import logo from "/img/logo.png";
+import logo from "/img/LOGO.png";
 
 type Props = {};
 
@@ -13,7 +13,7 @@ const Navbar = (props: Props) => {
     <FlexBetween mb="0.25rem" p="2rem 0rem" color={palette.grey[300]}>
         {/* LEFT  */}
         <FlexBetween gap="1rem">
-        <img src={logo} alt="Company Logo" style={{ height: '30px'}} /> {/* Adjust height as needed */}
+        <img src={logo} alt="Company Logo" style={{ height: '5em'}} /> {/* Adjust height as needed */}
         <Typography variant="h4" fontSize="25px" color="white">ECOBLASTIC</Typography>
         </FlexBetween>
 
