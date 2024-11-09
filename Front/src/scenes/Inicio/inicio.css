@@ -11,7 +11,16 @@
     font-family: 'Poppins', sans-serif;
 }
 
+button {
+    font-size: 35px;
+    background-color: white;
+    border-radius: 50px;
+    padding: 10px 10px 10px 10px;
+}
 
+button:hover{
+    background-color: rgb(78, 77, 81);
+}
 
 .cont {
     display: flex;

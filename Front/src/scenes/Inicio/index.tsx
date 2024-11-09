@@ -1,6 +1,6 @@
 import React from 'react';
 import './inicio.css';
-
+import celular from 'front/public/img/PÁGINA PRINCIPAL/celular.png';
 
 const Inicio: React.FC = () => {
   return (
@@ -10,6 +10,7 @@ const Inicio: React.FC = () => {
                 <div className='info'>
                     <h1>Inyecta eficiencia en tu produccion</h1>
                     <p>ECOBLASTIC es una aplicación innovadora que te permite monitorear tu inyectora de plástico desde cualquier lugar, de una manera eficaz y completamente segura.</p>
+                    <button>Comenzar</button>
                 </div>
                 <div className='img'>
                     <i className="fi fi-bs-digital-payment"></i>
