@@ -9,10 +9,6 @@ h1 {
     color: white;
 }
 
-p {
-    transform: rotateX('-20deg');
-}
-
 .all{
     text-align: center;
 }
@@ -25,9 +21,14 @@ p {
     align-items: center;
     justify-content: center;
     flex: 1;
-    font-size: 0.8em;
 }
 
-.plastico i, P {
-    color: white;
+.plastico img{
+    height: 40em;
+}
+
+.plastico img:hover{
+    border: solid 1px;
+    border-color: aliceblue;
+    border-radius: 20px;
 }

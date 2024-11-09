@@ -1,5 +1,8 @@
 import React from 'react';
 import './plasticos.css';
+import pet from "front/public/img/MONITOREO/pet.png";
+import polipropileno from "front/public/img/MONITOREO/pp.png";
+
 
 
 const Plasticos: React.FC = () => {
@@ -8,12 +11,14 @@ const Plasticos: React.FC = () => {
       <h1>Seleccione el plastico a emplear</h1>
       <div className='imagenes'>
         <div className='plastico'>
-          <i className="fi fi-rr-recycle"></i>
-          <p>Polipropileno</p>
+          <a href="../Inicio">
+              <img src={polipropileno} alt="polipropileno"/>
+          </a>
         </div>
         <div className='plastico'>
-          <i className="fi fi-ts-bio-leaves"></i>
-          <p>PET</p>
+          <a href="../Inicio">
+            <img src={pet} alt="pet"/>
+          </a>
         </div>
       </div>
     </div>
@@ -21,5 +26,3 @@ const Plasticos: React.FC = () => {
 };
 
 export default Plasticos;
-
-

@@ -1,6 +1,7 @@
 import React from 'react';
 import './inicio.css';
 import celular from 'front/public/img/PÁGINA PRINCIPAL/celular.png';
+import computadora from 'front/public/img/PÁGINA PRINCIPAL/compu.png';
 
 const Inicio: React.FC = () => {
   return (
@@ -13,14 +14,14 @@ const Inicio: React.FC = () => {
                     <button>Comenzar</button>
                 </div>
                 <div className='img'>
-                    <i className="fi fi-bs-digital-payment"></i>
+                    <img src={celular} alt="" />
                 </div>
             </div>
             </section>
             <section>
             <div className='cont'>
-                <div className='img-2'>
-                    <i className="fi fi-rr-dashboard-monitor"></i>
+                <div className='img'>
+                    <img src={computadora} alt="datos" />
                 </div>
                 <div className='info-2'>
                     <h1>Simplifica tu proceso de inyeccion con Ecoblastic</h1>

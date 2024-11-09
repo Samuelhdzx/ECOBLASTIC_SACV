@@ -7,7 +7,7 @@ import { Box, CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "@/scenes/navbar/index";
 import Inicio from "@/scenes/Inicio/index";
-import Plasticos from "@/scenes/Plastico/Seleccion/Plasticos";
+import Plasticos from "@/scenes/Plastico/Plasticos";
 import Dashboard from "@/scenes/dashboard";
 
 
