@@ -7,6 +7,7 @@ import { Box, CssBaseline } from "@mui/material";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "@/scenes/navbar/index";
 import Inicio from "@/scenes/Inicio/index";
+import Plasticos from "@/scenes/Plastico/Seleccion/Plasticos";
 import Dashboard from "@/scenes/dashboard";
 
 
@@ -25,7 +26,7 @@ function App() {
             <Route path="/predictions" element={<div>Pre-Monitoreo</div>} />
             <Route path="/registers" element={<div>Registros</div>} />
             <Route path="/manuals" element={<div>Manuales</div>} />
-            <Route path="/plastics" element={<div>Plasticos</div>} /> 
+            <Route path="/plastics" element={<Plasticos />} /> 
           </Routes>
         </Box>
         </ThemeProvider>
