@@ -11,7 +11,7 @@ const Plasticos: React.FC = () => {
       <h1>Seleccione el plastico a emplear</h1>
       <div className='imagenes'>
         <div className='plastico'>
-          <a href="../Inicio">
+          <a href="../Datos">
               <img src={polipropileno} alt="polipropileno"/>
           </a>
         </div>
