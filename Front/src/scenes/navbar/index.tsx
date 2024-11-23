@@ -14,7 +14,7 @@ const Navbar = (props: Props) => {
         {/* LEFT  */}
         <a href="../Inicio" style={{textDecoration: 'none'}}>
         <FlexBetween gap="1rem">
-        <img src={logo} alt="Company Logo" style={{ height: '5em'}} /> {/* Adjust height as needed */}
+        <img src={logo} alt="Company Logo" style={{ height: '6em'}} /> {/* Adjust height as needed */}
         <Typography variant="h4" fontSize="25px" color="white">ECOBLASTIC</Typography>
         </FlexBetween></a>
 
@@ -23,7 +23,7 @@ const Navbar = (props: Props) => {
         <FlexBetween gap="2rem">
 
             <Box sx={{ "&:hover": {color: palette.primary[100]} }}>
-              <Link to="/inicio"
+              <Link to="../Inicio"
                onClick={() => setSelected("inicio")}
                style={{
                 color: selected === "inicio" ? "inherit" : palette.grey[700],

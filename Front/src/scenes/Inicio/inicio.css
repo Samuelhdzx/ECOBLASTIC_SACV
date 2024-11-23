@@ -10,14 +10,17 @@
 }
 
 button {
-    font-size: 35px;
+    font-size: 2.5em;
     background-color: white;
     border-radius: 50px;
     padding: 10px 10px 10px 10px;
+    border-color: white;
 }
 
 button:hover{
-    background-color: rgb(78, 77, 81);
+    background-color: black;
+    border-color: white;
+    color: white;
 }
 
 .cont {

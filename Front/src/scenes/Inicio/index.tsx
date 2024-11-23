@@ -11,7 +11,9 @@ const Inicio: React.FC = () => {
                 <div className='info'>
                     <h1>Inyecta eficiencia en tu produccion</h1>
                     <p>ECOBLASTIC es una aplicación innovadora que te permite monitorear tu inyectora de plástico desde cualquier lugar, de una manera eficaz y completamente segura.</p>
-                    <button>Comenzar</button>
+                    <a href="plastics">
+                        <button>Comenzar</button>
+                    </a>
                 </div>
                 <div className='img'>
                     <img src={celular} alt="" />
