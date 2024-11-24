@@ -1,57 +1,23 @@
-import express from "express";
-import data_sensorsSchema from "../models/data_sensors.js";
-
-const router = express.Router();
+import {Router} from "express";
+import { authRequired } from "../middlewares/validateToken.js";
+import  data_sensorsSchema from "../models/data_sensors.js";
+const router = Router();
+import { getDatas, getData, createData, updateData, deleteData } from "../controllers/dash_controller.js";
 
 //ENDPOINTS
-
-
-//create date
-router.post('/data_sensors', (req, res) => {
-    const data_sensors = data_sensorsSchema(req.body);
-    data_sensors
-    .save()
-    .then ((data) => res.json(data))
-    .catch((error) => res.json({message: error}))
-});
-
 // get all dates
-router.get('/data_sensors', (req, res) => {
-    data_sensorsSchema
-    .find()
-    .then((data) => {
-        res.json(data);
-    }).catch((error) => res.json({message: error}))
-});
+router.get('/data_sensors', authRequired, getDatas);
 
 // get a date
-router.get('/data_sensors/:id', (req, res) => {
-    const { id } = req.params;
-    data_sensorsSchema
-    .findById(id)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({message: error}))
-});
+router.get('/data_sensors/:id', authRequired, getData);
+
+//create date
+router.post('/data_sensors', authRequired,  createData );
 
 // update a date
-router.put('/data_sensors/:id', (req, res) => {
-    const { id } = req.params;
-    const { temperature, humidity, date } = req.body;
-    data_sensorsSchema
-    .updateOne({ _id: id }, { $set: { temperature, humidity, date } })
-    .then((data) => res.json(data))
-    .catch((error) =>  res.json({message: error}))
-});
+router.put('/data_sensors/:id', authRequired, updateData);
 
 // delete a date
-router.delete('/data_sensors/:id', (req, res) => {
-    const { id } = req.params;
-    data_sensorsSchema.findByIdAndDelete(id)
-    .then((data) => res.json(data))
-    .catch((error) => res.json({message: error}))
-});
-
-
-    
+router.delete('/data_sensors/:id', authRequired, deleteData);
 
 export default router;

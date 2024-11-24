@@ -20,12 +20,16 @@ const data_sensorsSchema = mongoose.Schema({
     },
     temperature: { type: Number, required: true },
     injectionTime: { type: Number, required: true },
-    date: { type: Date, default: Date.now }
+    date: { type: Date, default: Date.now },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 });
 
+export default mongoose.model('DataSensors', data_sensorsSchema)
 
-
-export default mongoose.model('DataSensors', data_sensorsSchema);
 
 
 

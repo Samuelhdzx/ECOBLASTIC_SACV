@@ -1,12 +1,16 @@
 import { Router } from "express";
-const router = express.Router();
+import {register, login, logout, profile} from "../controllers/auth_controller.js";
+const router = Router();
+import { authRequired } from "../middlewares/validateToken.js";
+import {validateSchema} from "../middlewares/validator.middleware.js";
+import { registerSchema, loginSchema } from "../schemas/auth.schema.js";
 
-router.get('/data_sensors', (req, res) => {
-    data_sensorsSchema
-    .find()
-    .then((data) => {
-        res.json(data);
-    }).catch((error) => res.json({message: error}))
-});
+router.post("/register", validateSchema(registerSchema), register);
+
+router.post('/login', validateSchema(loginSchema), login);
+
+router.get('/logout', logout);
+
+router.get('/profile', authRequired,profile);
 
 export default router;

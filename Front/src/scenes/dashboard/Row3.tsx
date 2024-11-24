@@ -1,6 +1,6 @@
 import DashboardBox from '@/components/DashboardBox'
 import { useGetSensorDataQuery } from '@/state/api';
-import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ReferenceLine, Line} from 'recharts';
+import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line} from 'recharts';
 import BoxHeader from '@/components/BoxHeader';
 import { useTheme } from '@mui/material';
 
@@ -16,14 +16,14 @@ const Row3 = () => {
   const latestRecord = data ? data[data.length - 1] : null;
   console.log("Latest record:", latestRecord);
   
-  const chartData5 = latestRecord ? [
+  const chartData7 = latestRecord ? [
     {
       name: 'Temperature',
       value: latestRecord.temperature,
       fill: palette.secondary[100]
     },
   ] : [];
-  const chartData6 = latestRecord ? [
+  const chartData8 = latestRecord ? [
     {
       name: 'Tiempo',
       value: latestRecord.injectionTime,
@@ -41,7 +41,7 @@ const Row3 = () => {
         <LineChart
           width={500}
           height={300}
-          data={data}
+          data={chartData7}
           margin={{
             top: 20,
             right: 30,
@@ -65,7 +65,7 @@ const Row3 = () => {
       title="Grafico de Tiempo">
     </BoxHeader>
     <ResponsiveContainer width="100%" height="90%">
-      <LineChart width={300} height={100} data={data}>
+      <LineChart width={300} height={100} data={chartData8}>
         <Line type="monotone" dataKey="injectionTime" stroke="#8884d8" strokeWidth={2} />
       </LineChart>
     </ResponsiveContainer>

@@ -30,7 +30,16 @@ const Row2 = () => {
     }
   ] : [];
 
-    const renderCustomizedLabel = ({ cx, cy, percent, innerRadius, outerRadius, midAngle}) => {
+    interface CustomLabelProps {
+      cx: number;
+      cy: number;
+      percent: number;
+      innerRadius: number;
+      outerRadius: number;
+      midAngle: number;
+    }
+
+    const CustomLabel = ({ cx, cy, percent, innerRadius, outerRadius, midAngle }: CustomLabelProps) => {
       const RADIAN = Math.PI / 180;
       const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
       const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -46,8 +55,7 @@ const Row2 = () => {
           {`${(percent * 100).toFixed(0)}%`}
         </text>
       );
-    };
-   
+    };   
 
   return (
     <>
@@ -63,11 +71,11 @@ const Row2 = () => {
               cx="50%"
               cy="50%"
               labelLine={false}
-              label={renderCustomizedLabel}
+              label={CustomLabel}
               outerRadius={150}
               dataKey="value"
             >
-              {chartData4.map((entry, index) => (
+              {chartData4.map((_entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index]} />
               ))}
             </Pie>
