@@ -101,7 +101,7 @@ const Navbar = () => {
         <FlexBetween 
             mb="0.25rem" 
             p="1rem 2rem" 
-            color={palette.grey[300]}
+            color={palette.grey[900]}
             sx={{
                 boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                 position: 'sticky',
@@ -116,16 +116,18 @@ const Navbar = () => {
                     <img 
                         src={logo} 
                         alt="Ecoblastic Logo" 
-                        style={{ 
+                        style={{
+                            color: 'black',
                             height: '4em',
                             maxWidth: '100%',
-                            objectFit: 'contain'
+                            objectFit: 'contain',
+                            filter: 'brightness(1) invert(1)'
                         }} 
                     />
                     <Typography 
                         variant="h4" 
                         fontSize="22px" 
-                        color={palette.grey[100]}
+                        color={palette.grey[900]}
                         sx={{
                             fontWeight: 'bold',
                             display: { xs: 'none', sm: 'block' }
@@ -154,7 +156,6 @@ const Navbar = () => {
                             elevation: 0,
                             sx: {
                                 overflow: 'visible',
-                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                                 mt: 1.5,
                             },
                         }}
@@ -247,7 +248,6 @@ const Navbar = () => {
                                     elevation: 0,
                                     sx: {
                                         overflow: 'visible',
-                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                                         mt: 1.5,
                                     },
                                 }}
