@@ -45,7 +45,7 @@ const RegisterPage = () => {
           borderRadius: 2
         }}
       >
-        <Typography component="h1" variant="h5" color="primary">
+        <Typography fontSize={'1.5em'} color="primary">
           Registro
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -88,7 +88,12 @@ const RegisterPage = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              fontFamily:"Poppins",
+              fontSize: "0.9rem"
+            }}
           >
             Registrarse
           </Button>

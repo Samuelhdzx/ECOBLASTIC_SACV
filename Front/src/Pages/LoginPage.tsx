@@ -47,7 +47,7 @@ const LoginPage = () => {
           borderRadius: 2
         }}
       >
-        <Typography component="h1" variant="h5" color="primary">
+        <Typography fontSize={'1.5em'} color="primary">
           Iniciar Sesión
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -81,7 +81,12 @@ const LoginPage = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ 
+              mt: 3,
+              mb: 2,
+              fontFamily: 'poppins, sans-serif',
+              fontSize: '0.9rem',
+            }}
           >
             Ingresar
           </Button>
