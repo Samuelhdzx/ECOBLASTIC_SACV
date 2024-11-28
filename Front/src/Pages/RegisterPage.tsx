@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
+import './Register.css';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -42,9 +43,11 @@ const RegisterPage = () => {
           alignItems: 'center',
           backgroundColor: 'background.paper',
           padding: 3,
-          borderRadius: 2
+          borderRadius: 2,
+          justifyItems: 'center'
         }}
       >
+        <i className="fi fi-rr-user-add" style={{marginLeft:'5%'}}></i>
         <Typography fontSize={'1.5em'} color="primary">
           Registro
         </Typography>

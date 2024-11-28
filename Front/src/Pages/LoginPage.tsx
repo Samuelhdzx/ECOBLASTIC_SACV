@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
+import './Login.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ const LoginPage = () => {
           borderRadius: 2
         }}
       >
+        <i className="fi fi-ts-circle-user"></i>
         <Typography fontSize={'1.5em'} color="primary">
           Iniciar Sesión
         </Typography>
