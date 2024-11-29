@@ -6,10 +6,13 @@ import { BrowserRouter, Route, Routes, Navigate, useNavigate } from "react-route
 import Navbar from "@/scenes/navbar/index";
 import NavbarPublic from "@/scenes/navbar/index";
 import Inicio from "@/scenes/Inicio/index";
-import Plasticos from "@/scenes/Plastico/Plasticos";
 import Dashboard from "@/scenes/dashboard";
 import LoginPage from "@/Pages/LoginPage";
 import RegisterPage from "@/Pages/RegisterPage";
+import DataEntryForm from "./Pages/DataEntryForm";
+import Profile from "./Pages/Profile";
+import Manuales from "./Pages/Manuales";
+import AllRecords from "./Pages/AllRecords";
 
           interface LayoutProps {
             children: ReactNode;
@@ -81,6 +84,11 @@ import RegisterPage from "@/Pages/RegisterPage";
                     <RegisterPage />
                   </PublicLayout>
                 } />
+                <Route path="/inicio" element={
+                  <PublicLayout>
+                    <Inicio />
+                  </PublicLayout>
+                } />
                 <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
             );
@@ -92,6 +100,16 @@ import RegisterPage from "@/Pages/RegisterPage";
                     <Inicio />
                   </ProtectedLayout>
                 } />
+                // Add this to your imports
+  import DataEntryForm from '@/components/DataEntryForm';
+
+  // Add this to your protectedRoutes
+  <Route path="/data-entry" element={
+    <ProtectedLayout>
+      <DataEntryForm />
+    </ProtectedLayout>
+  } />
+
                 <Route path="/inicio" element={
                   <ProtectedLayout>
                     <Inicio />
@@ -109,19 +127,15 @@ import RegisterPage from "@/Pages/RegisterPage";
                 } />
                 <Route path="/registers" element={
                   <ProtectedLayout>
-                    <div>Registros</div>
+                  <AllRecords />
                   </ProtectedLayout>
                 } />
                 <Route path="/manuals" element={
                   <ProtectedLayout>
-                    <div>Manuales</div>
+                    <Manuales />
                   </ProtectedLayout>
                 } />
-                <Route path="/plastics" element={
-                  <ProtectedLayout>
-                    <Plasticos />
-                  </ProtectedLayout>
-                } />
+                
                 <Route path="/data_sensors" element={
                   <ProtectedLayout>
                     <div>Data Sensors Page</div>
@@ -139,7 +153,7 @@ import RegisterPage from "@/Pages/RegisterPage";
                 } />
                 <Route path="/profile" element={
                   <ProtectedLayout>
-                    <h1>Profile</h1>
+                   <Profile />
                   </ProtectedLayout>
                 } />
                 <Route path="*" element={<Navigate to="/login" replace />} />
