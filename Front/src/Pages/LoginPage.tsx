@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
+import './Login.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -47,7 +48,8 @@ const LoginPage = () => {
           borderRadius: 2
         }}
       >
-        <Typography component="h1" variant="h5" color="primary">
+        <i className="fi fi-ts-circle-user"></i>
+        <Typography fontSize={'1.5em'} color="primary">
           Iniciar Sesión
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -81,7 +83,12 @@ const LoginPage = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{ 
+              mt: 3,
+              mb: 2,
+              fontFamily: 'poppins, sans-serif',
+              fontSize: '0.9rem',
+            }}
           >
             Ingresar
           </Button>

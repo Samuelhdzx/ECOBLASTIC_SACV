@@ -2,78 +2,93 @@ import React from 'react';
 import './inicio.css';
 import celular from 'front/public/img/PÁGINA PRINCIPAL/celular.png';
 import computadora from 'front/public/img/PÁGINA PRINCIPAL/compu.png';
+import { Link } from 'react-router-dom';
 
 const Inicio: React.FC = () => {
   return (
-        <div className='inicio'>
-            <section>
-            <div className='cont'>
-                <div className='info'>
-                    <h1>Inyecta eficiencia en tu produccion</h1>
-                    <p>ECOBLASTIC es una aplicación innovadora que te permite monitorear tu inyectora de plástico desde cualquier lugar, de una manera eficaz y completamente segura.</p>
-                    <a href="plastics">
-                        <button>Comenzar</button>
-                    </a>
-                </div>
-                <div className='img'>
-                    <img src={celular} alt="" />
-                </div>
-            </div>
-            </section>
-            <section>
-            <div className='cont'>
-                <div className='img'>
-                    <img src={computadora} alt="datos" />
-                </div>
-                <div className='info-2'>
-                    <h1>Simplifica tu proceso de inyeccion con Ecoblastic</h1>
-                    <p>En el mundo de la industria, optimizar los procedimientos es una clave importante. En ECOBLASTIC entendemos la importancia de una producción efectiva en los procesos de inyección de plástico. Nuestra plataforma está diseñada para mejorar la producción industrial desde un aparato móvil. Únete a nosotros y descubre cómo nuestra aplicación optimiza tu tiempo y facilita el proceso de tu inyectora de plástico.</p>
-                </div>
-            </div>
-            </section>
-            <section className='contener'>
+    <div className="landing-page">
+      <div className="gradient-overlay">
+      <section className="hero">
+  <div className="hero-content">
+    <div className="hero-text">
+      <h1>Control Industrial Inteligente</h1>
+      <p className="hero-description">Potencia tu producción con ECOBLASTIC. Monitoreo en tiempo real, análisis predictivo y control total de tu inyectora de plástico.</p>
+      <div className="cta-group">
+        <Link to="/data-entry" className="primary-btn">Iniciar Ahora</Link>
+      </div>
+    </div>
+    <div className="hero-visual">
+      <img src={celular} alt="ECOBLASTIC Móvil" className="floating" />
+    </div>
+  </div>
+</section>
 
-                <h1>¿Que hacemos?</h1>
-                
-            <div className='hacemos'>
-                <div className='contenedor'>
-                    <div className='img'>
-                    <i className="fi fi-br-temperature-up"></i>
-                    </div>
-                    <div className='info'>
-                        <p>Calculamos la temperatura de fusión y enfriamiento de la inyectora en tiempo real.</p>
-                    </div>
-                </div>
-                <div className='contenedor'>
-                    <div className='img'>
-                        <i className="fi fi-rr-clock-five"></i>
-                    </div>
-                    <div className='info'>
-                        <p>Medimos el tiempo de espera para la formación correcta de la pieza.</p>
-                    </div>
-                </div>
-                <div className='contenedor'>
-                    <div className='img'>
-                        <i className="fi fi-ss-chart-histogram"></i>
-                    </div>
-                    <div className='info'>
-                        <p>Llevamos registros del uso de la inyectora y del consumo de energía que le queda para que realice su proceso completo.</p>
-                    </div>
-                </div>
-                <div className='contenedor'>
-                    <div className='img'>
-                        <i className="fi fi-rr-business-time"></i>
-                    </div>
-                    <div className='info'>
-                        <p>Medimos el tiempo de espera para la formación correcta de la pieza.</p>
-                    </div>
-                </div>
+<section className="features">
+  <div className="features-grid">
+    <div className="feature-card">
+      <i className="fi fi-rr-temperature-high"></i>
+      <h3>Control Térmico</h3>
+      <p>Monitoreo en tiempo real</p>
+    </div>
+    <div className="feature-card">
+      <i className="fi fi-rr-time-fast"></i>
+      <h3>Optimización</h3>
+      <p>Eficiencia productiva</p>
+    </div>
+    <div className="feature-card">
+      <i className="fi fi-rr-chart-line-up"></i>
+      <h3>Análisis</h3>
+      <p>Datos en tiempo real</p>
+    </div>
+    <div className="feature-card">
+      <i className="fi fi-rr-settings-sliders"></i>
+      <h3>Gestión</h3>
+      <p>Control integral</p>
+    </div>
+  </div>
+</section>
+
+        <section className="dashboard-preview">
+          <div className="preview-content">
+            <div className="preview-text">
+              <h2>Interfaz Intuitiva y Potente</h2>
+              <p>Visualiza, controla y optimiza todos tus procesos desde una única plataforma centralizada.</p>
+              <ul className="feature-list">
+                <li>✓ Dashboard personalizable</li>
+                <li>✓ Alertas en tiempo real</li>
+                <li>✓ Reportes automáticos</li>
+                <li>✓ Control remoto seguro</li>
+              </ul>
             </div>
-            </section>
-        </div>
-    );
+            <div className="preview-image">
+              <img src={computadora} alt="Dashboard" className="dashboard-img" />
+            </div>
+          </div>
+        </section>
+
+        <section className="stats">
+          <div className="stats-container">
+            <div className="stat-item">
+              <h4>99.9%</h4>
+              <p>Precisión</p>
+            </div>
+            <div className="stat-item">
+              <h4>50%</h4>
+              <p>Ahorro Energético</p>
+            </div>
+            <div className="stat-item">
+              <h4>24/7</h4>
+              <p>Monitoreo</p>
+            </div>
+            <div className="stat-item">
+              <h4>+1000</h4>
+              <p>Usuarios Activos</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
 };
-
-
 
 export default Inicio;

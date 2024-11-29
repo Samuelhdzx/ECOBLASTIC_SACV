@@ -18,60 +18,60 @@ const Navbar = () => {
     const location = useLocation();
     const isMobile = useMediaQuery('(max-width:968px)');
     
-    // Estado de autenticación
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    // Estados
     const [selected, setSelected] = useState(() => {
         const path = location.pathname.slice(1);
-        return path || "dashboard";
+        return path || "inicio";
     });
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mobileMenuAnchor, setMobileMenuAnchor] = useState<null | HTMLElement>(null);
 
-    // Items de navegación con iconos
     const navItems: NavItem[] = isAuthenticated ? [
-        { path: "/dashboard", label: "Dashboard", id: "dashboard" },
         { path: "/predictions", label: "Predicción", id: "predictions" },
+        { path: "/dashboard", label: "Dashboard", id: "dashboard" },
+        { path: "/profile", label: "Perfil", id: "profile" },
         { path: "/registers", label: "Registros", id: "registers" },
         { path: "/manuals", label: "Manuales", id: "manuals" },
-        { path: "/plastics", label: "Plásticos", id: "plastics" }
     ] : [
+        { path: "/inicio", label: "inicio", id: "inicio" },
         { path: "/register", label: "Registrarse", id: "register" },
         { path: "/login", label: "Iniciar Sesión", id: "login" }
     ];
 
-    // Verificar si el usuario está autenticado (esto es un ejemplo, debes ajustarlo según tu lógica)
     useEffect(() => {
-        const user = localStorage.getItem('user'); // O la lógica que uses para verificar autenticación
-        if (user) {
-            setIsAuthenticated(true);
-        } else {
-            setIsAuthenticated(false);
-            navigate('/login', { replace: true });
-        }
+        const user = localStorage.getItem('user');
+        setIsAuthenticated(!!user);
     }, []);
 
-    // Manejadores
     const handleLogout = async () => {
-        try {
-            const response = await fetch('http://localhost:1337/api/logout', {
-                method: 'GET',
-                credentials: 'include',
-            });
-    
-            if (!response.ok) {
-                throw new Error('Error en el logout');
+        if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+            try {
+                const response = await fetch('http://localhost:1337/api/logout', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error al cerrar sesión');
+                }
+
+                // Remove user data
+                localStorage.removeItem('user');
+                
+                // Dispatch custom event to notify App component
+                window.dispatchEvent(new Event('authChange'));
+                
+                // Close any open menus
+                handleMenuClose();
+                
+                // Navigate to login
+                navigate('/login', { replace: true });
+            } catch (error) {
+                console.error('Error durante el logout:', error);
+                alert('Ocurrió un error al cerrar sesión. Por favor, inténtalo nuevamente.');
             }
-    
-            localStorage.removeItem('user');
-            setIsAuthenticated(false);  // Cambiar el estado cuando el usuario cierre sesión
-            navigate('/login', { replace: true });  // Asegúrate de redirigir
-        } catch (error) {
-            console.error('Error durante el logout:', error);
         }
     };
-    
 
     const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -86,7 +86,6 @@ const Navbar = () => {
         setMobileMenuAnchor(null);
     };
 
-    // Estilos comunes
     const linkStyles = {
         transition: 'all 0.3s ease',
         fontSize: "16px",
@@ -101,7 +100,7 @@ const Navbar = () => {
         <FlexBetween 
             mb="0.25rem" 
             p="1rem 2rem" 
-            color={palette.grey[300]}
+            color={palette.grey[900]}
             sx={{
                 boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
                 position: 'sticky',
@@ -110,22 +109,23 @@ const Navbar = () => {
                 backgroundColor: palette.background.paper
             }}
         >
-            {/* LEFT SIDE */}
             <Link to="/inicio" style={{ textDecoration: 'none' }}>
                 <FlexBetween gap="1rem">
                     <img 
                         src={logo} 
                         alt="Ecoblastic Logo" 
-                        style={{ 
+                        style={{
+                            color: 'black',
                             height: '4em',
                             maxWidth: '100%',
-                            objectFit: 'contain'
+                            objectFit: 'contain',
+                            filter: 'brightness(1) invert(1)'
                         }} 
                     />
                     <Typography 
                         variant="h4" 
                         fontSize="22px" 
-                        color={palette.grey[100]}
+                        color={palette.grey[900]}
                         sx={{
                             fontWeight: 'bold',
                             display: { xs: 'none', sm: 'block' }
@@ -136,9 +136,7 @@ const Navbar = () => {
                 </FlexBetween>
             </Link>
 
-            {/* RIGHT SIDE */}
             {isMobile ? (
-                // Menú móvil
                 <>
                     <IconButton
                         onClick={handleMobileMenuClick}
@@ -154,7 +152,6 @@ const Navbar = () => {
                             elevation: 0,
                             sx: {
                                 overflow: 'visible',
-                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                                 mt: 1.5,
                             },
                         }}
@@ -185,7 +182,6 @@ const Navbar = () => {
                     </Menu>
                 </>
             ) : (
-                // Menú desktop
                 <FlexBetween gap="2rem">
                     {navItems.map((item) => (
                         <Box 
@@ -247,7 +243,6 @@ const Navbar = () => {
                                     elevation: 0,
                                     sx: {
                                         overflow: 'visible',
-                                        filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                                         mt: 1.5,
                                     },
                                 }}
@@ -255,7 +250,6 @@ const Navbar = () => {
                                 <MenuItem onClick={handleLogout}>
                                     <LogOut size={16} style={{ marginRight: '0.5rem' }} />
                                     Cerrar Sesión
-                                    
                                 </MenuItem>
                             </Menu>
                         </Box>

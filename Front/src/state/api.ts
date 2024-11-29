@@ -12,15 +12,25 @@ export const api = createApi({
       return headers;
     }
   }),
+  tagTypes: ['SensorData'],
   endpoints: (builder) => ({
     getSensorData: builder.query({
-      query: () => '/api/data_sensors'
-    })
+      query: () => '/api/data_sensors',
+      providesTags: ['SensorData']
+    }),
+    addSensorData: builder.mutation({
+      query: (data) => ({
+        url: '/api/data_sensors',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['SensorData']
+    }),
   })
 });
 
+export const { useGetSensorDataQuery, useAddSensorDataMutation } = api;
 
- export const { useGetSensorDataQuery } = api;
 
 
 //  //Mongo db 

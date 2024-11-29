@@ -1,6 +1,7 @@
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
+import './Register.css';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -42,10 +43,12 @@ const RegisterPage = () => {
           alignItems: 'center',
           backgroundColor: 'background.paper',
           padding: 3,
-          borderRadius: 2
+          borderRadius: 2,
+          justifyItems: 'center'
         }}
       >
-        <Typography component="h1" variant="h5" color="primary">
+        <i className="fi fi-rr-user-add" style={{marginLeft:'5%'}}></i>
+        <Typography fontSize={'1.5em'} color="primary">
           Registro
         </Typography>
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -88,7 +91,12 @@ const RegisterPage = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            sx={{
+              mt: 3,
+              mb: 2,
+              fontFamily:"Poppins",
+              fontSize: "0.9rem"
+            }}
           >
             Registrarse
           </Button>
