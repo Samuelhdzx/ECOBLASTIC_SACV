@@ -19,9 +19,7 @@ const Plasticos: React.FC = () => {
               <img src={polipropileno} alt="polipropileno" onClick={handleClick}/>
         </div>
         <div className='plastico'>
-          <a href="../Inicio">
-            <img src={pet} alt="pet"/>
-          </a>
+          <img src={pet} alt="pet" onClick={handleClick}/>
         </div>
       </div>
     </div>

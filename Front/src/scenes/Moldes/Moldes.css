@@ -11,22 +11,26 @@ h1 {
     text-align: center;
 }
 
-.imagenes {
+.imagenes-Molde {
     background-color: black;
     display: flex;
     flex-direction: row;
-    gap: 15%;
+    gap: 1%;
     align-items: center;
     justify-content: center;
     flex: 1;
 }
 
-.plastico img{
+.molde img{
     height: 40em;
 }
 
-.plastico img:hover{
+.molde img:hover{
     border: solid 1px;
     border-color: aliceblue;
-    border-radius: 20px;
+    border-radius: 30px;
+}
+
+.tipo {
+    color: white;
 }
