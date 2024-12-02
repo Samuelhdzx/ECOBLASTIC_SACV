@@ -10,10 +10,10 @@ const Manuales = () => {
         <p>Información detallada sobre plásticos, moldes y procedimientos</p>
       </header>
 
-      <section className="info-section">
-        <div className="info-card">
+      <section className="info-sectionM">
+        <div className="info-cardM">
           <h2>🔬 Plásticos Utilizados</h2>
-          <div className="info-content">
+          <div className="info-contentM">
             <h3>PET (Tereftalato de Polietileno)</h3>
             <p>Material versátil con excelentes propiedades:</p>
             <ul>
@@ -34,9 +34,9 @@ const Manuales = () => {
           </div>
         </div>
 
-        <div className="info-card">
+        <div className="info-cardM">
           <h2>🔧 Sistema de Moldes</h2>
-          <div className="info-content">
+          <div className="info-contentM">
             <h3>Características Principales</h3>
             <ul>
               <li>Diseño modular intercambiable</li>
@@ -55,9 +55,9 @@ const Manuales = () => {
           </div>
         </div>
 
-        <div className="info-card">
+        <div className="info-cardM">
           <h2>⚡ Proceso de Inyección</h2>
-          <div className="info-content">
+          <div className="info-contentM">
             <h3>Parámetros Críticos</h3>
             <ul>
               <li>Control preciso de temperatura</li>

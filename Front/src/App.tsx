@@ -13,6 +13,8 @@ import DataEntryForm from "./Pages/DataEntryForm";
 import Profile from "./Pages/Profile";
 import Manuales from "./Pages/Manuales";
 import AllRecords from "./Pages/AllRecords";
+import Predicciones from "./scenes/Predicciones/Predicciones";
+
 
           interface LayoutProps {
             children: ReactNode;
@@ -122,7 +124,7 @@ import AllRecords from "./Pages/AllRecords";
                 } />
                 <Route path="/predictions" element={
                   <ProtectedLayout>
-                    <div>Pre-Monitoreo</div>
+                    <Predicciones/>
                   </ProtectedLayout>
                 } />
                 <Route path="/registers" element={
