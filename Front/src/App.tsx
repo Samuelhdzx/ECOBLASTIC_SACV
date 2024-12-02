@@ -15,6 +15,9 @@ import Manuales from "./Pages/Manuales";
 import AllRecords from "./Pages/AllRecords";
 import { UserRecords } from "./Pages/UserRecors";
 
+import Predicciones from "./scenes/Predicciones/Predicciones";
+
+
           interface LayoutProps {
             children: ReactNode;
           }
@@ -63,16 +66,15 @@ import { UserRecords } from "./Pages/UserRecors";
             const [isAuthenticated, setIsAuthenticated] = useState(() => {
               return !!localStorage.getItem('user');
             });
-
             useEffect(() => {
-              const handleStorageChange = () => {
-                const user = localStorage.getItem('user');
-                setIsAuthenticated(!!user);
+              const handleAuthChange = () => {
+                  setIsAuthenticated(false);
               };
-
-              window.addEventListener('storage', handleStorageChange);
-              return () => window.removeEventListener('storage', handleStorageChange);
-            }, []);
+              
+              window.addEventListener('authChange', handleAuthChange);
+              return () => window.removeEventListener('authChange', handleAuthChange);
+          }, []);
+          
 
             const publicRoutes = (
               <Routes>
@@ -133,7 +135,7 @@ import { UserRecords } from "./Pages/UserRecors";
                 } />
                 <Route path="/predictions" element={
                   <ProtectedLayout>
-                    <div>Pre-Monitoreo</div>
+                    <Predicciones/>
                   </ProtectedLayout>
                 } />
                 <Route path="/registers" element={
@@ -163,9 +165,7 @@ import { UserRecords } from "./Pages/UserRecors";
                   </ProtectedLayout>
                 } />
 
-              <Route path="/logout" element={
-                   <LoginPage />
-                } />
+
                 <Route path="/profile" element={
                   <ProtectedLayout>
                    <Profile />

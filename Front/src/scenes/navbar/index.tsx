@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Box, Typography, useTheme, IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
 import { Menu as MenuIcon, User, LogOut } from "lucide-react";
 import FlexBetween from "@/components/FlexBetween";
-import logo from "/img/logo.png";
+import logo from "front/public/img/LOGO.png";
 
 type NavItem = {
     path: string;
@@ -30,10 +30,7 @@ const Navbar = () => {
         { path: "/predictions", label: "Predicción", id: "predictions" },
         { path: "/dashboard", label: "Dashboard", id: "dashboard" },
         { path: "/profile", label: "Perfil", id: "profile" },
-        { path: "/registers", label: "Registros", id: "registers" },
         { path: "/manuals", label: "Manuales", id: "manuals" },
-        { path: "/users", label: "Usuarios", id: "users" },
-        { path: "/logout", label: "Cerrar Sesión", id: "logout" }
     ] : [
         { path: "/inicio", label: "inicio", id: "inicio" },
         { path: "/register", label: "Registrarse", id: "register" },
@@ -57,17 +54,9 @@ const Navbar = () => {
                     throw new Error('Error al cerrar sesión');
                 }
     
-                // Remove user data
                 localStorage.removeItem('user');
-                
-                // Dispatch custom event to notify App component
                 window.dispatchEvent(new Event('authChange'));
-                
-                // Close any open menus
-                handleMenuClose();
-                
-                // Direct navigation to login
-                navigate('/login');
+                navigate('/login', { replace: true });
                 
             } catch (error) {
                 console.error('Error durante el logout:', error);
@@ -75,6 +64,7 @@ const Navbar = () => {
             }
         }
     };
+    
     
     
 
@@ -103,7 +93,6 @@ const Navbar = () => {
 
     return (
         <FlexBetween 
-            mb="0.25rem" 
             p="1rem 2rem" 
             color={palette.grey[900]}
             sx={{

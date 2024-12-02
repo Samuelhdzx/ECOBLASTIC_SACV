@@ -1,0 +1,142 @@
+/* Main Container */
+.predicciones-main {
+  background: #111111;
+  min-height: 100vh;
+  padding: 2rem;
+  color: #ffffff;
+  width: 100%;
+}
+
+/* Header Section */
+.predicciones-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+}
+
+.predicciones-header h1 {
+  color: #12efc8;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 10px rgba(18, 239, 200, 0.5);
+}
+
+.predicciones-header p {
+  color: #8884d8;
+  font-size: 1.2rem;
+}
+
+/* Content Section */
+.predicciones-content {
+  background: #1a1a1a;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(18, 239, 200, 0.1);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Material Selector */
+.predicciones-material-selector {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Parameters Section */
+.predicciones-parameters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Buttons */
+.predicciones-btn, .predicciones-param-btn {
+  background: #222222;
+  color: #ffffff;
+  border: 2px solid #12efc8;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.predicciones-btn:hover, .predicciones-param-btn:hover {
+  background: #12efc8;
+  color: #111111;
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(18, 239, 200, 0.5);
+}
+
+.predicciones-btn.predicciones-active, 
+.predicciones-param-btn.predicciones-active {
+  background: #12efc8;
+  color: #111111;
+  box-shadow: 0 0 20px rgba(18, 239, 200, 0.7);
+}
+
+/* Results Section */
+.predicciones-results {
+  background: #222222;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+/* Metrics Grid */
+.predicciones-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.predicciones-metric-card {
+  background: #1a1a1a;
+  border-left: 4px solid #12efc8;
+  padding: 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.predicciones-metric-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(18, 239, 200, 0.2);
+}
+
+/* Image and Text */
+.predicciones-image {
+  max-height: 300px;
+  width: auto;
+  display: block;
+  margin: 2rem auto;
+  filter: drop-shadow(0 0 10px rgba(18, 239, 200, 0.3));
+}
+
+.predicciones-text {
+  color: #12efc8;
+  text-align: center;
+  font-size: 1.4rem;
+  margin: 1.5rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .predicciones-material-selector,
+  .predicciones-parameters {
+    flex-direction: column;
+  }
+  
+  .predicciones-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .predicciones-header h1 {
+    font-size: 2rem;
+  }
+}
