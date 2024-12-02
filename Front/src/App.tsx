@@ -13,6 +13,7 @@ import DataEntryForm from "./Pages/DataEntryForm";
 import Profile from "./Pages/Profile";
 import Manuales from "./Pages/Manuales";
 import AllRecords from "./Pages/AllRecords";
+import { UserRecords } from "./Pages/UserRecors";
 
           interface LayoutProps {
             children: ReactNode;
@@ -53,7 +54,8 @@ import AllRecords from "./Pages/AllRecords";
               </>
             );
           };
-
+          
+          
 
 
           function App() {
@@ -109,6 +111,15 @@ import AllRecords from "./Pages/AllRecords";
       <DataEntryForm />
     </ProtectedLayout>
   } />
+   {/* <Route path="/users" element={
+    <ProtectedLayout>
+<UserRecords 
+  user={currentUser} 
+  records={sensorRecords} 
+  onClose={() => handleClose()} 
+/>
+    </ProtectedLayout>
+  } /> */}
 
                 <Route path="/inicio" element={
                   <ProtectedLayout>
@@ -150,6 +161,10 @@ import AllRecords from "./Pages/AllRecords";
                   <ProtectedLayout>
                     <h1>Update Data</h1>
                   </ProtectedLayout>
+                } />
+
+              <Route path="/logout" element={
+                   <LoginPage />
                 } />
                 <Route path="/profile" element={
                   <ProtectedLayout>

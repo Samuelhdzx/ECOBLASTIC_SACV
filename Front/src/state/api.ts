@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ 
+  baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:1337',
     credentials: 'include',
     prepareHeaders: (headers) => {
@@ -12,12 +12,17 @@ export const api = createApi({
       return headers;
     }
   }),
-  tagTypes: ['SensorData'],
+  tagTypes: ['SensorData', 'Users'],
   endpoints: (builder) => ({
     getSensorData: builder.query({
-      query: () => '/api/data_sensors',
+      query: () => ({
+          url: '/api/data_sensors',
+          method: 'GET',
+          credentials: 'include'
+      }),
       providesTags: ['SensorData']
-    }),
+  }),
+  
     addSensorData: builder.mutation({
       query: (data) => ({
         url: '/api/data_sensors',
@@ -26,10 +31,18 @@ export const api = createApi({
       }),
       invalidatesTags: ['SensorData']
     }),
+    getAllUsers: builder.query({
+      query: () => '/api/users',
+      providesTags: ['Users']
+    })
   })
 });
 
-export const { useGetSensorDataQuery, useAddSensorDataMutation } = api;
+export const { 
+  useGetSensorDataQuery, 
+  useAddSensorDataMutation,
+  useGetAllUsersQuery 
+} = api;
 
 
 

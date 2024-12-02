@@ -32,6 +32,8 @@ const Navbar = () => {
         { path: "/profile", label: "Perfil", id: "profile" },
         { path: "/registers", label: "Registros", id: "registers" },
         { path: "/manuals", label: "Manuales", id: "manuals" },
+        { path: "/users", label: "Usuarios", id: "users" },
+        { path: "/logout", label: "Cerrar Sesión", id: "logout" }
     ] : [
         { path: "/inicio", label: "inicio", id: "inicio" },
         { path: "/register", label: "Registrarse", id: "register" },
@@ -50,11 +52,11 @@ const Navbar = () => {
                     method: 'GET',
                     credentials: 'include',
                 });
-
+    
                 if (!response.ok) {
                     throw new Error('Error al cerrar sesión');
                 }
-
+    
                 // Remove user data
                 localStorage.removeItem('user');
                 
@@ -64,14 +66,17 @@ const Navbar = () => {
                 // Close any open menus
                 handleMenuClose();
                 
-                // Navigate to login
-                navigate('/login', { replace: true });
+                // Direct navigation to login
+                navigate('/login');
+                
             } catch (error) {
                 console.error('Error durante el logout:', error);
                 alert('Ocurrió un error al cerrar sesión. Por favor, inténtalo nuevamente.');
             }
         }
     };
+    
+    
 
     const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
