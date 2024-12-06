@@ -68,7 +68,7 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
             });
             useEffect(() => {
               const handleAuthChange = () => {
-                  setIsAuthenticated(false);
+                setIsAuthenticated(!!localStorage.getItem('user'));
               };
               
               window.addEventListener('authChange', handleAuthChange);
@@ -99,11 +99,8 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
 
             const protectedRoutes = (
               <Routes>
-                <Route path="/" element={
-                  <ProtectedLayout>
-                    <Inicio />
-                  </ProtectedLayout>
-                } />
+                <Route path="/" element={<Navigate to="/login" replace />} />
+                    
                 // Add this to your imports
   import DataEntryForm from '@/components/DataEntryForm';
 
@@ -171,6 +168,7 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
                    <Profile />
                   </ProtectedLayout>
                 } />
+<<<<<<< HEAD
 
 <Route 
       path="/logout" 
@@ -182,8 +180,14 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
     />
                 
                 <Route path="*" element={<Navigate to="/login" replace />} />
+=======
+            <Route path="/logout" element={<LoginPage />} />
+
+>>>>>>> ed6eeae72aeaf2f8a298e6d81d48d772d74df138
               </Routes>
             );
+
+
 
             return (
               <div className="app">

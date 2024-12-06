@@ -53,7 +53,11 @@ const Navbar = () => {
               credentials: 'include',
             });
       
+<<<<<<< HEAD
             if (response.ok) {
+=======
+            if (!response.ok) {
+>>>>>>> ed6eeae72aeaf2f8a298e6d81d48d772d74df138
               throw new Error('Error al cerrar sesión');
             }
       
