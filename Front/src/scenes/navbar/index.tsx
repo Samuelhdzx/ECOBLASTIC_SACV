@@ -47,38 +47,31 @@ const Navbar = () => {
     
     const handleLogout = async () => {
         if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-          try {
-            const response = await fetch('http://localhost:1337/api/logout', {
-              method: 'GET',
-              credentials: 'include',
-            });
-      
-<<<<<<< HEAD
-            if (response.ok) {
-=======
-            if (!response.ok) {
->>>>>>> ed6eeae72aeaf2f8a298e6d81d48d772d74df138
-              throw new Error('Error al cerrar sesión');
+            try {
+                const response = await fetch('http://localhost:1337/api/logout', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+    
+                // Error: La condición está invertida
+                // if (response.ok) { ... } lanzaría un error cuando la respuesta es exitosa
+                if (!response.ok) { // Cambiado a !response.ok
+                    throw new Error('Error al cerrar sesión');
+                }
+    
+                // Si llegamos aquí, el logout fue exitoso
+                localStorage.removeItem('user');
+                handleMenuClose();
+                window.dispatchEvent(new Event('authChange'));
+                navigate('/login', { replace: true });
+                
+            } catch (error) {
+                console.error('Error durante el logout:', error);
+                alert('Ocurrió un error al cerrar sesión. Por favor, inténtalo nuevamente.');
             }
-      
-            // Remove user data
-            localStorage.removeItem('user');
-            
-            // Close any open menus
-            handleMenuClose();
-            
-            // Dispatch custom event to notify App component
-            window.dispatchEvent(new Event('authChange'));
-            
-            // Navigate to login
-            navigate('/login', { replace: true });
-          } catch (error) {
-            console.error('Error durante el logout:', error);
-            alert('Ocurrió un error al cerrar sesión. Por favor, inténtalo nuevamente.');
-          }
         }
-      };
-      
+    };
+    
     
     
 

@@ -168,7 +168,6 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
                    <Profile />
                   </ProtectedLayout>
                 } />
-<<<<<<< HEAD
 
 <Route 
       path="/logout" 
@@ -180,10 +179,6 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
     />
                 
                 <Route path="*" element={<Navigate to="/login" replace />} />
-=======
-            <Route path="/logout" element={<LoginPage />} />
-
->>>>>>> ed6eeae72aeaf2f8a298e6d81d48d772d74df138
               </Routes>
             );
 
