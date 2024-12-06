@@ -42,29 +42,39 @@ const Navbar = () => {
         setIsAuthenticated(!!user);
     }, []);
 
+
+    
+    
     const handleLogout = async () => {
         if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-            try {
-                const response = await fetch('http://localhost:1337/api/logout', {
-                    method: 'GET',
-                    credentials: 'include',
-                });
-    
-                if (!response.ok) {
-                    throw new Error('Error al cerrar sesión');
-                }
-    
-                localStorage.removeItem('user');
-                window.dispatchEvent(new Event('authChange'));
-                navigate('/login', { replace: true });
-                
-            } catch (error) {
-                console.error('Error durante el logout:', error);
-                alert('Ocurrió un error al cerrar sesión. Por favor, inténtalo nuevamente.');
+          try {
+            const response = await fetch('http://localhost:1337/api/logout', {
+              method: 'GET',
+              credentials: 'include',
+            });
+      
+            if (response.ok) {
+              throw new Error('Error al cerrar sesión');
             }
+      
+            // Remove user data
+            localStorage.removeItem('user');
+            
+            // Close any open menus
+            handleMenuClose();
+            
+            // Dispatch custom event to notify App component
+            window.dispatchEvent(new Event('authChange'));
+            
+            // Navigate to login
+            navigate('/login', { replace: true });
+          } catch (error) {
+            console.error('Error durante el logout:', error);
+            alert('Ocurrió un error al cerrar sesión. Por favor, inténtalo nuevamente.');
+          }
         }
-    };
-    
+      };
+      
     
     
 

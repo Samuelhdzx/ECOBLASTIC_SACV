@@ -171,6 +171,16 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
                    <Profile />
                   </ProtectedLayout>
                 } />
+
+<Route 
+      path="/logout" 
+      element={
+        <ProtectedLayout>
+          <Navigate to="/login" replace />
+        </ProtectedLayout>
+      } 
+    />
+                
                 <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
             );
