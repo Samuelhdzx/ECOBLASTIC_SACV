@@ -110,16 +110,10 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
       <DataEntryForm />
     </ProtectedLayout>
   } />
-   {/* <Route path="/users" element={
-    <ProtectedLayout>
-<UserRecords 
-  user={currentUser} 
-  records={sensorRecords} 
-  onClose={() => handleClose()} 
-/>
-    </ProtectedLayout>
-  } /> */}
 
+   
+   
+   
                 <Route path="/inicio" element={
                   <ProtectedLayout>
                     <Inicio />
@@ -161,6 +155,8 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
                     <h1>Update Data</h1>
                   </ProtectedLayout>
                 } />
+
+
 
 
                 <Route path="/profile" element={

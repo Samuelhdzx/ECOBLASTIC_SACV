@@ -32,119 +32,74 @@ interface SensorRecord {
   user: User;
 }
 
-const AllRecords = () => {
-  const { data: records, isLoading } = useGetSensorDataQuery({});
-  const { data: allUsers } = useGetAllUsersQuery({});
-  const [searchUsername, setSearchUsername] = useState('');
+const UserRecords = ({ user, records, onClose }: { user: User; records: SensorRecord[]; onClose: () => void }) => {
   const [searchDate, setSearchDate] = useState('');
   const [searchType, setSearchType] = useState('all');
-
-  const filterRecords = (records: SensorRecord[]) => {
-    return records?.filter(record => {
-      // Improved username matching logic
-      const usernameMatch = searchUsername === '' || 
-      allUsers?.some((user: User) => 
-        user.username.toLowerCase().includes(searchUsername.toLowerCase()) &&
-        user._id === record.user._id
-      );
-
-      // Date matching logic
-      let dateMatch = true;
-      if (searchDate && searchType !== 'all') {
-        const recordDate = new Date(record.date);
-        const searchDateObj = new Date(searchDate);
-
-        const recordYear = recordDate.getFullYear();
-        const recordMonth = recordDate.getMonth();
-        const recordDay = recordDate.getDate();
-
-        const searchYear = searchDateObj.getFullYear();
-        const searchMonth = searchDateObj.getMonth();
-        const searchDay = searchDateObj.getDate();
-
-        switch (searchType) {
-          case 'day':
-            dateMatch = recordYear === searchYear &&
-                       recordMonth === searchMonth &&
-                       recordDay === searchDay;
-            break;
-          case 'month':
-            dateMatch = recordYear === searchYear &&
-                       recordMonth === searchMonth;
-            break;
-          case 'year':
-            dateMatch = recordYear === searchYear;
-            break;
-        }
+  
+  const userRecords = records?.filter(record => record.user._id === user._id) || [];
+  
+  const filteredRecords = userRecords.filter(record => {
+    let dateMatch = true;
+    
+    if (searchDate) {
+      const recordDate = new Date(record.date);
+      const searchDateObj = new Date(searchDate);
+      
+      switch (searchType) {
+        case 'day':
+          dateMatch = (
+            recordDate.getDate() === searchDateObj.getDate() &&
+            recordDate.getMonth() === searchDateObj.getMonth() &&
+            recordDate.getFullYear() === searchDateObj.getFullYear()
+          );
+          break;
+        case 'month':
+          dateMatch = (
+            recordDate.getMonth() === searchDateObj.getMonth() &&
+            recordDate.getFullYear() === searchDateObj.getFullYear()
+          );
+          break;
+        case 'year':
+          dateMatch = recordDate.getFullYear() === searchDateObj.getFullYear();
+          break;
       }
-
-      return usernameMatch && dateMatch;
-    });
-  };
-
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Cargando registros...</p>
-      </div>
-    );
-  }
-
-  const filteredRecords = filterRecords(records || []);
+    }
+    
+    return dateMatch;
+  });
 
   return (
-    <div className="all-records-container">
-      <div className="header-section">
-        <h1 className="header-title">Registros Globales</h1>
-        <p className="header-subtitle">Historial de Todos los Usuarios</p>
-
-        <div className="search-controls">
-          <input
-            type="text"
-            placeholder="Buscar por nombre de usuario..."
-            value={searchUsername}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchUsername(e.target.value)}
-            className="search-input"
-          />
-
-          <select
-            value={searchType}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSearchType(e.target.value)}
-            className="search-select"
-          >
-            <option value="all">Todos los registros</option>
-            <option value="day">Buscar por día</option>
-            <option value="month">Buscar por mes</option>
-            <option value="year">Buscar por año</option>
-          </select>
-
-          {searchType !== 'all' && (
-            <input
-              type={searchType === 'day' ? 'date' : searchType === 'month' ? 'month' : 'number'}
-              value={searchDate}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchDate(e.target.value)}
-              className="search-input"
-              min={searchType === 'year' ? '2000' : undefined}
-              max={searchType === 'year' ? '2100' : undefined}
-            />
-          )}
-        </div>
-
-        <div className="results-summary">
-          Total registros encontrados: {filteredRecords.length}
-        </div>
+    <div className="user-records-modal">
+      <div className="modal-header">
+        <h2>Registros de {user.username}</h2>
+        <button onClick={onClose} className="close-button">×</button>
+      </div>
+      
+      <div className="search-section">
+        <select
+          value={searchType}
+          onChange={(e) => setSearchType(e.target.value)}
+          className="search-select"
+        >
+          <option value="all">Todos los registros</option>
+          <option value="day">Buscar por día</option>
+          <option value="month">Buscar por mes</option>
+          <option value="year">Buscar por año</option>
+        </select>
+        <input
+          type={searchType === 'day' ? 'date' : searchType === 'month' ? 'month' : 'year'}
+          value={searchDate}
+          onChange={(e) => setSearchDate(e.target.value)}
+          className="search-input"
+        />
       </div>
 
       <div className="records-grid">
         {filteredRecords.map((record, index) => (
           <div key={index} className="record-card">
             <div className="record-header">
-              <span className="record-number">Registro #{index + 1}</span>
               <span className="record-date">{new Date(record.date).toLocaleString()}</span>
-              <span className="record-user">{record.user.username}</span>
             </div>
-
             <div className="record-content">
               <div className="data-section">
                 <h3 className="section-title">🔬 Polímeros Usados</h3>
@@ -213,6 +168,48 @@ const AllRecords = () => {
           </div>
         ))}
       </div>
+    </div>
+  );
+};
+
+const AllRecords = () => {
+  const { data: users } = useGetAllUsersQuery({});
+  const { data: records, isLoading } = useGetSensorDataQuery({});
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  if (isLoading) return <div>Cargando registros...</div>;
+
+  return (
+    <div className="all-records-container">
+      <div className="header-section">
+        <h1 className="header-title">Registros Globales</h1>
+        <p className="header-subtitle">Historial de Todos los Usuarios</p>
+
+        <div className="users-overview">
+          <h2>Usuarios Registrados</h2>
+          <div className="users-grid">
+            {users?.map((user: User) => (
+              <div 
+                key={user._id} 
+                className="user-summary-card"
+                onClick={() => setSelectedUser(user)}
+              >
+                <h3>{user.username}</h3>
+                <p>{user.email}</p>
+                <p>Total registros: {records?.filter((record: SensorRecord) => record.user._id === user._id).length || 0}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {selectedUser && (
+        <UserRecords 
+          user={selectedUser}
+          records={records || []}
+          onClose={() => setSelectedUser(null)}
+        />
+      )}
     </div>
   );
 };
