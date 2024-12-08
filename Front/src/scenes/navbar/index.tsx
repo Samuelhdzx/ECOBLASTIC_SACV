@@ -56,9 +56,7 @@ const Navbar = () => {
     
                 // Error: La condición está invertida
                 // if (response.ok) { ... } lanzaría un error cuando la respuesta es exitosa
-                if (!response.ok) { // Cambiado a !response.ok
-                    throw new Error('Error al cerrar sesión');
-                }
+               
     
                 // Si llegamos aquí, el logout fue exitoso
                 localStorage.removeItem('user');
