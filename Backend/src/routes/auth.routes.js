@@ -13,7 +13,15 @@ router.get('/logout', authRequired,logout);
 
 router.get('/profile', authRequired,profile);
 
-router.get('/users', authRequired, getAllUsers);  
+router.get('/data_sensors/all', authRequired, async (req, res) => {
+    try {
+      const allRecords = await data_sensorsSchema.find().populate('user');
+      res.json(allRecords);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
 
 
 

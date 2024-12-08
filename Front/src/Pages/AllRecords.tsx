@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGetSensorDataQuery, useGetAllUsersQuery } from '@/state/api';
 import './AllRecords.css';
 
@@ -33,47 +33,49 @@ interface SensorRecord {
 }
 
 const AllRecords = () => {
-  const { data: records, isLoading } = useGetSensorDataQuery({});
-  const { data: allUsers } = useGetAllUsersQuery({});
+  const { data: records = [], isLoading, error } = useGetSensorDataQuery({}) as {
+    data: SensorRecord[];
+    isLoading: boolean;
+    error: any;
+  };
+  const { data: allUsers = [] } = useGetAllUsersQuery({});
   const [searchUsername, setSearchUsername] = useState('');
   const [searchDate, setSearchDate] = useState('');
   const [searchType, setSearchType] = useState('all');
 
-  const filterRecords = (records: SensorRecord[]) => {
-    return records?.filter(record => {
-      // Improved username matching logic
-      const usernameMatch = searchUsername === '' || 
-      allUsers?.some((user: User) => 
-        user.username.toLowerCase().includes(searchUsername.toLowerCase()) &&
-        user._id === record.user._id
-      );
+  // Debug logs
+  useEffect(() => {
+    console.log('Records:', records);
+    console.log('Users:', allUsers);
+    console.log('API Error:', error);
+  }, [records, allUsers, error]);
 
-      // Date matching logic
+  const filterRecords = (records: SensorRecord[]): SensorRecord[] => {
+    if (!Array.isArray(records)) return [];
+    
+    return records.filter(record => {
+      // Username matching
+      const usernameMatch = !searchUsername || 
+        record.user.username.toLowerCase().includes(searchUsername.toLowerCase());
+
+      // Date matching
       let dateMatch = true;
       if (searchDate && searchType !== 'all') {
         const recordDate = new Date(record.date);
         const searchDateObj = new Date(searchDate);
 
-        const recordYear = recordDate.getFullYear();
-        const recordMonth = recordDate.getMonth();
-        const recordDay = recordDate.getDate();
-
-        const searchYear = searchDateObj.getFullYear();
-        const searchMonth = searchDateObj.getMonth();
-        const searchDay = searchDateObj.getDate();
-
         switch (searchType) {
           case 'day':
-            dateMatch = recordYear === searchYear &&
-                       recordMonth === searchMonth &&
-                       recordDay === searchDay;
+            dateMatch = recordDate.getDate() === searchDateObj.getDate() &&
+                       recordDate.getMonth() === searchDateObj.getMonth() &&
+                       recordDate.getFullYear() === searchDateObj.getFullYear();
             break;
           case 'month':
-            dateMatch = recordYear === searchYear &&
-                       recordMonth === searchMonth;
+            dateMatch = recordDate.getMonth() === searchDateObj.getMonth() &&
+                       recordDate.getFullYear() === searchDateObj.getFullYear();
             break;
           case 'year':
-            dateMatch = recordYear === searchYear;
+            dateMatch = recordDate.getFullYear() === searchDateObj.getFullYear();
             break;
         }
       }
@@ -91,7 +93,15 @@ const AllRecords = () => {
     );
   }
 
-  const filteredRecords = filterRecords(records || []);
+  if (error) {
+    return (
+      <div className="error-container">
+        <p>Error al cargar los registros: {error.message}</p>
+      </div>
+    );
+  }
+
+  const filteredRecords = filterRecords(records);
 
   return (
     <div className="all-records-container">
@@ -104,13 +114,13 @@ const AllRecords = () => {
             type="text"
             placeholder="Buscar por nombre de usuario..."
             value={searchUsername}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchUsername(e.target.value)}
+            onChange={(e) => setSearchUsername(e.target.value)}
             className="search-input"
           />
 
           <select
             value={searchType}
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSearchType(e.target.value)}
+            onChange={(e) => setSearchType(e.target.value)}
             className="search-select"
           >
             <option value="all">Todos los registros</option>
@@ -123,7 +133,7 @@ const AllRecords = () => {
             <input
               type={searchType === 'day' ? 'date' : searchType === 'month' ? 'month' : 'number'}
               value={searchDate}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchDate(e.target.value)}
+              onChange={(e) => setSearchDate(e.target.value)}
               className="search-input"
               min={searchType === 'year' ? '2000' : undefined}
               max={searchType === 'year' ? '2100' : undefined}

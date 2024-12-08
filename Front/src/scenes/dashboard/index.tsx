@@ -11,7 +11,7 @@ const gridTemplateLargeScreens = `
   "a b c"
   "a b c"
   "a b c"
-  "d b c"
+  "a b c"
   "d h i"
   "d h i"
   "d h i"
@@ -33,22 +33,9 @@ const gridTemplateSmallScreens = `
   "d"
   "d"
   "d"
-  "e"
-  "e"
-  "f"
-  "f"
-  "f"
-  "g"
-  "g"
-  "g"
-  "h"
-  "h"
-  "h"
   "h"
   "i"
   "i"
-  "j"
-  "j"
 `;
 
 const Dashboard = () => {
@@ -64,22 +51,16 @@ const Dashboard = () => {
 
     return(
         <Box
-            width="99%"
-            display="grid"
-            gap="1.7rem"
-            sx={
-                isAboveMediumScreens
-                    ? {
-                        gridTemplateColumns: "repeat(3, minmax(500px, 1fr))",
-                        gridTemplateRows: "repeat(10, minmax(70px, 1fr))",
-                        gridTemplateAreas: gridTemplateLargeScreens,
-                    }
-                    : {
-                        gridAutoColumns: "1fr",
-                        gridAutoRows: "80px",
-                        gridTemplateAreas: gridTemplateSmallScreens,
-                    }
-            }
+        width="100%"
+        height="100%"
+        display="grid"
+        gap="1.5rem"
+        sx={{
+          padding: isAboveMediumScreens ? "1.5rem" : "1rem",
+          gridTemplateColumns: isAboveMediumScreens ? "repeat(3, 1fr)" : "1fr",
+          gridTemplateRows: "auto",
+          gridTemplateAreas: isAboveMediumScreens ? gridTemplateLargeScreens : gridTemplateSmallScreens,
+        }}
         >
             <Row1 />
             <Row2 />

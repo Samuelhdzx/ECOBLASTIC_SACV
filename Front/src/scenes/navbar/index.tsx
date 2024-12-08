@@ -31,7 +31,7 @@ const Navbar = () => {
         { path: "/dashboard", label: "Dashboard", id: "dashboard" },
         { path: "/profile", label: "Perfil", id: "profile" },
         { path: "/manuals", label: "Manuales", id: "manuals" },
-        {path : "/registers", label: "Todos los registros", id: "registers" },
+        // {path : "/registers", label: "Todos los registros", id: "registers" },
     ] : [
         { path: "/inicio", label: "inicio", id: "inicio" },
         { path: "/register", label: "Registrarse", id: "register" },

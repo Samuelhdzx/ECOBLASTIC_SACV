@@ -31,12 +31,12 @@ import { useTheme } from '@mui/material';
 
     const chartData2 = latestRecord ? [
       {
-        name: 'Energia Utilizada',
+        name: 'Utilizada',
         value: latestRecord.potentiometerEnergy.used,
         fill: palette.secondary[200]
       },
       {
-        name: 'Energia Restante',
+        name: 'Restante',
         value: latestRecord.potentiometerEnergy.remaining,
         fill : palette.primary[700]
       }
@@ -44,12 +44,12 @@ import { useTheme } from '@mui/material';
 
     const chartData3 = latestRecord ? [
       {
-        name: 'Energia Utilizada',
+        name: 'Utilizada',
         value: latestRecord.injectorEnergy.used,
         fill: palette.secondary[200]
       },
       {
-        name: 'Energia Restante',
+        name: 'Restante',
         value: latestRecord.injectorEnergy.remaining,
         fill : palette.primary[600]
       }
@@ -78,7 +78,7 @@ import { useTheme } from '@mui/material';
       <ResponsiveContainer width="100%" height="90%">
         <PieChart width={300} height={300}>
           <Pie data={chartData2} dataKey="value" cx="50%" cy="50%" outerRadius={10} label={({name}) => `${name}`} />
-          <Pie data={chartData2} dataKey="value" cx="50%" cy="50%" innerRadius={160} outerRadius={180}  label />
+          <Pie data={chartData2} dataKey="value" cx="50%" cy="50%" innerRadius={130} outerRadius={150}  label />
         </PieChart>
       </ResponsiveContainer>
       </DashboardBox>
@@ -89,7 +89,7 @@ import { useTheme } from '@mui/material';
       <ResponsiveContainer width="100%" height="90%">
         <PieChart width={300} height={300}>
           <Pie data={chartData3} dataKey="value" cx="50%" cy="50%" outerRadius={10} label={({name}) => `${name}`} />
-          <Pie data={chartData3} dataKey="value" cx="50%" cy="50%" innerRadius={160} outerRadius={180}  label />
+          <Pie data={chartData3} dataKey="value" cx="50%" cy="50%" innerRadius={130} outerRadius={150}  label />
         </PieChart>
       </ResponsiveContainer>
       </DashboardBox>

@@ -113,11 +113,11 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
 
    
    
-    <Route path="/registers" element={
+    {/* <Route path="/registers" element={
     <ProtectedLayout>
 <AllRecords />
     </ProtectedLayout>
-  } />  
+  } />   */}
 
                 <Route path="/inicio" element={
                   <ProtectedLayout>
