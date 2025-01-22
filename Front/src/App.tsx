@@ -13,6 +13,8 @@ import DataEntryForm from "./Pages/DataEntryForm";
 import Profile from "./Pages/Profile";
 import Manuales from "./Pages/Manuales";
 import AllRecords from "./Pages/AllRecords";
+import AdminRegisterPage from "./Pages/AdminRegisterPage";
+import AdminLoginPage from "./Pages/AdminLoginPage";
 import { UserRecords } from "./Pages/UserRecors";
 
 import Predicciones from "./scenes/Predicciones/Predicciones";
@@ -91,6 +93,19 @@ import Predicciones from "./scenes/Predicciones/Predicciones";
                 <Route path="/inicio" element={
                   <PublicLayout>
                     <Inicio />
+                  </PublicLayout>
+                } />
+
+                <Route path="/loginAdmin" element={
+                  <PublicLayout>
+                    <AdminLoginPage />  
+                  </PublicLayout>
+                } />
+                
+
+                <Route path="/createAdmin" element={
+                  <PublicLayout>
+                    <AdminRegisterPage />
                   </PublicLayout>
                 } />
                 <Route path="*" element={<Navigate to="/login" replace />} />

@@ -32,3 +32,36 @@ export const loginSchema = z.object({
         message: "Password must be at least 6 characters",
     }),
 });
+
+
+export const loginAdminSchema = z.object({
+    adminId: z.string({
+        required_error: "Admin ID is required",
+    }).regex(/^ECO-ADM-\d{3}$/, {
+        message: "Invalid Admin ID format. Must be ECO-ADM-XXX where X is a number"
+    }),
+    password: z.string({
+        required_error: "Password is required",
+    }).min(6, {
+        message: "Password must be at least 6 characters",
+    }),
+});
+
+// Schema para crear nuevo admin
+export const createAdminSchema = z.object({
+    adminId: z.string({
+        required_error: "Admin ID is required",
+    }).regex(/^ECO-ADM-\d{3}$/, {
+        message: "Invalid Admin ID format. Must be ECO-ADM-XXX where X is a number"
+    }),
+    username: z.string({
+        required_error: "Username is required",
+    }).min(3, {
+        message: "Username must be at least 3 characters",
+    }),
+    password: z.string({
+        required_error: "Password is required",
+    }).min(6, {
+        message: "Password must be at least 6 characters",
+    }),
+});

@@ -1,13 +1,17 @@
 import { Router } from "express";
-import {register, login, logout, profile, getAllUsers} from "../controllers/auth_controller.js";
+import {register, login, logout, profile, loginAdmin, createAdmin } from "../controllers/auth_controller.js";
 const router = Router();
 import { authRequired } from "../middlewares/validateToken.js";
 import {validateSchema} from "../middlewares/validator.middleware.js";
-import { registerSchema, loginSchema } from "../schemas/auth.schema.js";
+import { registerSchema, loginSchema, loginAdminSchema, createAdminSchema } from "../schemas/auth.schema.js";
 
 router.post("/register", validateSchema(registerSchema), register);
 
 router.post('/login', validateSchema(loginSchema), login);
+
+router.post('/loginAdmin', validateSchema(loginAdminSchema), loginAdmin);
+
+router.post('/createAdmin', validateSchema(createAdminSchema), createAdmin);
 
 router.get('/logout', authRequired,logout);
 

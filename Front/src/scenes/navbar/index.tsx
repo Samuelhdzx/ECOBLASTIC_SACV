@@ -35,7 +35,8 @@ const Navbar = () => {
     ] : [
         { path: "/inicio", label: "inicio", id: "inicio" },
         { path: "/register", label: "Registrarse", id: "register" },
-        { path: "/login", label: "Iniciar Sesión", id: "login" }
+        { path: "/login", label: "Iniciar Sesión", id: "login" },
+        { path: "/createAdmin", label: "Para Administradores", id: "createAdmin" },
     ];
 
     useEffect(() => {
