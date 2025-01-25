@@ -100,6 +100,29 @@ const RegisterPage = () => {
           >
             Registrarse
           </Button>
+          <Box sx={{ 
+            mt: 2, 
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1
+          }}>
+            <Typography variant="body1" color="text.secondary">
+              ¿Ya tienes una cuenta? Si es así, empieza ya
+            </Typography>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/login')}
+              sx={{
+                fontFamily: "Poppins",
+                fontSize: "0.9rem",
+                width: '60%'
+              }}
+            >
+              Iniciar Sesión
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Container>

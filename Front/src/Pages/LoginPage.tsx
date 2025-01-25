@@ -26,7 +26,7 @@ const LoginPage = () => {
       if (res.ok) {
         localStorage.setItem('user', JSON.stringify(data));
         navigate('/inicio');
-        window.location.reload(); // Esto forzará la recarga para mostrar el Navbar correcto
+        window.location.reload();
       } else {
         setError(data.message || 'Credenciales inválidas');
       }
@@ -83,7 +83,7 @@ const LoginPage = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ 
+            sx={{
               mt: 3,
               mb: 2,
               fontFamily: 'poppins, sans-serif',
@@ -92,6 +92,34 @@ const LoginPage = () => {
           >
             Ingresar
           </Button>
+
+          {/* Nueva sección de registro */}
+          <Box sx={{ 
+            mt: 2, 
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1
+          }}>
+            <Typography variant="body1" color="text.secondary">
+              ¿Aún no tienes una cuenta? Si es así, regístrate ahora
+            </Typography>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/register')}
+              sx={{
+                fontFamily: "Poppins",
+                fontSize: "0.9rem",
+                width: '60%',
+                '&:hover': {
+                  backgroundColor: 'rgba(25, 118, 210, 0.04)'
+                }
+              }}
+            >
+              Registrarse
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Container>

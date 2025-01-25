@@ -15,7 +15,7 @@ const AdminLoginPage = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:1337/api/loginAdmin', { 
+      const res = await fetch('http://localhost:1337/api/loginAdmin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -25,8 +25,8 @@ const AdminLoginPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem('admin', JSON.stringify(data));
-        navigate('/admin/dashboard');
+        localStorage.setItem('user', JSON.stringify(data));
+        navigate('/inicio');
         window.location.reload();
       } else {
         setError(data.message || 'Credenciales de administrador inválidas');
@@ -50,16 +50,16 @@ const AdminLoginPage = () => {
           borderRadius: 3
         }}
       >
-        <AdminPanelSettingsIcon 
-          sx={{ 
-            fontSize: 60, 
+        <AdminPanelSettingsIcon
+          sx={{
+            fontSize: 60,
             color: '#fff',
-            marginBottom: 2 
-          }} 
+            marginBottom: 2
+          }}
         />
-        <Typography 
-          variant="h4" 
-          sx={{ 
+        <Typography
+          variant="h4"
+          sx={{
             color: '#fff',
             fontWeight: 'bold',
             marginBottom: 3
@@ -67,10 +67,10 @@ const AdminLoginPage = () => {
         >
           Panel Administrativo
         </Typography>
-        <Box 
-          component="form" 
-          onSubmit={handleSubmit} 
-          sx={{ 
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
             width: '100%',
             backgroundColor: '#fff',
             padding: 3,
@@ -123,6 +123,37 @@ const AdminLoginPage = () => {
           >
             Acceder como Administrador
           </Button>
+
+          {/* Nueva sección de registro */}
+          <Box sx={{ 
+            mt: 2, 
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1
+          }}>
+            <Typography variant="body1" color="text.secondary">
+              ¿Aún no tienes una cuenta? Si así, regístrate ahora
+            </Typography>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/createAdmin')}
+              sx={{
+                fontFamily: "Poppins",
+                fontSize: "0.9rem",
+                width: '60%',
+                borderColor: '#4caf50',
+                color: '#4caf50',
+                '&:hover': {
+                  borderColor: '#388e3c',
+                  backgroundColor: 'rgba(76, 175, 80, 0.04)'
+                }
+              }}
+            >
+              Registrarse
+            </Button>
+          </Box>
         </Box>
       </Paper>
     </Container>

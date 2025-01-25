@@ -17,6 +17,9 @@ router.get('/logout', authRequired,logout);
 
 router.get('/profile', authRequired,profile);
 
+
+
+
 router.get('/data_sensors/all', authRequired, async (req, res) => {
     try {
       const allRecords = await data_sensorsSchema.find().populate('user');

@@ -3,19 +3,44 @@ import './inicio.css';
 import celular from 'front/public/img/PÁGINA PRINCIPAL/celular.png';
 import computadora from 'front/public/img/PÁGINA PRINCIPAL/compu.png';
 import { Link } from 'react-router-dom';
+import { Typography } from '@mui/material';
 
 const Inicio: React.FC = () => {
   return (
     <div className="landing-page">
       <div className="gradient-overlay">
       <section className="hero">
-  <div className="hero-content">
-    <div className="hero-text">
-      <h1>Control Industrial Inteligente</h1>
-      <p className="hero-description">Potencia tu producción con ECOBLASTIC. Monitoreo en tiempo real, análisis predictivo y control total de tu inyectora de plástico.</p>
-      <div className="cta-group">
-        <Link to="/data-entry" className="primary-btn">Iniciar Ahora</Link>
-      </div>
+    <div className="hero-content">
+      <div className="hero-text">
+        <h1>Control Industrial Inteligente</h1>
+        <p className="hero-description">Potencia tu producción con ECOBLASTIC. Monitoreo en tiempo real, análisis predictivo y control total de tu inyectora de plástico.</p>
+        <div className="cta-group">
+    <Link
+      to={localStorage.getItem('user') ? '/data-entry' : '/register'}
+      className="primary-btn"
+    >
+      {localStorage.getItem('user') ? 'Ingresar Datos' : 'Iniciar Ahora'}
+    </Link>
+    
+    <div className="admin-section">
+      <Typography 
+        variant="body1" 
+        sx={{ 
+          color: 'var(--light)', 
+          margin: '1.5rem 0 0.5rem 0',
+          textAlign: 'center' 
+        }}
+      >
+        ¿Eres un administrador? Da clic aquí
+      </Typography>
+      <Link
+        to="/createAdmin"
+        className="admin-btn"
+      >
+        Acceso Administrativo
+      </Link>
+    </div>
+  </div>
     </div>
     <div className="hero-visual">
       <img src={celular} alt="ECOBLASTIC Móvil" className="floating" />

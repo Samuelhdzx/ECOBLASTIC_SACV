@@ -25,7 +25,7 @@ const AdminRegisterPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-        navigate('/admin/login');
+        navigate('/loginAdmin');
       } else {
         setError(Array.isArray(data.message) ? data.message[0] : data.message);
       }
@@ -57,7 +57,7 @@ const AdminRegisterPage = () => {
             margin="normal"
             required
             fullWidth
-            label="Nombre de usuario"
+            label="Nombre de administrador"
             name="username"
             autoFocus
             value={formData.username}
@@ -102,6 +102,31 @@ const AdminRegisterPage = () => {
           >
             Registrar Administrador
           </Button>
+
+          {/* Nueva sección de login */}
+          <Box sx={{ 
+            mt: 2, 
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 1
+          }}>
+            <Typography variant="body1" color="text.secondary">
+              ¿Ya tienes una cuenta? Si es así, empieza ya
+            </Typography>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/loginAdmin')}
+              sx={{
+                fontFamily: "Poppins",
+                fontSize: "0.9rem",
+                width: '60%'
+              }}
+            >
+              Iniciar Sesión
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Container>

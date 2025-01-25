@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import data_sensorsRoutes from "./src/routes/data_sensors.js";
 import authRoutes from "./src/routes/auth.routes.js";
+import esp32Routes from "./src/routes/esp32.routes.js";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
@@ -21,6 +22,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use('/api', data_sensorsRoutes);
 app.use('/api', authRoutes);
+app.use('/api/esp32', esp32Routes);
 
 
 //routes

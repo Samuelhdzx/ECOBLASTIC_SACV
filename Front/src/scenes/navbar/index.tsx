@@ -33,9 +33,7 @@ const Navbar = () => {
         { path: "/manuals", label: "Manuales", id: "manuals" },
         // {path : "/registers", label: "Todos los registros", id: "registers" },
     ] : [
-        { path: "/inicio", label: "inicio", id: "inicio" },
-        { path: "/register", label: "Registrarse", id: "register" },
-        { path: "/login", label: "Iniciar Sesión", id: "login" },
+        { path: "/register", label: "Para usuarios", id: "register" },
         { path: "/createAdmin", label: "Para Administradores", id: "createAdmin" },
     ];
 
@@ -63,7 +61,7 @@ const Navbar = () => {
                 localStorage.removeItem('user');
                 handleMenuClose();
                 window.dispatchEvent(new Event('authChange'));
-                navigate('/login', { replace: true });
+                navigate('/inicio', { replace: true });
                 
             } catch (error) {
                 console.error('Error durante el logout:', error);
