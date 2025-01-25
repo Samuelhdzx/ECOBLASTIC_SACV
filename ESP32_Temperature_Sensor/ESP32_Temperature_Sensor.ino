@@ -21,6 +21,7 @@ void setup() {
     delay(1000);
     Serial.println("Conectando a WiFi...");
   }
+  //ola
   Serial.println("Conectado a WiFi");
 }
 
