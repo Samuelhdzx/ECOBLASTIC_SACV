@@ -1,21 +1,21 @@
-import React from 'react';
-import { Box, Container, Grid, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Grid, Container, Typography, Paper } from '@mui/material';
 import { motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
-import DeviceList from '../../components/Dashboard/DeviceList';
-import TemperatureChart from '../../components/Dashboard/TemperatureChart';
-import HumidityChart from '../../components/Dashboard/HumidityChart';
-import DeviceStatus from '../../components/Dashboard/DeviceStatus';
-import AlertsPanel from '../../components/Dashboard/AlertsPanel';
+import DeviceList from './DeviceList';
+import TemperatureChart from './TemperatureChart';
+import HumidityChart from './HumidityChart';
+import DeviceStatus from './DeviceStatus';
+import AlertsPanel from './AlertsPanel';
 import { wsService } from '../../services/websocket.service';
 
 const Dashboard = () => {
-    const [devices, setDevices] = React.useState([]);
-    const [selectedDevice, setSelectedDevice] = React.useState(null);
-    const [sensorData, setSensorData] = React.useState([]);
-    const [alerts, setAlerts] = React.useState([]);
+    const [devices, setDevices] = useState([]);
+    const [selectedDevice, setSelectedDevice] = useState(null);
+    const [sensorData, setSensorData] = useState([]);
+    const [alerts, setAlerts] = useState([]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         // Cargar dispositivos iniciales
         fetchDevices();
 
@@ -33,7 +33,7 @@ const Dashboard = () => {
 
     const fetchDevices = async () => {
         try {
-            const response = await fetch('http://localhost:1337/api/esp32/devices');
+            const response = await fetch('http://localhost:3000/api/esp32/devices');
             const data = await response.json();
             setDevices(data);
         } catch (error) {
@@ -72,7 +72,7 @@ const Dashboard = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                 >
-                    <Typography variant="h4" gutterBottom>
+                    <Typography variant="h1" gutterBottom>
                         ECOBLASTIC Monitor
                     </Typography>
                 </motion.div>
@@ -85,11 +85,13 @@ const Dashboard = () => {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            <DeviceList
-                                devices={devices}
-                                selectedDevice={selectedDevice}
-                                onDeviceSelect={handleDeviceSelect}
-                            />
+                            <Paper elevation={0} sx={{ p: 2, height: '100%' }}>
+                                <DeviceList
+                                    devices={devices}
+                                    selectedDevice={selectedDevice}
+                                    onDeviceSelect={handleDeviceSelect}
+                                />
+                            </Paper>
                         </motion.div>
                     </Grid>
 
@@ -102,7 +104,9 @@ const Dashboard = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.5, delay: 0.4 }}
                                 >
-                                    <TemperatureChart data={sensorData} />
+                                    <Paper elevation={0} sx={{ p: 2 }}>
+                                        <TemperatureChart data={sensorData} />
+                                    </Paper>
                                 </motion.div>
                             </Grid>
                             <Grid item xs={12}>
@@ -111,13 +115,15 @@ const Dashboard = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.5, delay: 0.6 }}
                                 >
-                                    <HumidityChart data={sensorData} />
+                                    <Paper elevation={0} sx={{ p: 2 }}>
+                                        <HumidityChart data={sensorData} />
+                                    </Paper>
                                 </motion.div>
                             </Grid>
                         </Grid>
                     </Grid>
 
-                    {/* Estado y Alertas */}
+                    {/* Panel Lateral */}
                     <Grid item xs={12} md={3}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
@@ -126,7 +132,9 @@ const Dashboard = () => {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 0.5, delay: 0.8 }}
                                 >
-                                    <DeviceStatus device={selectedDevice} />
+                                    <Paper elevation={0} sx={{ p: 2 }}>
+                                        <DeviceStatus device={selectedDevice} />
+                                    </Paper>
                                 </motion.div>
                             </Grid>
                             <Grid item xs={12}>
@@ -135,7 +143,9 @@ const Dashboard = () => {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 0.5, delay: 1 }}
                                 >
-                                    <AlertsPanel alerts={alerts} />
+                                    <Paper elevation={0} sx={{ p: 2 }}>
+                                        <AlertsPanel alerts={alerts} />
+                                    </Paper>
                                 </motion.div>
                             </Grid>
                         </Grid>
