@@ -54,3 +54,11 @@ export const receiveESP32Data = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Controlador para recibir datos de temperatura y humedad del Arduino
+export const recibirDatos = (req, res) => {
+    const { temperatura, humedad } = req.body;
+    console.log(`Datos recibidos: Temperatura = ${temperatura}°C, Humedad = ${humedad}%`);
+    // Aquí puedes agregar lógica para manejar los datos, como guardarlos en una base de datos
+    res.status(200).send('Datos recibidos correctamente');
+};

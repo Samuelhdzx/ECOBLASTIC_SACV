@@ -3,6 +3,19 @@ import { useGetSensorDataQuery } from '@/state/api';
 import { ResponsiveContainer, PieChart,  Pie } from 'recharts';
 import BoxHeader from '@/components/BoxHeader';
 import { useTheme } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
   const Row1 = () => {
     const { palette } = useTheme();
@@ -55,8 +68,47 @@ import { useTheme } from '@mui/material';
       }
     ] : [];
 
+    const [sensorData, setSensorData] = useState<{ temperature: number; humidity: number; timestamp: string }[]>([]);
 
+    useEffect(() => {
+      const ws = new WebSocket('ws://localhost:8000');
 
+      ws.onopen = () => {
+        console.log('WebSocket connection established');
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log('Data received:', data);
+        setSensorData((prevData) => [...prevData, data]);
+      };
+
+      ws.onerror = (error) => {
+        console.error('WebSocket error:', error);
+      };
+
+      return () => {
+        ws.close();
+      };
+    }, []);
+
+    const chartData4 = {
+      labels: sensorData.map((d) => new Date(d.timestamp).toLocaleTimeString()),
+      datasets: [
+        {
+          label: 'Temperature',
+          data: sensorData.map((d) => d.temperature),
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        },
+        {
+          label: 'Humidity',
+          data: sensorData.map((d) => d.humidity),
+          borderColor: 'rgb(54, 162, 235)',
+          backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        },
+      ],
+    };
 
   return (
     <>
@@ -92,6 +144,10 @@ import { useTheme } from '@mui/material';
           <Pie data={chartData3} dataKey="value" cx="50%" cy="50%" innerRadius={130} outerRadius={150}  label />
         </PieChart>
       </ResponsiveContainer>
+      </DashboardBox>
+      <DashboardBox gridArea="d">
+        <h2>Sensor Data - DHT22</h2>
+        <Line data={chartData4} />
       </DashboardBox>
     </>
   )
