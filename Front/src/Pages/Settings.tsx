@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import './Settings.css'
+import './Settings.css';
+import { useGetAllUsersQuery, useDeleteUserMutation } from '../state/api';
+
 const Settings: React.FC = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [theme, setTheme] = useState('dark');
@@ -10,6 +12,24 @@ const Settings: React.FC = () => {
     push: true,
     alerts: true
   });
+
+  const { data: users, isLoading, error } = useGetAllUsersQuery();
+  const [deleteUser] = useDeleteUserMutation();
+
+  const handleDeleteUser = async (userId: string) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
+      try {
+        await deleteUser(userId).unwrap();
+      } catch (error) {
+        console.error('Error al eliminar usuario:', error);
+        alert('No se pudo eliminar el usuario');
+      }
+    }
+  };
+
+  console.log('Users data:', users);
+  console.log('Loading state:', isLoading);
+  console.log('Error:', error);
 
   return (
     <motion.div 
@@ -224,29 +244,35 @@ const Settings: React.FC = () => {
                 </button>
 
                 <div className="users-list">
-                  <div className="user-item">
-                    <img src="https://via.placeholder.com/40" alt="User" />
-                    <div className="user-info">
-                      <h4>Juan Pérez</h4>
-                      <span>Administrador</span>
+                  {isLoading ? (
+                    <div className="loading">Cargando usuarios...</div>
+                  ) : error ? (
+                    <div className="error">Error al cargar usuarios: {JSON.stringify(error)}</div>
+                  ) : users && Array.isArray(users) && users.length > 0 ? (
+                    users.map((user: any) => (
+                      <div key={user._id || user.id} className="user-item">
+                        <img src={user.avatar || "https://via.placeholder.com/40"} alt={user.username} />
+                        <div className="user-info">
+                          <h4>{user.username}</h4>
+                          <span>{user.email}</span>
+                        </div>
+                        <div className="user-actions">
+                          <button className="edit-btn">Editar</button>
+                          <button 
+                            className="delete-btn"
+                            onClick={() => handleDeleteUser(user._id || user.id)}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="no-users">
+                      No hay usuarios registrados o hubo un error al cargarlos. 
+                      {users ? `Datos recibidos: ${JSON.stringify(users)}` : 'No se recibieron datos'}
                     </div>
-                    <div className="user-actions">
-                      <button className="edit-btn">Editar</button>
-                      <button className="delete-btn">Eliminar</button>
-                    </div>
-                  </div>
-
-                  <div className="user-item">
-                    <img src="https://via.placeholder.com/40" alt="User" />
-                    <div className="user-info">
-                      <h4>María García</h4>
-                      <span>Operador</span>
-                    </div>
-                    <div className="user-actions">
-                      <button className="edit-btn">Editar</button>
-                      <button className="delete-btn">Eliminar</button>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </motion.div>

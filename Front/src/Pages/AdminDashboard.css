@@ -1,0 +1,141 @@
+  :root {
+    --primary: #6366f1;
+    --secondary: #818cf8;
+    --dark: #000000;
+    --light: #ffffff;
+    --accent: #c084fc;
+  }
+  .admin-landing-page {
+    background: var(--dark);
+    min-height: 100vh;
+    color: var(--light);
+  }
+    .admin-navbar {
+      background-color: #1a237e !important;
+    }
+    
+    .admin-logo {
+      flex-grow: 1;
+      font-weight: bold;
+      color: #fff;
+    }
+    
+    .admin-nav-links {
+      margin-right: 2rem;
+    }
+    
+    .admin-nav-links a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+    
+    .admin-nav-links a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .admin-gradient-overlay {
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 1));
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .admin-hero {
+      padding: 4rem 0;
+      text-align: center;
+    }
+    
+    .admin-hero-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .admin-hero-text h1 {
+      color: var(--light);  /* Changed from #4caf50 */
+    }
+    
+    .admin-hero-description {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #fff;
+    }
+    
+    .admin-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .admin-feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--primary);
+      color: var(--light);
+      transition: all 0.3s ease;
+      padding: 1.5rem;
+      border-radius: 16px;
+      text-decoration: none;
+      text-align: center;
+    }
+    
+    .admin-feature-card:hover {
+      background: rgba(99, 102, 241, 0.1);
+      transform: translateY(-5px);
+      border-color: var(--accent);
+    }
+
+    
+  .admin-features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 2rem 0;
+  }
+
+  .admin-hero-text h1 {
+    color: var(--light);
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .admin-hero-description {
+    color: var(--secondary);
+    font-size: 1.2rem;
+  }
+
+  .admin-feature-card h3 {
+    color: var(--accent);
+    margin: 1rem 0;
+  }
+
+  .admin-feature-card p {
+    color: var(--secondary);
+  }
+
+  @media (max-width: 768px) {
+    .admin-features-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .admin-hero-text h1 {
+      font-size: 2rem;
+    }
+  }
+    
+  .admin-feature-card svg {
+    color: var(--primary);  /* Changed from #4caf50 */
+  }
+    
+  .admin-feature-card h3 {
+    color: var(--accent);  /* Changed from #4caf50 */
+  }
+
+  .admin-feature-card p {
+    color: var(--secondary);  /* Changed from #fff for better hierarchy */
+  }
+    

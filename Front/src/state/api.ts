@@ -21,8 +21,8 @@ export const api = createApi({
           credentials: 'include'
       }),
       providesTags: ['SensorData']
-  }),
-  
+    }),
+    
     addSensorData: builder.mutation({
       query: (data) => ({
         url: '/api/data_sensors',
@@ -31,9 +31,18 @@ export const api = createApi({
       }),
       invalidatesTags: ['SensorData']
     }),
+    
     getAllUsers: builder.query({
       query: () => '/api/users',
       providesTags: ['Users']
+    }),
+    
+    deleteUser: builder.mutation({
+      query: (userId) => ({
+        url: `/api/users/${userId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Users']
     })
   })
 });
@@ -41,15 +50,6 @@ export const api = createApi({
 export const { 
   useGetSensorDataQuery, 
   useAddSensorDataMutation,
-  useGetAllUsersQuery 
+  useGetAllUsersQuery,
+  useDeleteUserMutation 
 } = api;
-
-
-
-//  //Mongo db 
-//  Username: hernandezbarriossamuel
-//  password: eco_07
-// IP: 189.234.144.161/32
-
-//"kpi/kpis = sensor/sensors"
-//Kpis = Sensors

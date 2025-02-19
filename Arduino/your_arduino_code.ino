@@ -10,7 +10,7 @@ const char* ssid = "INFINITUM7E25_2.4";     // Reemplaza con el nombre de tu red
 const char* password = "JUxnP2A7Q6";  // Reemplaza con tu contraseña WiFi
 
 // URL del backend para enviar datos
-const char* serverName = "http://192.168.1.100:1337/api/data_sensors";  // Reemplaza con la URL de tu backend
+const char* serverName = "http://192.168.1.100:5173/api/data_sensors";  // Reemplaza con la URL de tu backend
 
 // Crear objeto para el DHT
 DHT dht(DHTPIN, DHTTYPE);
@@ -66,7 +66,7 @@ void loop() {
 
     Serial.print("💧  Humedad: ");
     Serial.print(humedad);
-    Serial.println("%\n");
+    Serial.println("%");
 
     // Enviar datos al servidor
     WiFiClient client;

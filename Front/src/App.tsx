@@ -15,6 +15,7 @@ import LoginPage from "@/Pages/LoginPage";
 import RegisterPage from "@/Pages/RegisterPage";
 import AdminLoginPage from "@/Pages/AdminLoginPage";
 import AdminRegisterPage from "@/Pages/AdminRegisterPage";
+import AdminDashboard from "@/Pages/AdminDashboard";
 
 // 4. PÁGINAS PROTEGIDAS
 import InicioAut from "./scenes/inicioAut";
@@ -34,7 +35,7 @@ interface PropiedadesLayout {
   children: ReactNode;
 }
 
-// 6. LAYOUT PROTEGIDO
+// 6. LAYOUTS
 const LayoutProtegido = ({ children }: PropiedadesLayout) => {
   const navegar = useNavigate();
   const [estaCargando, setEstaCargando] = useState(true);
@@ -47,9 +48,7 @@ const LayoutProtegido = ({ children }: PropiedadesLayout) => {
     setEstaCargando(false);
   }, [navegar]);
 
-  if (estaCargando) {
-    return null; // Aquí podrías poner un componente de carga
-  }
+  if (estaCargando) return null;
 
   return (
     <>
@@ -59,7 +58,23 @@ const LayoutProtegido = ({ children }: PropiedadesLayout) => {
   );
 };
 
-// 7. LAYOUT PÚBLICO
+const LayoutAdmin = ({ children }: PropiedadesLayout) => {
+  const navegar = useNavigate();
+  const [estaCargando, setEstaCargando] = useState(true);
+
+  useEffect(() => {
+    const admin = localStorage.getItem('admin');
+    if (!admin) {
+      navegar('/loginAdmin', { replace: true });
+    }
+    setEstaCargando(false);
+  }, [navegar]);
+
+  if (estaCargando) return null;
+
+  return <>{children}</>;
+};
+
 const LayoutPublico = ({ children }: PropiedadesLayout) => (
   <>
     <NavbarPublic />
@@ -69,18 +84,14 @@ const LayoutPublico = ({ children }: PropiedadesLayout) => (
 
 // 8. COMPONENTE PRINCIPAL APP
 function App() {
-  // Configuración del tema
   const tema = useMemo(() => createTheme(themeSettings), []);
+  const [estaAutenticado, setEstaAutenticado] = useState(() => !!localStorage.getItem('user'));
+  const [esAdmin, setEsAdmin] = useState(() => !!localStorage.getItem('admin'));
 
-  // Estado de autenticación
-  const [estaAutenticado, setEstaAutenticado] = useState(() => {
-    return !!localStorage.getItem('user');
-  });
-
-  // Manejador de cambios en autenticación
   useEffect(() => {
     const manejarCambioAuth = () => {
       setEstaAutenticado(!!localStorage.getItem('user'));
+      setEsAdmin(!!localStorage.getItem('admin'));
     };
     
     window.addEventListener('authChange', manejarCambioAuth);
@@ -119,7 +130,7 @@ function App() {
     </Routes>
   );
 
-  // 10. RUTAS PROTEGIDAS
+  // 10. RUTAS PROTEGIDAS USUARIO
   const rutasProtegidas = (
     <Routes>
       <Route path="/" element={<Navigate to="/inicio" replace />} />
@@ -163,11 +174,6 @@ function App() {
           <Help />
         </LayoutProtegido>
       } />
-      <Route path="/data_sensors" element={
-        <LayoutProtegido>
-          <div>Página de Sensores de Datos</div>
-        </LayoutProtegido>
-      } />
       <Route path="/data-entry" element={
         <LayoutProtegido>
           <DataEntryForm />
@@ -178,23 +184,41 @@ function App() {
           <Profile />
         </LayoutProtegido>
       } />
-      <Route path="/logout" element={
-        <LayoutProtegido>
-          <Navigate to="/inicio" replace />
-        </LayoutProtegido>
-      } />
       <Route path="*" element={<Navigate to="/inicio" replace />} />
     </Routes>
   );
 
-  // 11. RENDERIZADO PRINCIPAL
+  // 11. RUTAS ADMIN
+  const rutasAdmin = (
+    <Routes>
+      <Route path="/" element={<Navigate to="/admin-dashboard" replace />} />
+      <Route path="/admin-dashboard" element={
+        <LayoutAdmin>
+          <AdminDashboard />
+        </LayoutAdmin>
+      } />
+      <Route path="/settings" element={
+        <LayoutAdmin>
+          <Settings />
+        </LayoutAdmin>
+      } />
+      <Route path="/reports" element={
+        <LayoutAdmin>
+          <Reports />
+        </LayoutAdmin>
+      } />
+
+      <Route path="*" element={<Navigate to="/admin-dashboard" replace />} />
+    </Routes>
+  );
+
   return (
     <div className="app">
       <BrowserRouter>
         <ThemeProvider theme={tema}>
           <CssBaseline />
           <Box width="100%" height="100%">
-            {estaAutenticado ? rutasProtegidas : rutasPublicas}
+            {esAdmin ? rutasAdmin : (estaAutenticado ? rutasProtegidas : rutasPublicas)}
           </Box>
         </ThemeProvider>
       </BrowserRouter>

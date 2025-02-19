@@ -2,6 +2,7 @@ import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Container, Paper } from '@mui/material';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import AdminDashboard from '@/Pages/AdminDashboard';
 import './Login.css';
 
 const AdminLoginPage = () => {
@@ -25,10 +26,12 @@ const AdminLoginPage = () => {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem('user', JSON.stringify(data));
-        navigate('/inicio');
+        localStorage.setItem('admin', JSON.stringify(data));
+        localStorage.setItem('isAdmin', 'true');
+        navigate('/admin-dashboard');  // Nueva ruta para el panel administrativo
         window.location.reload();
-      } else {
+      }
+      else {
         setError(data.message || 'Credenciales de administrador inválidas');
       }
     } catch (err) {
