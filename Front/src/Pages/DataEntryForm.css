@@ -136,4 +136,49 @@
       font-size: 2rem;
     }
   }
+  .data-entry-container {
+    @apply max-w-4xl mx-auto p-6;
+  }
+  
+  .step-container {
+    @apply bg-white rounded-lg shadow-lg p-8;
+  }
+  
+  .material-button, .mold-button {
+    @apply bg-blue-500 text-white py-4 px-6 rounded-lg
+           hover:bg-blue-600 transition-colors duration-200
+           flex items-center justify-center gap-2 text-lg font-medium;
+  }
+  
+  .parameters-form {
+    @apply bg-white rounded-lg shadow-lg p-8 space-y-6;
+  }
+  
+  .form-header {
+    @apply border-b pb-4 mb-6;
+  }
+  
+  .form-grid {
+    @apply grid grid-cols-2 gap-6;
+  }
+  
+  .input-group {
+    @apply space-y-2;
+  }
+  
+  .input-label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+  
+  .input-field {
+    @apply w-full border-gray-300 rounded-md shadow-sm
+           focus:ring-blue-500 focus:border-blue-500;
+  }
+  
+  .submit-button {
+    @apply w-full bg-green-500 text-white py-3 px-6 rounded-lg
+           hover:bg-green-600 transition-colors duration-200
+           flex items-center justify-center gap-2 text-lg font-medium
+           mt-8;
+  }
   

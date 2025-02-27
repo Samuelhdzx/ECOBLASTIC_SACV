@@ -3,6 +3,7 @@ import './Predicciones.css';
 import gramaje from 'front/public/img/MONITOREO/gramaje.png';
 import temperatura from 'front/public/img/MONITOREO/temperatura.png';
 import tiempo from 'front/public/img/MONITOREO/tiempo.png';
+
 const Predicciones: React.FC = () => {
   const [selectedMaterial, setSelectedMaterial] = useState('PET');
   const [selectedParameter, setSelectedParameter] = useState('gramaje');
@@ -49,7 +50,8 @@ const Predicciones: React.FC = () => {
           tasaDeCalidad: "97%"
         }
       }
-    };    return content[material as keyof typeof content][parameter as keyof typeof content.PET];
+    };
+    return content[material as keyof typeof content][parameter as keyof typeof content.PET];
   };
 
   const currentContent = getContent(selectedMaterial, selectedParameter);
@@ -62,31 +64,81 @@ const Predicciones: React.FC = () => {
       </div>
 
       <div className="predicciones-content">
-        <div className="predicciones-material-selector">
-          <button className={`predicciones-btn ${selectedMaterial === 'PET' ? 'predicciones-active' : ''}`} onClick={() => setSelectedMaterial('PET')}>PET</button>
-          <button className={`predicciones-btn ${selectedMaterial === 'POLIPROPILENO' ? 'predicciones-active' : ''}`} onClick={() => setSelectedMaterial('POLIPROPILENO')}>POLIPROPILENO</button>
-        </div>
+        <div className="predicciones-selectors">
+          <div className="predicciones-material-selector">
+            <button 
+              className={`predicciones-btn ${selectedMaterial === 'PET' ? 'predicciones-active' : ''}`} 
+              onClick={() => setSelectedMaterial('PET')}
+            >
+              PET
+            </button>
+            <button 
+              className={`predicciones-btn ${selectedMaterial === 'POLIPROPILENO' ? 'predicciones-active' : ''}`} 
+              onClick={() => setSelectedMaterial('POLIPROPILENO')}
+            >
+              POLIPROPILENO
+            </button>
+          </div>
 
-        <div className="predicciones-parameters">
-          <button className={`predicciones-param-btn ${selectedParameter === 'gramaje' ? 'predicciones-active' : ''}`} onClick={() => setSelectedParameter('gramaje')}>Gramaje</button>
-          <button className={`predicciones-param-btn ${selectedParameter === 'temperatura' ? 'predicciones-active' : ''}`} onClick={() => setSelectedParameter('temperatura')}>Temperatura</button>
-          <button className={`predicciones-param-btn ${selectedParameter === 'tiempo' ? 'predicciones-active' : ''}`} onClick={() => setSelectedParameter('tiempo')}>Tiempo</button>
-        </div>
-
-        <div className="predicciones-results">
-          <img src={currentContent.image} alt="Material visualization" className="predicciones-image" />
-          <h3 className="predicciones-text">{currentContent.text}</h3>
-          <div className="predicciones-metrics">
-            {Object.entries(currentContent)
-              .filter(([key]) => key !== 'text' && key !== 'image')
-              .map(([key, value]) => (
-                <div key={key} className="predicciones-metric-card">
-                  <h4 className="predicciones-metric-title">{key.replace(/([A-Z])/g, ' $1').toUpperCase()}</h4>
-                  <div className="predicciones-metric-value">{value}</div>
-                </div>
-              ))}
+          <div className="predicciones-parameters">
+            <button 
+              className={`predicciones-param-btn ${selectedParameter === 'temperatura' ? 'predicciones-active' : ''}`} 
+              onClick={() => setSelectedParameter('temperatura')}
+            >
+              Temperatura
+            </button>
+            <button 
+              className={`predicciones-param-btn ${selectedParameter === 'gramaje' ? 'predicciones-active' : ''}`} 
+              onClick={() => setSelectedParameter('gramaje')}
+            >
+              Gramaje
+            </button>
+            <button 
+              className={`predicciones-param-btn ${selectedParameter === 'tiempo' ? 'predicciones-active' : ''}`} 
+              onClick={() => setSelectedParameter('tiempo')}
+            >
+              Tiempo
+            </button>
           </div>
         </div>
+
+
+
+
+
+
+
+
+
+          <div className="predicciones-layout">
+            <div className="predicciones-image-section">
+              {selectedParameter === 'gramaje' && (
+                <i className="fi fi-rr-scale huge-icon"></i>
+              )}
+              {selectedParameter === 'temperatura' && (
+                <i className="fi fi-rr-temperature-high huge-icon"></i>
+              )}
+              {selectedParameter === 'tiempo' && (
+                <i className="fi fi-rr-time-fast huge-icon"></i>
+              )}
+            </div>
+          <div className="predicciones-info-section">
+            <h3 className="predicciones-text">{currentContent.text}</h3>
+            <div className="predicciones-metrics">
+              {Object.entries(currentContent)
+                .filter(([key]) => key !== 'text' && key !== 'image')
+                .map(([key, value]) => (
+                  <div key={key} className="predicciones-metric-card">
+                    <h4 className="predicciones-metric-title">
+                      {key.replace(/([A-Z])/g, ' $1').toUpperCase()}
+                    </h4>
+                    <div className="predicciones-metric-value">{value}</div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

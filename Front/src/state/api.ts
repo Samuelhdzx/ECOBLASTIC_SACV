@@ -1,5 +1,17 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+export interface UserRecord {
+  _id: string;
+  temperature: number;
+  polymerUsage: {
+    pet: number;
+    polypropylene: number;
+  };
+  efficiency: number;
+  status: string;
+  createdAt: string;
+}
+
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:1337',
@@ -12,17 +24,17 @@ export const api = createApi({
       return headers;
     }
   }),
-  tagTypes: ['SensorData', 'Users'],
+  tagTypes: ['SensorData', 'Users', 'Production', 'Inventory', 'Maintenance', 'Quality'],
   endpoints: (builder) => ({
     getSensorData: builder.query({
       query: () => ({
-          url: '/api/data_sensors',
-          method: 'GET',
-          credentials: 'include'
+        url: '/api/data_sensors',
+        method: 'GET',
+        credentials: 'include'
       }),
       providesTags: ['SensorData']
     }),
-    
+
     addSensorData: builder.mutation({
       query: (data) => ({
         url: '/api/data_sensors',
@@ -31,25 +43,77 @@ export const api = createApi({
       }),
       invalidatesTags: ['SensorData']
     }),
-    
+
     getAllUsers: builder.query({
       query: () => '/api/users',
       providesTags: ['Users']
     }),
-    
+
+    registerUser: builder.mutation<any, any>({
+      query: (userData) => ({
+        url: '/api/register',
+        method: 'POST',
+        body: userData,
+      }),
+      invalidatesTags: ['Users']
+    }),
+
     deleteUser: builder.mutation({
       query: (userId) => ({
         url: `/api/users/${userId}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Users']
+    }),
+
+    getUserRecords: builder.query<UserRecord[], string>({
+      query: (userId) => ({
+        url: `/data/user/${userId}`,
+        method: 'GET',
+      }),
+    }),
+
+    getProductionMetrics: builder.query({
+      query: () => '/api/production/metrics',
+      providesTags: ['Production']
+    }),
+
+    getInventoryLevels: builder.query({
+      query: () => '/api/inventory/levels',
+      providesTags: ['Inventory']
+    }),
+
+    getQualityMetrics: builder.query({
+      query: () => '/api/quality/metrics',
+      providesTags: ['Quality']
+    }),
+
+    getMaintenanceSchedule: builder.query({
+      query: () => '/api/maintenance/schedule',
+      providesTags: ['Maintenance']
+    }),
+
+    updateMachineParams: builder.mutation({
+      query: (params) => ({
+        url: '/api/production/params',
+        method: 'PUT',
+        body: params,
+      }),
+      invalidatesTags: ['Production']
     })
   })
 });
 
-export const { 
-  useGetSensorDataQuery, 
+export const {
+  useGetSensorDataQuery,
   useAddSensorDataMutation,
   useGetAllUsersQuery,
-  useDeleteUserMutation 
+  useDeleteUserMutation,
+  useRegisterUserMutation,
+  useGetProductionMetricsQuery,
+  useGetInventoryLevelsQuery,
+  useGetQualityMetricsQuery,
+  useGetMaintenanceScheduleQuery,
+  useUpdateMachineParamsMutation,
+  useGetUserRecordsQuery
 } = api;

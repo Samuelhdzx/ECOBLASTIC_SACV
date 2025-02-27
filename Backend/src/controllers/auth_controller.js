@@ -229,3 +229,21 @@
             res.status(500).json({ message: error.message });
         }
     };
+    export const deleteUser = async (req, res) => {
+        try {
+            const { userId } = req.params;
+            console.log(`Intentando eliminar usuario con ID: ${userId}`);
+    
+            const userDeleted = await User.findByIdAndDelete(userId);
+            
+            if (!userDeleted) {
+                return res.status(404).json({ message: "Usuario no encontrado" });
+            }
+    
+            res.json({ message: "Usuario eliminado correctamente" });
+        } catch (error) {
+            console.error("Error al eliminar usuario:", error);
+            res.status(500).json({ message: error.message });
+        }
+    };
+    
