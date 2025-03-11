@@ -16,6 +16,8 @@ const CustomTooltipCurrent = ({ active, payload }: any) => {
           borderRadius: '5px',
           color: '#fff',
           border: '1px solid #FBBF24'
+
+          //ola
         }}
       >
         <p>{`Corriente: ${payload[0].value.toFixed(2)} A`}</p>
