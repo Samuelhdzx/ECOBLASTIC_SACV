@@ -65,34 +65,35 @@ const AdminNavbar = () => {
   };
 
   return (
-    <FlexBetween
-      p="1rem 2rem"
-      color={palette.grey[900]}
-      sx={{
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 1000,
-        backgroundColor: palette.background.paper
-      }}
+    <FlexBetween 
+        p="1rem 2rem" 
+        color={palette.grey[900]}
+        sx={{
+            boxShadow: '0 2px 4px rgba(0,0,0,0.0)',
+            position: 'sticky',
+            top: 0,
+            zIndex: 1000,
+            backgroundColor: palette.background.defaut
+        }}
     >
+
       <Link to="/admin-dashboard" style={{ textDecoration: 'none' }}>
         <FlexBetween gap="1rem">
           <img
             src={logo}
             alt="Ecoblastic Logo"
             style={{
-              color: 'black',
+              color: 'white',
               height: '4em',
               maxWidth: '100%',
               objectFit: 'contain',
-              filter: 'brightness(1) invert(1)'
+              filter: 'brig   htness(1) invert(1)'
             }}
           />
           <Typography
             variant="h4"
             fontSize="22px"
-            color={palette.grey[900]}
+            color={palette.grey[100]}
             sx={{
               fontWeight: 'bold',
               display: { xs: 'none', sm: 'block' }

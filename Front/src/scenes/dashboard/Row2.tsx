@@ -1,90 +1,115 @@
-import DashboardBox from '@/components/DashboardBox'
-import { useGetSensorDataQuery } from '@/state/api';
-import { ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+// scenes/dashboard/Row2.tsx
+import React from 'react';
+import DashboardBox from '@/components/DashboardBox';
 import BoxHeader from '@/components/BoxHeader';
+import { useGetSensorDataQuery } from '@/state/api';
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  Tooltip
+} from 'recharts';
 import { useTheme } from '@mui/material';
 
+// Tooltip personalizado
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div
+        style={{
+          background: '#1e1e1e',
+          padding: '0.5rem 1rem',
+          borderRadius: '5px',
+          color: '#fff',
+          border: '1px solid #9A48FD'
+        }}
+      >
+        <p>{`${payload[0].name}: ${payload[0].value}%`}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const Row2 = () => {
-
   const { palette } = useTheme();
-  const { data } = useGetSensorDataQuery(undefined, {
-    pollingInterval: 3000
-  });
+  const { data } = useGetSensorDataQuery(undefined, { pollingInterval: 3000 });
+  const latest = data ? data[data.length - 1] : null;
 
-  const latestRecord = data ? data[data.length - 1] : null;
+  // Datos para el potenciómetro
+  const potData = latest
+    ? [
+        { name: 'Usada', value: latest.potentiometerEnergy.used },
+        { name: 'Restante', value: latest.potentiometerEnergy.remaining }
+      ]
+    : [];
 
-  const COLORS = [palette.primary[500], palette.secondary[500], palette.tertiary[500]];
+  // Datos para el inyector
+  const injData = latest
+    ? [
+        { name: 'Usada', value: latest.injectorEnergy.used },
+        { name: 'Restante', value: latest.injectorEnergy.remaining }
+      ]
+    : [];
 
-  const chartData4 = latestRecord ? [
-    {
-      name: 'Molde 1',
-      value: latestRecord.moldUsage.mold1,
-    },
-    {
-      name: 'Molde 2',
-      value: latestRecord.moldUsage.mold2,
-    },
-    {
-      name: 'Molde 3',
-      value: latestRecord.moldUsage.mold3,
-    }
-  ] : [];
-
-    interface CustomLabelProps {
-      cx: number;
-      cy: number;
-      percent: number;
-      innerRadius: number;
-      outerRadius: number;
-      midAngle: number;
-    }
-
-    const CustomLabel = ({ cx, cy, percent, innerRadius, outerRadius, midAngle }: CustomLabelProps) => {
-      const RADIAN = Math.PI / 180;
-      const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-      const x = cx + radius * Math.cos(-midAngle * RADIAN);
-      const y = cy + radius * Math.sin(-midAngle * RADIAN);
-      return (
-        <text
-          x={x}
-          y={y}
-          fill="black"
-          textAnchor="middle"
-          dominantBaseline="central"
-        >
-          {`${(percent * 100).toFixed(0)}%`}
-        </text>
-      );
-    };   
+  // Colores
+  const DONUT_COLORS = [palette.primary.main, palette.secondary.main];
 
   return (
     <>
-      <DashboardBox gridArea="d">
-       <BoxHeader
-      title="Veces de uso por molde"
-      /> 
-
+      <DashboardBox gridArea="b">
+        <BoxHeader title="Energía Potenciómetro" />
         <ResponsiveContainer width="100%" height="90%">
           <PieChart>
             <Pie
-              data={chartData4}
+              data={potData}
+              dataKey="value"
+              nameKey="name"
               cx="50%"
               cy="50%"
+              innerRadius={50}
+              outerRadius={80}
+              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
               labelLine={false}
-              label={CustomLabel}
-              outerRadius={150}
-              dataKey="value"
             >
-              {chartData4.map((_entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index]} />
+              {potData.map((entry, index) => (
+                <Cell key={`cell-pot-${index}`} fill={DONUT_COLORS[index % DONUT_COLORS.length]} />
               ))}
             </Pie>
+            <Tooltip content={<CustomTooltip />} />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      </DashboardBox>
+
+      <DashboardBox gridArea="c">
+        <BoxHeader title="Energía Inyector" />
+        <ResponsiveContainer width="100%" height="90%">
+          <PieChart>
+            <Pie
+              data={injData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              innerRadius={50}
+              outerRadius={80}
+              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+              labelLine={false}
+            >
+              {injData.map((entry, index) => (
+                <Cell key={`cell-inj-${index}`} fill={DONUT_COLORS[index % DONUT_COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip content={<CustomTooltip />} />
             <Legend />
           </PieChart>
         </ResponsiveContainer>
       </DashboardBox>
     </>
-  )
-}
+  );
+};
 
 export default Row2;

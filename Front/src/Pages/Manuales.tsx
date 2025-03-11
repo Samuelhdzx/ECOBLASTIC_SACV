@@ -1,21 +1,36 @@
-import './Manuales.css';
+import React from 'react';
+import { useTheme } from '@mui/material/styles';
+import { Box, Typography, Button } from '@mui/material';
 import manualTecnico from '../../public/pdf/ECOBLASTIC manual (3) (1).pdf';
 import manualUsuario from '../../public/pdf/MANUAL INYECTORA.pdf';
+import './Manuales.css';
 
 const Manuales = () => {
-  return (
-    <div className="manuales-container">
-      <header className="manuales-header">
-        <h1>Guía Técnica de Materiales y Procesos</h1>
-        <p>Información detallada sobre plásticos, moldes y procedimientos</p>
-      </header>
+  const theme = useTheme();
 
-      <section className="info-sectionM">
-        <div className="info-cardM">
-          <h2>🔬 Plásticos Utilizados</h2>
-          <div className="info-contentM">
-            <h3>PET (Tereftalato de Polietileno)</h3>
-            <p>Material versátil con excelentes propiedades:</p>
+  return (
+    <Box
+      className="manuales-container"
+      sx={{
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        '--card-background-color': theme.palette.background.paper,
+        '--text-color': theme.palette.text.primary,
+        '--button-background-color': theme.palette.primary.main,
+        '--button-text-color': theme.palette.primary.contrastText,
+      }}
+    >
+      <Box className="manuales-header">
+        <Typography variant="h1">Guía Técnica de Materiales y Procesos</Typography>
+        <Typography variant="body1">Información detallada sobre plásticos, moldes y procedimientos</Typography>
+      </Box>
+
+      <Box className="info-sectionM">
+        <Box className="info-cardM">
+          <Typography variant="h2">🔬 Plásticos Utilizados</Typography>
+          <Box className="info-contentM">
+            <Typography variant="h3">PET (Tereftalato de Polietileno)</Typography>
+            <Typography variant="body1">Material versátil con excelentes propiedades:</Typography>
             <ul>
               <li>Temperatura de fusión: 260°C</li>
               <li>Resistencia al impacto alta</li>
@@ -23,21 +38,21 @@ const Manuales = () => {
               <li>100% Reciclable</li>
             </ul>
 
-            <h3>Polipropileno (PP)</h3>
-            <p>Termoplástico de alta resistencia:</p>
+            <Typography variant="h3">Polipropileno (PP)</Typography>
+            <Typography variant="body1">Termoplástico de alta resistencia:</Typography>
             <ul>
               <li>Temperatura de fusión: 170°C</li>
               <li>Excelente resistencia química</li>
               <li>Bajo costo de producción</li>
               <li>Alta durabilidad</li>
             </ul>
-          </div>
-        </div>
+          </Box>
+        </Box>
 
-        <div className="info-cardM">
-          <h2>🔧 Sistema de Moldes</h2>
-          <div className="info-contentM">
-            <h3>Características Principales</h3>
+        <Box className="info-cardM">
+          <Typography variant="h2">🔧 Sistema de Moldes</Typography>
+          <Box className="info-contentM">
+            <Typography variant="h3">Características Principales</Typography>
             <ul>
               <li>Diseño modular intercambiable</li>
               <li>Sistema de refrigeración optimizado</li>
@@ -45,20 +60,20 @@ const Manuales = () => {
               <li>Mantenimiento preventivo programado</li>
             </ul>
 
-            <h3>Especificaciones Técnicas</h3>
+            <Typography variant="h3">Especificaciones Técnicas</Typography>
             <ul>
               <li>Presión máxima: 200 MPa</li>
               <li>Temperatura máxima: 300°C</li>
               <li>Tiempo de ciclo: 15-45 segundos</li>
               <li>Vida útil estimada: 100,000 ciclos</li>
             </ul>
-          </div>
-        </div>
+          </Box>
+        </Box>
 
-        <div className="info-cardM">
-          <h2>⚡ Proceso de Inyección</h2>
-          <div className="info-contentM">
-            <h3>Parámetros Críticos</h3>
+        <Box className="info-cardM">
+          <Typography variant="h2">⚡ Proceso de Inyección</Typography>
+          <Box className="info-contentM">
+            <Typography variant="h3">Parámetros Críticos</Typography>
             <ul>
               <li>Control preciso de temperatura</li>
               <li>Presión de inyección controlada</li>
@@ -66,36 +81,36 @@ const Manuales = () => {
               <li>Velocidad de inyección ajustable</li>
             </ul>
 
-            <h3>Recomendaciones</h3>
+            <Typography variant="h3">Recomendaciones</Typography>
             <ul>
               <li>Precalentamiento de material</li>
               <li>Limpieza regular del sistema</li>
               <li>Calibración periódica</li>
               <li>Monitoreo constante</li>
             </ul>
-          </div>
-        </div>
-      </section>
+          </Box>
+        </Box>
+      </Box>
 
-      <section className="download-section">
-        <h2>Manuales Disponibles</h2>
-        <div className="download-cards">
+      <Box className="download-section">
+        <Typography variant="h2">Manuales Disponibles</Typography>
+        <Box className="download-cards">
           <a href={manualTecnico} download className="download-card">
             <span className="download-icon">📘</span>
-            <h3>Manual Técnico</h3>
-            <p>Especificaciones detalladas y guía de mantenimiento</p>
-            <button className="download-button">Descargar PDF</button>
+            <Typography variant="h3">Manual Técnico</Typography>
+            <Typography variant="body1">Especificaciones detalladas y guía de mantenimiento</Typography>
+            <Button className="download-button">Descargar PDF</Button>
           </a>
 
           <a href={manualUsuario} download className="download-card">
             <span className="download-icon">📗</span>
-            <h3>Manual de Usuario</h3>
-            <p>Guía de operación y mejores prácticas</p>
-            <button className="download-button">Descargar PDF</button>
+            <Typography variant="h3">Manual de Usuario</Typography>
+            <Typography variant="body1">Guía de operación y mejores prácticas</Typography>
+            <Button className="download-button">Descargar PDF</Button>
           </a>
-        </div>
-      </section>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

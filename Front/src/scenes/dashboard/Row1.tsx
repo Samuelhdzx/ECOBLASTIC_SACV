@@ -1,156 +1,123 @@
-import DashboardBox from '@/components/DashboardBox'
-import { useGetSensorDataQuery } from '@/state/api';
-import { ResponsiveContainer, PieChart,  Pie } from 'recharts';
+// scenes/dashboard/Row1.tsx
+import React from 'react';
+import DashboardBox from '@/components/DashboardBox';
 import BoxHeader from '@/components/BoxHeader';
-import { useTheme } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
+import { useGetSensorDataQuery } from '@/state/api';
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
-  Legend
-);
+  Legend,
+  Cell
+} from 'recharts';
+import { useTheme } from '@mui/material';
 
-  const Row1 = () => {
-    const { palette } = useTheme();
-    const { data } = useGetSensorDataQuery(undefined, {
-      pollingInterval: 3000
-    });
-    
-    console.log("All records from MongoDB:", data);
-    
-    // Find the most recent record
-    const latestRecord = data ? data[data.length - 1] : null;
-    console.log("Latest record:", latestRecord);
-    
-    const chartData = latestRecord ? [
-      {
-        name: 'PET',
-        value: latestRecord.polymerUsage.pet,
-        fill: palette.secondary[100]
-      },
-      {
-        name: 'Polipropileno',
-        value: latestRecord.polymerUsage.polypropylene,
-        fill : palette.primary[200]
-      }
-    ] : [];
+// Tooltip personalizado con fondo oscuro y texto claro
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div
+        style={{
+          background: '#1e1e1e',
+          padding: '0.5rem 1rem',
+          borderRadius: '5px',
+          color: '#fff',
+          border: '1px solid #9A48FD',
+        }}
+      >
+        <p>{`${payload[0].name}: ${payload[0].value}`}</p>
+      </div>
+    );
+  }
+  return null;
+};
 
-    const chartData2 = latestRecord ? [
-      {
-        name: 'Utilizada',
-        value: latestRecord.potentiometerEnergy.used,
-        fill: palette.secondary[200]
-      },
-      {
-        name: 'Restante',
-        value: latestRecord.potentiometerEnergy.remaining,
-        fill : palette.primary[700]
-      }
-    ] : [];
+const Row1 = () => {
+  const { data } = useGetSensorDataQuery(undefined, { pollingInterval: 3000 });
+  const { palette } = useTheme();
 
-    const chartData3 = latestRecord ? [
-      {
-        name: 'Utilizada',
-        value: latestRecord.injectorEnergy.used,
-        fill: palette.secondary[200]
-      },
-      {
-        name: 'Restante',
-        value: latestRecord.injectorEnergy.remaining,
-        fill : palette.primary[600]
-      }
-    ] : [];
+  // Registro más reciente
+  const latestRecord = data ? data[data.length - 1] : null;
 
-    const [sensorData, setSensorData] = useState<{ temperature: number; humidity: number; timestamp: string }[]>([]);
+  let material = 'N/A';
+  let molde = 'N/A';
+  if (latestRecord) {
+    if (latestRecord.polymerUsage.pet === 1) material = 'PET';
+    else if (latestRecord.polymerUsage.polypropylene === 1) material = 'Polipropileno';
 
-    useEffect(() => {
-      const ws = new WebSocket('ws://localhost:8000');
+    if (latestRecord.moldUsage.mold1 === 1) molde = 'Molde 1';
+    else if (latestRecord.moldUsage.mold2 === 1) molde = 'Molde 2';
+    else if (latestRecord.moldUsage.mold3 === 1) molde = 'Molde 3';
+  }
 
-      ws.onopen = () => {
-        console.log('WebSocket connection established');
-      };
+  // Conteo global de usos
+  const timesPet = data?.filter(item => item.polymerUsage.pet === 1).length ?? 0;
+  const timesPP = data?.filter(item => item.polymerUsage.polypropylene === 1).length ?? 0;
+  const timesMold1 = data?.filter(item => item.moldUsage.mold1 === 1).length ?? 0;
+  const timesMold2 = data?.filter(item => item.moldUsage.mold2 === 1).length ?? 0;
+  const timesMold3 = data?.filter(item => item.moldUsage.mold3 === 1).length ?? 0;
 
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        console.log('Data received:', data);
-        setSensorData((prevData) => [...prevData, data]);
-      };
+  // Datos para los gráficos
+  const polymerChartData = [
+    { name: 'PET', value: timesPet },
+    { name: 'Polipropileno', value: timesPP },
+  ];
+  const moldChartData = [
+    { name: 'Molde 1', value: timesMold1 },
+    { name: 'Molde 2', value: timesMold2 },
+    { name: 'Molde 3', value: timesMold3 },
+  ];
 
-      ws.onerror = (error) => {
-        console.error('WebSocket error:', error);
-      };
-
-      return () => {
-        ws.close();
-      };
-    }, []);
-
-    const chartData4 = {
-      labels: sensorData.map((d) => new Date(d.timestamp).toLocaleTimeString()),
-      datasets: [
-        {
-          label: 'Temperature',
-          data: sensorData.map((d) => d.temperature),
-          borderColor: 'rgb(255, 99, 132)',
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-        {
-          label: 'Humidity',
-          data: sensorData.map((d) => d.humidity),
-          borderColor: 'rgb(54, 162, 235)',
-          backgroundColor: 'rgba(54, 162, 235, 0.5)',
-        },
-      ],
-    };
+  const BRAND_COLORS = [palette.primary.main, palette.secondary.main, '#FBBF24'];
 
   return (
-    <>
-      <DashboardBox gridArea="a">
-      <BoxHeader
-      title="Plasticos Empleados"
-      />
-      <ResponsiveContainer width="100%" height="90%">
-        <PieChart width={300} height={300}>
-          <Pie data={chartData} dataKey="value" cx="50%" cy="50%" outerRadius={10} label={({name}) => `${name}`} />
-          <Pie data={chartData} dataKey="value" cx="50%" cy="50%" innerRadius={130} outerRadius={150}  label />
-        </PieChart>
-      </ResponsiveContainer>
-      </DashboardBox>
-      <DashboardBox gridArea="b">
-      <BoxHeader
-      title="Energía del Potenciómetro"
-      />
-      <ResponsiveContainer width="100%" height="90%">
-        <PieChart width={300} height={300}>
-          <Pie data={chartData2} dataKey="value" cx="50%" cy="50%" outerRadius={10} label={({name}) => `${name}`} />
-          <Pie data={chartData2} dataKey="value" cx="50%" cy="50%" innerRadius={130} outerRadius={150}  label />
-        </PieChart>
-      </ResponsiveContainer>
-      </DashboardBox>
-      <DashboardBox gridArea="c">
-      <BoxHeader
-      title="Energia de la Resistencia  "
-      />
-      <ResponsiveContainer width="100%" height="90%">
-        <PieChart width={300} height={300}>
-          <Pie data={chartData3} dataKey="value" cx="50%" cy="50%" outerRadius={10} label={({name}) => `${name}`} />
-          <Pie data={chartData3} dataKey="value" cx="50%" cy="50%" innerRadius={130} outerRadius={150}  label />
-        </PieChart>
-      </ResponsiveContainer>
-      </DashboardBox>
-      <DashboardBox gridArea="d">
-        <h2>Sensor Data - DHT22</h2>
-        <Line data={chartData4} />
-      </DashboardBox>
-    </>
-  )
-}
+    <DashboardBox gridArea="a">
+      <BoxHeader title="Selección Actual" subtitle="Material y Molde" />
+      <div style={{ padding: '1rem', fontSize: '1rem', lineHeight: '1.5' }}>
+        <p><strong>Material:</strong> {material}</p>
+        <p><strong>Molde:</strong> {molde}</p>
+      </div>
+
+      {/* Gráficas comparativas */}
+      <div style={{ display: 'flex', gap: '1rem', height: '280px', padding: '0 1rem 1rem' }}>
+        {/* Uso de Materiales */}
+        <ResponsiveContainer width="50%">
+          <BarChart data={polymerChartData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+            <XAxis dataKey="name" stroke="#E5E5E5" />
+            <YAxis allowDecimals={false} stroke="#E5E5E5" />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend />
+            <Bar dataKey="value" label={{ position: 'top', fill: '#E5E5E5' }}>
+              {polymerChartData.map((entry, index) => (
+                <Cell key={`cell-polymer-${index}`} fill={BRAND_COLORS[index % BRAND_COLORS.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+
+        {/* Uso de Moldes */}
+        <ResponsiveContainer width="50%">
+          <BarChart data={moldChartData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+            <XAxis dataKey="name" stroke="#E5E5E5" />
+            <YAxis allowDecimals={false} stroke="#E5E5E5" />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend />
+            <Bar dataKey="value" label={{ position: 'top', fill: '#E5E5E5' }}>
+              {moldChartData.map((entry, index) => (
+                <Cell key={`cell-mold-${index}`} fill={BRAND_COLORS[index % BRAND_COLORS.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </DashboardBox>
+  );
+};
 
 export default Row1;

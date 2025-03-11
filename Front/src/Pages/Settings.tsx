@@ -1,3 +1,4 @@
+// Settings.tsx
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Line, Bar } from 'react-chartjs-2';
@@ -9,8 +10,8 @@ import {
   LineElement,
   BarElement,
   Title,
-  Tooltip,
-  Legend
+  Tooltip as ChartTooltip,
+  Legend as ChartLegend
 } from 'chart.js';
 import './Settings.css';
 import {
@@ -34,8 +35,8 @@ ChartJS.register(
   LineElement,
   BarElement,
   Title,
-  Tooltip,
-  Legend
+  ChartTooltip,
+  ChartLegend
 );
 
 interface ModalRegistroProps {
@@ -50,8 +51,6 @@ const ModalRegistro: React.FC<ModalRegistroProps> = ({ onClose }) => {
   });
 
   const [selectedUser, setSelectedUser] = useState<any>(null);
-
-
   const [registerUser] = useRegisterUserMutation({});
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -106,7 +105,13 @@ const ModalRegistro: React.FC<ModalRegistroProps> = ({ onClose }) => {
     </div>
   );
 };
-const Settings: React.FC = () => {
+
+interface SettingsProps {
+  onThemeChange?: (mode: "dark" | "light") => void;
+  currentMode?: "dark" | "light";
+}
+
+const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
   // Estados principales
   const [activeTab, setActiveTab] = useState(() => 
     localStorage.getItem('settingsActiveTab') || 'production'
@@ -198,6 +203,14 @@ const Settings: React.FC = () => {
         tension: 0.1
       }
     ]
+  };
+
+  // Bloque para el selector de tema
+  const [tempMode, setTempMode] = useState<"dark" | "light">(currentMode || "dark");
+
+  const handleChangeTheme = (newMode: "dark" | "light") => {
+    setTempMode(newMode);
+    onThemeChange && onThemeChange(newMode);
   };
 
   return (
@@ -402,7 +415,7 @@ const Settings: React.FC = () => {
               <h2>Control de Calidad</h2>
               
               <div className="quality-dashboard">
-              <div className="quality-metrics">
+                <div className="quality-metrics">
                   <div className="quality-card">
                     <h3>Tasa de Defectos</h3>
                     <div className="quality-value">
@@ -717,6 +730,38 @@ const Settings: React.FC = () => {
               </div>
             </motion.div>
           )}
+
+          {/* Bloque para el selector de tema */}
+          <motion.div 
+            className="settings-section theme-section"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ marginTop: '2rem' }}
+          >
+            <h2>Modo de Tema</h2>
+            <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <label>
+                <input
+                  type="radio"
+                  name="themeMode"
+                  value="dark"
+                  checked={tempMode === "dark"}
+                  onChange={() => handleChangeTheme("dark")}
+                />
+                Ecoblastic Oscuro
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="themeMode"
+                  value="light"
+                  checked={tempMode === "light"}
+                  onChange={() => handleChangeTheme("light")}
+                />
+                Ecoblastic Blanco
+              </label>
+            </div>
+          </motion.div>
         </div>
       </div>
 

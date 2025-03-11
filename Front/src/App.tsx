@@ -1,9 +1,9 @@
-// 1. IMPORTACIONES PRINCIPALES
+// App.tsx
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useMemo, useState, useEffect, ReactNode } from "react";
-import { themeSettings } from "./theme";
+import { getThemeSettings } from "./theme";
 import { Box, CssBaseline } from "@mui/material";
-import { BrowserRouter, Route, Routes, Navigate, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 
 // 2. COMPONENTES DE NAVEGACIÓN
 import Navbar from "@/scenes/navbar/index";
@@ -37,16 +37,16 @@ interface PropiedadesLayout {
 
 // 6. LAYOUTS
 const LayoutProtegido = ({ children }: PropiedadesLayout) => {
-  const navegar = useNavigate();
+  const navigate = useNavigate();
   const [estaCargando, setEstaCargando] = useState(true);
 
   useEffect(() => {
     const usuario = localStorage.getItem('user');
     if (!usuario) {
-      navegar('/inicio', { replace: true });
+      navigate('/inicio', { replace: true });
     }
     setEstaCargando(false);
-  }, [navegar]);
+  }, [navigate]);
 
   if (estaCargando) return null;
 
@@ -59,16 +59,16 @@ const LayoutProtegido = ({ children }: PropiedadesLayout) => {
 };
 
 const LayoutAdmin = ({ children }: PropiedadesLayout) => {
-  const navegar = useNavigate();
+  const navigate = useNavigate();
   const [estaCargando, setEstaCargando] = useState(true);
 
   useEffect(() => {
     const admin = localStorage.getItem('admin');
     if (!admin) {
-      navegar('/loginAdmin', { replace: true });
+      navigate('/loginAdmin', { replace: true });
     }
     setEstaCargando(false);
-  }, [navegar]);
+  }, [navigate]);
 
   if (estaCargando) return null;
 
@@ -82,9 +82,19 @@ const LayoutPublico = ({ children }: PropiedadesLayout) => (
   </>
 );
 
-// 8. COMPONENTE PRINCIPAL APP
 function App() {
-  const tema = useMemo(() => createTheme(themeSettings), []);
+  // Estado para el modo: "dark" o "light"
+  const [mode, setMode] = useState<"dark" | "light">(() => {
+    const savedMode = localStorage.getItem("themeMode") as "dark" | "light";
+    return savedMode || "dark";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("themeMode", mode);
+  }, [mode]);
+
+  const theme = useMemo(() => createTheme(getThemeSettings(mode)), [mode]);
+
   const [estaAutenticado, setEstaAutenticado] = useState(() => !!localStorage.getItem('user'));
   const [esAdmin, setEsAdmin] = useState(() => !!localStorage.getItem('admin'));
 
@@ -97,6 +107,11 @@ function App() {
     window.addEventListener('authChange', manejarCambioAuth);
     return () => window.removeEventListener('authChange', manejarCambioAuth);
   }, []);
+
+  // Función para cambiar el tema (se la pasamos a Settings)
+  const handleThemeChange = (newMode: "dark" | "light") => {
+    setMode(newMode);
+  };
 
   // 9. RUTAS PÚBLICAS
   const rutasPublicas = (
@@ -161,7 +176,7 @@ function App() {
       } />
       <Route path="/settings" element={
         <LayoutProtegido>
-          <Settings />
+          <Settings onThemeChange={handleThemeChange} currentMode={mode} />
         </LayoutProtegido>
       } />
       <Route path="/manuals" element={
@@ -199,7 +214,7 @@ function App() {
       } />
       <Route path="/settings" element={
         <LayoutAdmin>
-          <Settings />
+          <Settings onThemeChange={handleThemeChange} currentMode={mode} />
         </LayoutAdmin>
       } />
       <Route path="/reports" element={
@@ -207,7 +222,6 @@ function App() {
           <Reports />
         </LayoutAdmin>
       } />
-
       <Route path="*" element={<Navigate to="/admin-dashboard" replace />} />
     </Routes>
   );
@@ -215,9 +229,14 @@ function App() {
   return (
     <div className="app">
       <BrowserRouter>
-        <ThemeProvider theme={tema}>
+        <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Box width="100%" height="100%">
+          {/* Envolvemos toda la aplicación en un Box con fondo blanco */}
+          <Box
+            width="100%"
+            minHeight="100vh"
+            sx={{ backgroundColor: theme.palette.background.default }}
+          >
             {esAdmin ? rutasAdmin : (estaAutenticado ? rutasProtegidas : rutasPublicas)}
           </Box>
         </ThemeProvider>
@@ -225,5 +244,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

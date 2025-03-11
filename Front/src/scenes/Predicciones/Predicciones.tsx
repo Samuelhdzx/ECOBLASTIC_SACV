@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Predicciones.css';
 import gramaje from 'front/public/img/MONITOREO/gramaje.png';
 import temperatura from 'front/public/img/MONITOREO/temperatura.png';
 import tiempo from 'front/public/img/MONITOREO/tiempo.png';
+import { useTheme } from '@mui/material/styles';
 
 const Predicciones: React.FC = () => {
   const [selectedMaterial, setSelectedMaterial] = useState('PET');
   const [selectedParameter, setSelectedParameter] = useState('gramaje');
+  const theme = useTheme();
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme.palette.mode);
+  }, [theme.palette.mode]);
 
   const getContent = (material: string, parameter: string) => {
     const content = {
@@ -102,26 +108,18 @@ const Predicciones: React.FC = () => {
           </div>
         </div>
 
-
-
-
-
-
-
-
-
-          <div className="predicciones-layout">
-            <div className="predicciones-image-section">
-              {selectedParameter === 'gramaje' && (
-                <i className="fi fi-rr-scale huge-icon"></i>
-              )}
-              {selectedParameter === 'temperatura' && (
-                <i className="fi fi-rr-temperature-high huge-icon"></i>
-              )}
-              {selectedParameter === 'tiempo' && (
-                <i className="fi fi-rr-time-fast huge-icon"></i>
-              )}
-            </div>
+        <div className="predicciones-layout">
+          <div className="predicciones-image-section">
+            {selectedParameter === 'gramaje' && (
+              <i className="fi fi-rr-scale huge-icon"></i>
+            )}
+            {selectedParameter === 'temperatura' && (
+              <i className="fi fi-rr-temperature-high huge-icon"></i>
+            )}
+            {selectedParameter === 'tiempo' && (
+              <i className="fi fi-rr-time-fast huge-icon"></i>
+            )}
+          </div>
           <div className="predicciones-info-section">
             <h3 className="predicciones-text">{currentContent.text}</h3>
             <div className="predicciones-metrics">
@@ -138,7 +136,6 @@ const Predicciones: React.FC = () => {
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
