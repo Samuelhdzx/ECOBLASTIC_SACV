@@ -1,4 +1,4 @@
-// theme.ts
+  // theme.ts
 
 // 1) Define tus tokens de color (actualizando primary, secondary, etc.)
 export const tokens = {
@@ -153,55 +153,67 @@ const tokensDark = {
   background: {
     light: "#2d2d34",
     main: "#1f2026", // Este es el fondo oscuro original
+    navbar: "#161618",
+    navbar_secondary: "#1a1a1f",
+    surface: "#2d2d34",
+    paper: "#1f2026",
+    alt1: "#252732",
+    alt2: "#1E1E24",
+    contrast: "#FFFFFF",
   },
 };
 
 // 2) Define tus tokens de color para MODO CLARO
 const tokensLight = {
   grey: {
-    100: "#242427",
-    200: "#48494e",
-    300: "#6b6d74",
-    400: "#8f929b",
-    500: "#b3b6c2",
-    600: "#c2c5ce",
-    700: "#d1d3da",
-    800: "#e1e2e7",
-    900: "#f0f0f3",
+    100: "#1F2937", // Más oscuro para mejor contraste
+    200: "#374151",
+    300: "#4B5563",
+    400: "#6B7280",
+    500: "#9CA3AF",
+    600: "#D1D5DB",
+    700: "#E5E7EB",
+    800: "#F3F4F6",
+    900: "#F9FAFB",
   },
   primary: {
-    100: "#f4edff",
-    200: "#e9dbff",
-    300: "#decaff",
-    400: "#d3b8ff",
-    500: "#9A48FD", // Mismo morado
-    600: "#7a38ca",
-    700: "#5b2997",
-    800: "#3b1965",
-    900: "#1c0932",
+    100: "#F3EAFF",
+    200: "#E2D1FF",
+    300: "#C9A6FF",
+    400: "#AB74FF",
+    500: "#9A48FD", // Mantenemos el color principal
+    600: "#8132DB",
+    700: "#6925B9",
+    800: "#511997",
+    900: "#390C75",
   },
   secondary: {
-    100: "#e0fffb",
-    200: "#c2fff7",
-    300: "#a3fff3",
-    400: "#85ffef",
-    500: "#14B8A6", // Mismo teal
-    600: "#0e8d7f",
-    700: "#096259",
-    800: "#053632",
-    900: "#001b19",
+    100: "#CCFBF1",
+    200: "#99F6E4",
+    300: "#5EEAD4",
+    400: "#2DD4BF",
+    500: "#14B8A6", // Mantenemos el teal principal
+    600: "#0D9488",
+    700: "#0F766E",
+    800: "#115E59",
+    900: "#134E4A",
   },
   tertiary: {
-    500: "#FBBF24",
+    500: "#F59E0B",
   },
   background: {
-    light: "#f5f5f5",
-    main: "#ffffff", // fondo blanco
+    light: "#F8FAFF", // Fondo con sutil tono azulado
+    main: "#FFFFFF",
+    navbar: "#F1F5F9", // Navbar con tono gris azulado sutil
+    navbar_secondary: "#E2E8F0",
+    surface: "#FFFFFF", // Para tarjetas y elementos elevados
+    paper: "#F8FAFF", // Para fondos de secciones
+    alt1: "#EDF2F7",
+    alt2: "#E2E8F0",
+    contrast: "#1E293B", // Para elementos que necesiten alto contraste
   },
 };
 
-
-// 3) Función que retorna el theme según el modo
 // 3) Función que retorna el theme según el modo
 export const getThemeSettings = (mode: "dark" | "light") => {
   const tokens = mode === "dark" ? tokensDark : tokensLight;
@@ -228,6 +240,13 @@ export const getThemeSettings = (mode: "dark" | "light") => {
       background: {
         default: tokens.background.main,
         light: tokens.background.light,
+        navbar: tokens.background.navbar,
+        navbar_secondary: tokens.background.navbar_secondary,
+        alt1: tokens.background.alt1,
+        alt2: tokens.background.alt2,
+        surface: tokens.background.surface,
+        paper: tokens.background.paper,
+        contrast: tokens.background.contrast,
       },
     },
     typography: {

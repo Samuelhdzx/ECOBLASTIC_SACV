@@ -1,8 +1,7 @@
-// scenes/dashboard/Row3.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardBox from '@/components/DashboardBox';
 import BoxHeader from '@/components/BoxHeader';
-import { useGetSensorDataQuery } from '@/state/api';
+import axios from 'axios';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -12,20 +11,22 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip
+  Tooltip,
 } from 'recharts';
 import { useTheme } from '@mui/material';
 
 const CustomTooltipTemp = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div style={{
-        background: '#1e1e1e',
-        padding: '0.5rem 1rem',
-        borderRadius: '5px',
-        color: '#fff',
-        border: '1px solid #9A48FD'
-      }}>
+      <div
+        style={{
+          background: '#1e1e1e',
+          padding: '0.5rem 1rem',
+          borderRadius: '5px',
+          color: '#fff',
+          border: '1px solid #9A48FD',
+        }}
+      >
         <p>{`Temperatura: ${payload[0].value} °C`}</p>
       </div>
     );
@@ -36,13 +37,15 @@ const CustomTooltipTemp = ({ active, payload }: any) => {
 const CustomTooltipTime = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div style={{
-        background: '#1e1e1e',
-        padding: '0.5rem 1rem',
-        borderRadius: '5px',
-        color: '#fff',
-        border: '1px solid #14B8A6'
-      }}>
+      <div
+        style={{
+          background: '#1e1e1e',
+          padding: '0.5rem 1rem',
+          borderRadius: '5px',
+          color: '#fff',
+          border: '1px solid #14B8A6',
+        }}
+      >
         <p>{`Tiempo de Inyección: ${payload[0].value} s`}</p>
       </div>
     );
@@ -51,8 +54,25 @@ const CustomTooltipTime = ({ active, payload }: any) => {
 };
 
 const Row3 = () => {
-  const { data } = useGetSensorDataQuery(undefined, { pollingInterval: 3000 });
+  const [data, setData] = useState([]);
   const { palette } = useTheme();
+
+  // Obtener datos desde el backend
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:1337/api/sensors');
+        console.log('Datos recibidos:', response.data); // Verificar los datos en la consola
+        setData(response.data);
+      } catch (error) {
+        console.error('Error al obtener los datos:', error);
+      }
+    };
+
+    fetchData();
+    const interval = setInterval(fetchData, 3000); // Actualizar cada 3 segundos
+    return () => clearInterval(interval); // Limpiar el intervalo al desmontar el componente
+  }, []);
 
   return (
     <>
@@ -68,7 +88,7 @@ const Row3 = () => {
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-            <XAxis dataKey="_id" hide />
+            <XAxis dataKey="timestamp" hide />
             <YAxis stroke="#E5E5E5" />
             <Tooltip content={<CustomTooltipTemp />} />
             <Area
@@ -88,7 +108,7 @@ const Row3 = () => {
         <ResponsiveContainer width="100%" height="90%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-            <XAxis dataKey="_id" hide />
+            <XAxis dataKey="timestamp" hide />
             <YAxis stroke="#E5E5E5" />
             <Tooltip content={<CustomTooltipTime />} />
             <Line

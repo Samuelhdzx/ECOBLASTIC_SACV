@@ -2,7 +2,9 @@
     padding: 2rem;
     max-width: 1600px;
     margin: 0 auto;
-    color: var(--light);
+    color: var(--text-primary);
+    background: var(--background-dark);
+    min-height: 100vh;
   }
   
   .reports-header {
@@ -10,10 +12,12 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--background-card);
     padding: 2rem;
     border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-subtle);
+    backdrop-filter: blur(10px);
   }
   
   .reports-header h1 {
@@ -69,16 +73,18 @@
   }
   
   .metric-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--background-card);
     padding: 1.8rem;
     border-radius: 16px;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    border: 1px solid var(--border-subtle);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-sm);
   }
   
   .metric-card:hover {
     transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
     background: rgba(255, 255, 255, 0.15);
   }
   
@@ -127,11 +133,12 @@
   }
   
   .chart-container {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--background-card);
     padding: 2rem;
     border-radius: 16px;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-lg);
   }
   
   .chart-container h3 {
@@ -141,11 +148,12 @@
   }
   
   .reports-table {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--background-card);
     padding: 2rem;
     border-radius: 16px;
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-lg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   .reports-table h3 {
@@ -187,8 +195,8 @@
   }
   
   .status-badge.success {
-    background: rgba(16, 185, 129, 0.2);
-    color: #34d399;
+    background: rgba(52, 211, 153, 0.2);
+    color: var(--success);
   }
   
   /* Personalización de los gráficos */
@@ -225,4 +233,3 @@
       overflow-x: auto;
     }
   }
-  

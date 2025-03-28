@@ -1,6 +1,27 @@
-
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+  --primary: #7757FA;
+  --primary-dark: #5B43C8;
+  --secondary: #A58DF9;
+  --accent: #C084FC;
+  --background-dark: #0E0E10;
+  --background-card: #1C1C1E;
+  --background-hover: rgba(119, 87, 250, 0.1);
+  --text-primary: #FFFFFF;
+  --text-secondary: #B0A5C0;
+  --danger: #FF5757;
+  --success: #34D399;
+  --warning: #FBBF24;
+  --info: #60A5FA;
+  --border-subtle: rgba(165, 141, 249, 0.2);
+  --shadow-color: rgba(119, 87, 250, 0.2);
+  --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  --shadow-sm: 0 4px 6px var(--shadow-color);
+  --shadow-md: 0 8px 16px var(--shadow-color);
+  --shadow-lg: 0 8px 32px var(--shadow-color);
+}
+
 html,
 body,
 #root {
@@ -9,7 +30,6 @@ body,
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-style: normal;
-  background-color: #000000;
+  background-color: var(--background-dark);
+  color: var(--text-primary);
 }
