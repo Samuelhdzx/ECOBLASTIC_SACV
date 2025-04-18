@@ -1,73 +1,341 @@
+/* ------------------------------
+   CONFIGURACIÓN BASE
+------------------------------ */
+:root {
+  --color-primary: #3a86ff;
+  --color-secondary: #8338ec;
+  --color-tertiary: #ff006e;
+  --color-accent-green: #06d6a0;
+  --color-accent-yellow: #ffbe0b;
+  --color-bg-dark: #0d1117;
+  --color-bg-light: #161b22;
+  --color-card-bg: rgba(30, 41, 59, 0.9);
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.85);
+  --color-border: rgba(255, 255, 255, 0.2);
+  --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.3);
+  --shadow-text: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --gradient-header: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  --gradient-highlight: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-large: 16px;
+  --transition-default: all 0.3s ease;
+}
+
+/* ------------------------------
+   CONTENEDOR PRINCIPAL
+------------------------------ */
 .manuales-container {
-    padding: 20px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--color-bg-dark) 0%, #000000 100%);
+  color: var(--color-text-primary);
+  padding: 2rem 1.5rem;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+/* ------------------------------
+   ENCABEZADO
+------------------------------ */
+.manual-header {
+  text-align: center;
+  background: var(--gradient-header);
+  border-radius: var(--radius-large);
+  padding: 3rem 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.manual-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='rgba(255,255,255,0.05)' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.header-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  z-index: 1;
+  text-shadow: var(--shadow-text);
+  letter-spacing: -0.02em;
+}
+
+.header-subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ------------------------------
+   SECCIÓN DE INFORMACIÓN
+------------------------------ */
+.info-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.info-card {
+  background: var(--color-card-bg);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: var(--transition-default);
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.card-header {
+  background: linear-gradient(to right, rgba(20, 30, 48, 0.95), rgba(36, 59, 85, 0.95));
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card-icon {
+  font-size: 2rem;
+}
+
+.card-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.material-group {
+  margin-bottom: 2rem;
+}
+
+.material-group:last-child {
+  margin-bottom: 0;
+}
+
+.material-group h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.material-group h3::before {
+  content: '▶';
+  color: var(--color-primary);
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.material-group p {
+  margin-bottom: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.feature-list {
+  list-style-type: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.75rem;
+}
+
+.feature-list li {
+  background: rgba(22, 31, 46, 0.9);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-small);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.feature-highlight {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* ------------------------------
+   SECCIÓN DE DESCARGA
+------------------------------ */
+.download-container {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: var(--radius-large);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-card);
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-primary);
+}
+
+.section-description {
+  color: var(--color-text-secondary);
+  margin-bottom: 2.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.download-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.download-card {
+  display: flex;
+  background: var(--color-card-bg);
+  border-radius: var(--radius-medium);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: var(--transition-default);
+}
+
+.download-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.manual-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  width: 100px;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(27, 38, 54, 0.9) 0%, rgba(36, 59, 85, 0.9) 100%);
+}
+
+.manual-icon.technical {
+  background: linear-gradient(135deg, rgba(58, 134, 255, 0.2) 0%, rgba(58, 134, 255, 0.4) 100%);
+}
+
+.manual-icon.user {
+  background: linear-gradient(135deg, rgba(6, 214, 160, 0.2) 0%, rgba(6, 214, 160, 0.4) 100%);
+}
+
+.manual-info {
+  flex: 1;
+  padding: 1.5rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.manual-info h3 {
+  font-size: 1.35rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.manual-info p {
+  color: var(--color-text-secondary);
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.download-button {
+  align-self: flex-start;
+  background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-small);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition-default);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.download-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.download-icon {
+  font-weight: bold;
+}
+
+/* ------------------------------
+   MEDIA QUERIES
+------------------------------ */
+@media (max-width: 768px) {
+  .header-title {
+    font-size: 2rem;
   }
   
-  .manuales-header {
-    text-align: center;
-    margin-bottom: 20px;
+  .manual-header {
+    padding: 2rem 1rem;
   }
   
-  .info-sectionM {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .info-cardM {
-    padding: 20px;
-    border-radius: 8px;
-    background-color: var(--card-background-color);
-    color: var(--text-color);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .info-contentM ul {
-    padding-left: 20px;
-  }
-  
-  .download-section {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .download-cards {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
+  .feature-list {
+    grid-template-columns: 1fr;
   }
   
   .download-card {
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: var(--card-background-color);
-    color: var(--text-color);
-    text-decoration: none;
-    width: 200px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
   }
   
-  .download-card:hover {
-    transform: scale(1.05);
+  .manual-icon {
+    width: 100%;
+    padding: 1.5rem 0;
   }
   
-  .download-icon {
-    font-size: 2rem;
-    margin-bottom: 10px;
+  .manual-info {
+    padding: 1.5rem;
   }
   
   .download-button {
-    margin-top: 10px;
-    background-color: var(--button-background-color);
-    color: var(--button-text-color);
+    align-self: center;
+    width: 100%;
+    justify-content: center;
   }
+}

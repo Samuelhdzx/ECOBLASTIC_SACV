@@ -1,18 +1,7 @@
 import React, { useState } from 'react';
 import { useGetSensorDataQuery } from '@/state/api';
-import {
-  Box,
-  Typography,
-  Grid,
-  Paper,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TextField,
-  useTheme
-} from '@mui/material';
 import { format } from 'date-fns';
+import './profile.css';
 
 interface SensorRecord {
   date: string;
@@ -49,7 +38,7 @@ const Profile = () => {
   const { data: records, isLoading } = useGetSensorDataQuery({});
   const [searchDate, setSearchDate] = useState('');
   const [searchType, setSearchType] = useState('all'); // 'all', 'day', 'month', 'year'
-  const theme = useTheme();
+  const [activeRecord, setActiveRecord] = useState<number | null>(null);
 
   const filterRecords = (records: SensorRecord[]) => {
     if (!searchDate) return records;
@@ -69,121 +58,239 @@ const Profile = () => {
     });
   };
 
-  if (isLoading) return <Box p={3}><Typography>Loading records...</Typography></Box>;
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+        </div>
+        <p>Cargando datos de producción...</p>
+      </div>
+    );
+  }
 
   const filteredRecords = filterRecords(records || []);
+  
+  // Formatear la fecha para mostrar con hora
+  const formatRecordDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return format(date, 'dd/MM/yyyy HH:mm'); // Formato con día, mes, año y hora
+    } catch (error) {
+      return 'Fecha no disponible';
+    }
+  };
 
   return (
-    <Box sx={{ p: 3, backgroundColor: theme.palette.background.default, minHeight: '100vh' }}>
-      {/* Encabezado y sección de búsqueda */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-          Historial de Registros
-        </Typography>
-        <Typography variant="subtitle1" sx={{ color: theme.palette.text.secondary, mb: 2 }}>
-          Sistema de Monitoreo de Parámetros
-        </Typography>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Grid item xs={12} sm={4}>
-            <FormControl fullWidth size="small">
-              <InputLabel>Buscar por</InputLabel>
-              <Select
-                label="Buscar por"
-                value={searchType}
-                onChange={(e) => setSearchType(e.target.value)}
-              >
-                <MenuItem value="all">Todos los registros</MenuItem>
-                <MenuItem value="day">Por día</MenuItem>
-                <MenuItem value="month">Por mes</MenuItem>
-                <MenuItem value="year">Por año</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              fullWidth
-              size="small"
-              variant="outlined"
-              label="Fecha"
+    <div className="profile-container">
+      {/* Encabezado */}
+      <header className="header-section">
+        <div className="header-content">
+          <h1 className="header-title">Sistema de Monitoreo Industrial</h1>
+          <p className="header-subtitle">Panel de Control de Parámetros</p>
+        </div>
+        <div className="header-indicator">
+          <div className="indicator-dot"></div>
+          <span>Sistema activo</span>
+        </div>
+      </header>
+
+      {/* Sección de búsqueda */}
+      <div className="search-section">
+        <div className="search-title">
+          <span className="search-icon">🔍</span>
+          <h2>Filtrar Registros</h2>
+        </div>
+        
+        <div className="search-controls">
+          <div className="search-group">
+            <label htmlFor="search-type">Tipo de búsqueda</label>
+            <select
+              id="search-type"
+              className="search-select"
+              value={searchType}
+              onChange={(e) => setSearchType(e.target.value)}
+            >
+              <option value="all">Todos los registros</option>
+              <option value="day">Por día</option>
+              <option value="month">Por mes</option>
+              <option value="year">Por año</option>
+            </select>
+          </div>
+          
+          <div className="search-group">
+            <label htmlFor="search-date">Fecha</label>
+            <input
+              id="search-date"
+              className="search-input"
               type={searchType === 'day' ? 'date' : searchType === 'month' ? 'month' : searchType === 'year' ? 'number' : 'text'}
               value={searchDate}
               onChange={(e) => setSearchDate(e.target.value)}
+              placeholder={searchType === 'year' ? 'Ingrese el año' : ''}
             />
-          </Grid>
-        </Grid>
-        <Typography variant="body1" sx={{ mt: 2 }}>
-          Registros encontrados: {filteredRecords.length}
-        </Typography>
-      </Box>
+          </div>
+        </div>
+        
+        <div className="results-badge">
+          <div className="results-icon">
+            <span>📊</span>
+          </div>
+          <div className="results-text">
+            <span className="results-count">{filteredRecords.length}</span>
+            <span className="results-label">registros encontrados</span>
+          </div>
+        </div>
+      </div>
 
-      {/* Grid de tarjetas con registros */}
-      <Grid container spacing={3}>
-        {filteredRecords.map((record: SensorRecord, index: number) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
-                  Registro #{index + 1}
-                </Typography>
-                <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
-                  {format(new Date(record.date), 'PPpp')}
-                </Typography>
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'medium', mb: 0.5 }}>
-                  🔬 Polímeros Usados
-                </Typography>
-                <Typography variant="body2">PET: {record.polymerUsage.pet} kg</Typography>
-                <Typography variant="body2">
-                  Polipropileno: {record.polymerUsage.polypropylene} kg
-                </Typography>
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'medium', mb: 0.5 }}>
-                  ⚡ Energía del Potenciómetro
-                </Typography>
-                <Typography variant="body2">
-                  Utilizada: {record.potentiometerEnergy.used}%
-                </Typography>
-                <Typography variant="body2">
-                  Restante: {record.potentiometerEnergy.remaining}%
-                </Typography>
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'medium', mb: 0.5 }}>
-                  🔌 Energía del Inyector
-                </Typography>
-                <Typography variant="body2">
-                  Utilizada: {record.injectorEnergy.used}%
-                </Typography>
-                <Typography variant="body2">
-                  Restante: {record.injectorEnergy.remaining}%
-                </Typography>
-              </Box>
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'medium', mb: 0.5 }}>
-                  🔧 Uso de Moldes
-                </Typography>
-                <Typography variant="body2">Molde 1: {record.moldUsage.mold1} usos</Typography>
-                <Typography variant="body2">Molde 2: {record.moldUsage.mold2} usos</Typography>
-                <Typography variant="body2">Molde 3: {record.moldUsage.mold3} usos</Typography>
-              </Box>
-              <Box>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'medium', mb: 0.5 }}>
-                  🌡️ Parámetros Adicionales
-                </Typography>
-                <Typography variant="body2">
-                  Temperatura: {record.temperature}°C
-                </Typography>
-                <Typography variant="body2">
-                  Tiempo de Inyección: {record.injectionTime}s
-                </Typography>
-              </Box>
-            </Paper>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+      {/* Grid de registros */}
+      {filteredRecords.length > 0 ? (
+        <div className="records-wrapper">
+          <div className="record-tabs">
+            {filteredRecords.map((record, index) => (
+              <div 
+                key={`tab-${index}`} 
+                className={`record-tab ${activeRecord === index ? 'active' : ''}`}
+                onClick={() => setActiveRecord(index)}
+              >
+                <div className="tab-content">
+                  <span className="tab-number">{index + 1}</span>
+                  <div className="tab-datetime">
+                    <span className="tab-date">{formatRecordDate(record.date).split(' ')[0]}</span>
+                    <span className="tab-time">{formatRecordDate(record.date).split(' ')[1]}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="records-container">
+            {filteredRecords.map((record, index) => (
+              <div 
+                key={`record-${index}`} 
+                className={`record-grid ${activeRecord === index ? 'active' : ''}`}
+              >
+                {/* Tarjeta de polímeros */}
+                <div className="data-card polymer-card">
+                  <div className="card-header">
+                    <span className="card-icon">🧪</span>
+                    <h3 className="card-title">Polímeros Utilizados</h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="data-grid">
+                      <div className="data-item">
+                        <div className="data-label">PET</div>
+                        <div className="data-value">{record.polymerUsage.pet} kg</div>
+                      </div>
+                      <div className="data-item">
+                        <div className="data-label">Polipropileno</div>
+                        <div className="data-value">{record.polymerUsage.polypropylene} kg</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                                  {/* Tarjeta de estado energético */}
+                <div className="data-card energy-card">
+                  <div className="card-header">
+                    <span className="card-icon">⚡</span>
+                    <h3 className="card-title">Estado Energético</h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="energy-meters">
+                      <div className="energy-meter">
+                        <div className="meter-label">
+                          <span>Potenciómetro</span>
+                          <span className="meter-percentage">{record.potentiometerEnergy.used}%</span>
+                        </div>
+                        <div className="meter-bar">
+                          <div 
+                            className={`meter-fill ${record.potentiometerEnergy.used > 75 ? 'high' : record.potentiometerEnergy.used > 50 ? 'medium' : record.potentiometerEnergy.used > 25 ? 'low' : 'safe'}`}
+                            style={{ width: `${record.potentiometerEnergy.used}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      <div className="energy-meter">
+                        <div className="meter-label">
+                          <span>Inyector</span>
+                          <span className="meter-percentage">{record.injectorEnergy.used}%</span>
+                        </div>
+                        <div className="meter-bar">
+                          <div 
+                            className={`meter-fill ${record.injectorEnergy.used > 75 ? 'high' : record.injectorEnergy.used > 50 ? 'medium' : record.injectorEnergy.used > 25 ? 'low' : 'safe'}`}
+                            style={{ width: `${record.injectorEnergy.used}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Tarjeta de uso de moldes */}
+                <div className="data-card mold-card">
+                  <div className="card-header">
+                    <span className="card-icon">🔧</span>
+                    <h3 className="card-title">Uso de Moldes</h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="mold-grid">
+                      <div className="mold-item">
+                        <div className="mold-label">Molde 1</div>
+                        <div className="mold-value">{record.moldUsage.mold1}</div>
+                        <div className="mold-unit">usos</div>
+                      </div>
+                      <div className="mold-item">
+                        <div className="mold-label">Molde 2</div>
+                        <div className="mold-value">{record.moldUsage.mold2}</div>
+                        <div className="mold-unit">usos</div>
+                      </div>
+                      <div className="mold-item">
+                        <div className="mold-label">Molde 3</div>
+                        <div className="mold-value">{record.moldUsage.mold3}</div>
+                        <div className="mold-unit">usos</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Tarjeta de parámetros adicionales */}
+                <div className="data-card parameters-card">
+                  <div className="card-header">
+                    <span className="card-icon">📊</span>
+                    <h3 className="card-title">Parámetros Adicionales</h3>
+                  </div>
+                  <div className="card-content">
+                    <div className="parameters-grid">
+                      <div className="parameter-item">
+                        <div className="parameter-icon">🌡️</div>
+                        <div className="parameter-info">
+                          <div className="parameter-label">Temperatura</div>
+                          <div className="parameter-value">{record.temperature}°C</div>
+                        </div>
+                      </div>
+                      <div className="parameter-item">
+                        <div className="parameter-icon">⏱️</div>
+                        <div className="parameter-info">
+                          <div className="parameter-label">Tiempo Inyección</div>
+                          <div className="parameter-value">{record.injectionTime}s</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        // Mensaje cuando no hay registros
+        <div className="no-records">
+          <div className="no-records-icon">📊</div>
+          <h3>No se encontraron registros</h3>
+          <p>Intenta cambiar los criterios de búsqueda o verifica que existan datos para el período seleccionado.</p>
+        </div>
+      )}
+    </div>
   );
 };
 

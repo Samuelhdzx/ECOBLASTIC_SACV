@@ -1,116 +1,147 @@
 import React from 'react';
-import { useTheme } from '@mui/material/styles';
-import { Box, Typography, Button } from '@mui/material';
-import manualTecnico from '../../public/pdf/ECOBLASTIC manual (3) (1).pdf';
-import manualUsuario from '../../public/pdf/MANUAL INYECTORA.pdf';
 import './Manuales.css';
 
+// Asumimos que los archivos PDF están en las mismas rutas
+import manualTecnico from '../../public/pdf/ECOBLASTIC manual (3) (1).pdf';
+import manualUsuario from '../../public/pdf/MANUAL INYECTORA.pdf';
+
 const Manuales = () => {
-  const theme = useTheme();
-
   return (
-    <Box
-      className="manuales-container"
-      sx={{
-        backgroundColor: theme.palette.background.default,
-        color: theme.palette.text.primary,
-        '--card-background-color': theme.palette.background.paper,
-        '--text-color': theme.palette.text.primary,
-        '--button-background-color': theme.palette.primary.main,
-        '--button-text-color': theme.palette.primary.contrastText,
-      }}
-    >
-      <Box className="manuales-header">
-        <Typography variant="h1">Guía Técnica de Materiales y Procesos</Typography>
-        <Typography variant="body1">Información detallada sobre plásticos, moldes y procedimientos</Typography>
-      </Box>
+    <div className="manuales-container">
+      {/* Encabezado con efecto de glassmorphism */}
+      <header className="manual-header">
+        <h1 className="header-title">Guía Técnica de Materiales y Procesos</h1>
+        <p className="header-subtitle">Información detallada sobre plásticos, moldes y procedimientos</p>
+      </header>
 
-      <Box className="info-sectionM">
-        <Box className="info-cardM">
-          <Typography variant="h2">🔬 Plásticos Utilizados</Typography>
-          <Box className="info-contentM">
-            <Typography variant="h3">PET (Tereftalato de Polietileno)</Typography>
-            <Typography variant="body1">Material versátil con excelentes propiedades:</Typography>
-            <ul>
-              <li>Temperatura de fusión: 260°C</li>
-              <li>Resistencia al impacto alta</li>
-              <li>Transparencia y brillo excepcional</li>
-              <li>100% Reciclable</li>
-            </ul>
+      {/* Sección de información técnica */}
+      <div className="info-section">
+        {/* Tarjeta de Plásticos */}
+        <div className="info-card">
+          <div className="card-header">
+            <span className="card-icon">🔬</span>
+            <h2>Plásticos Utilizados</h2>
+          </div>
+          <div className="card-content">
+            <div className="material-group">
+              <h3>PET (Tereftalato de Polietileno)</h3>
+              <p>Material versátil con excelentes propiedades:</p>
+              <ul className="feature-list">
+                <li><span className="feature-highlight">Temperatura de fusión:</span> 260°C</li>
+                <li><span className="feature-highlight">Resistencia al impacto:</span> Alta</li>
+                <li><span className="feature-highlight">Transparencia:</span> Excepcional</li>
+                <li><span className="feature-highlight">Reciclabilidad:</span> 100%</li>
+              </ul>
+            </div>
+            
+            <div className="material-group">
+              <h3>Polipropileno (PP)</h3>
+              <p>Termoplástico de alta resistencia:</p>
+              <ul className="feature-list">
+                <li><span className="feature-highlight">Temperatura de fusión:</span> 170°C</li>
+                <li><span className="feature-highlight">Resistencia química:</span> Excelente</li>
+                <li><span className="feature-highlight">Costo de producción:</span> Bajo</li>
+                <li><span className="feature-highlight">Durabilidad:</span> Alta</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-            <Typography variant="h3">Polipropileno (PP)</Typography>
-            <Typography variant="body1">Termoplástico de alta resistencia:</Typography>
-            <ul>
-              <li>Temperatura de fusión: 170°C</li>
-              <li>Excelente resistencia química</li>
-              <li>Bajo costo de producción</li>
-              <li>Alta durabilidad</li>
-            </ul>
-          </Box>
-        </Box>
+        {/* Tarjeta de Sistema de Moldes */}
+        <div className="info-card">
+          <div className="card-header">
+            <span className="card-icon">🔧</span>
+            <h2>Sistema de Moldes</h2>
+          </div>
+          <div className="card-content">
+            <div className="material-group">
+              <h3>Características Principales</h3>
+              <ul className="feature-list">
+                <li><span className="feature-highlight">Diseño:</span> Modular intercambiable</li>
+                <li><span className="feature-highlight">Refrigeración:</span> Sistema optimizado</li>
+                <li><span className="feature-highlight">Acabado superficial:</span> Alta calidad</li>
+                <li><span className="feature-highlight">Mantenimiento:</span> Preventivo programado</li>
+              </ul>
+            </div>
+            
+            <div className="material-group">
+              <h3>Especificaciones Técnicas</h3>
+              <ul className="feature-list">
+                <li><span className="feature-highlight">Presión máxima:</span> 200 MPa</li>
+                <li><span className="feature-highlight">Temperatura máxima:</span> 300°C</li>
+                <li><span className="feature-highlight">Tiempo de ciclo:</span> 15-45 segundos</li>
+                <li><span className="feature-highlight">Vida útil estimada:</span> 100,000 ciclos</li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-        <Box className="info-cardM">
-          <Typography variant="h2">🔧 Sistema de Moldes</Typography>
-          <Box className="info-contentM">
-            <Typography variant="h3">Características Principales</Typography>
-            <ul>
-              <li>Diseño modular intercambiable</li>
-              <li>Sistema de refrigeración optimizado</li>
-              <li>Acabado superficial de alta calidad</li>
-              <li>Mantenimiento preventivo programado</li>
-            </ul>
+        {/* Tarjeta de Proceso de Inyección */}
+        <div className="info-card">
+          <div className="card-header">
+            <span className="card-icon">⚡</span>
+            <h2>Proceso de Inyección</h2>
+          </div>
+          <div className="card-content">
+            <div className="material-group">
+              <h3>Parámetros Críticos</h3>
+              <ul className="feature-list">
+                <li><span className="feature-highlight">Temperatura:</span> Control preciso</li>
+                <li><span className="feature-highlight">Presión:</span> Inyección controlada</li>
+                <li><span className="feature-highlight">Enfriamiento:</span> Tiempo optimizado</li>
+                <li><span className="feature-highlight">Velocidad:</span> Ajustable</li>
+              </ul>
+            </div>
+            
+            <div className="material-group">
+              <h3>Recomendaciones</h3>
+              <ul className="feature-list">
+                <li><span className="feature-highlight">Material:</span> Precalentamiento</li>
+                <li><span className="feature-highlight">Sistema:</span> Limpieza regular</li>
+                <li><span className="feature-highlight">Equipos:</span> Calibración periódica</li>
+                <li><span className="feature-highlight">Operación:</span> Monitoreo constante</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
-            <Typography variant="h3">Especificaciones Técnicas</Typography>
-            <ul>
-              <li>Presión máxima: 200 MPa</li>
-              <li>Temperatura máxima: 300°C</li>
-              <li>Tiempo de ciclo: 15-45 segundos</li>
-              <li>Vida útil estimada: 100,000 ciclos</li>
-            </ul>
-          </Box>
-        </Box>
-
-        <Box className="info-cardM">
-          <Typography variant="h2">⚡ Proceso de Inyección</Typography>
-          <Box className="info-contentM">
-            <Typography variant="h3">Parámetros Críticos</Typography>
-            <ul>
-              <li>Control preciso de temperatura</li>
-              <li>Presión de inyección controlada</li>
-              <li>Tiempo de enfriamiento optimizado</li>
-              <li>Velocidad de inyección ajustable</li>
-            </ul>
-
-            <Typography variant="h3">Recomendaciones</Typography>
-            <ul>
-              <li>Precalentamiento de material</li>
-              <li>Limpieza regular del sistema</li>
-              <li>Calibración periódica</li>
-              <li>Monitoreo constante</li>
-            </ul>
-          </Box>
-        </Box>
-      </Box>
-
-      <Box className="download-section">
-        <Typography variant="h2">Manuales Disponibles</Typography>
-        <Box className="download-cards">
+      {/* Sección de descarga de manuales */}
+      <div className="download-container">
+        <h2 className="section-title">Manuales Disponibles</h2>
+        <p className="section-description">Descarga nuestros manuales completos en formato PDF</p>
+        
+        <div className="download-cards">
           <a href={manualTecnico} download className="download-card">
-            <span className="download-icon">📘</span>
-            <Typography variant="h3">Manual Técnico</Typography>
-            <Typography variant="body1">Especificaciones detalladas y guía de mantenimiento</Typography>
-            <Button className="download-button">Descargar PDF</Button>
+            <div className="manual-icon technical">
+              <span>📘</span>
+            </div>
+            <div className="manual-info">
+              <h3>Manual Técnico</h3>
+              <p>Especificaciones detalladas y guía de mantenimiento exhaustiva para técnicos e ingenieros.</p>
+              <button className="download-button">
+                <span className="download-icon">↓</span>
+                Descargar PDF
+              </button>
+            </div>
           </a>
 
           <a href={manualUsuario} download className="download-card">
-            <span className="download-icon">📗</span>
-            <Typography variant="h3">Manual de Usuario</Typography>
-            <Typography variant="body1">Guía de operación y mejores prácticas</Typography>
-            <Button className="download-button">Descargar PDF</Button>
+            <div className="manual-icon user">
+              <span>📗</span>
+            </div>
+            <div className="manual-info">
+              <h3>Manual de Usuario</h3>
+              <p>Guía completa de operación, solución de problemas y mejores prácticas para operadores.</p>
+              <button className="download-button">
+                <span className="download-icon">↓</span>
+                Descargar PDF
+              </button>
+            </div>
           </a>
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 

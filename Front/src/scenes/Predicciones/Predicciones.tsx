@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Predicciones.css';
+
+// Importamos las imágenes (ajusta las rutas según tu estructura de proyecto)
 import gramaje from 'front/public/img/MONITOREO/gramaje.png';
 import temperatura from 'front/public/img/MONITOREO/temperatura.png';
 import tiempo from 'front/public/img/MONITOREO/tiempo.png';
-import { useTheme } from '@mui/material/styles';
 
 const Predicciones: React.FC = () => {
   const [selectedMaterial, setSelectedMaterial] = useState('PET');
   const [selectedParameter, setSelectedParameter] = useState('gramaje');
-  const theme = useTheme();
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme.palette.mode);
-  }, [theme.palette.mode]);
-
+  // Base de datos con la información de los materiales y parámetros
   const getContent = (material: string, parameter: string) => {
     const content = {
       PET: {
@@ -62,80 +59,145 @@ const Predicciones: React.FC = () => {
 
   const currentContent = getContent(selectedMaterial, selectedParameter);
 
-  return (
-    <div className="predicciones-main">
-      <div className="predicciones-header">
-        <h1>Predicciones de Material</h1>
-        <p>Análisis Predictivo</p>
-      </div>
+  // Obtener el icono adecuado según el parámetro seleccionado
+  const getParameterIcon = () => {
+    switch (selectedParameter) {
+      case 'gramaje':
+        return '⚖️';
+      case 'temperatura':
+        return '🌡️';
+      case 'tiempo':
+        return '⏱️';
+      default:
+        return '📊';
+    }
+  };
+  
+  // Obtener el color del gradiente según el material seleccionado
+  const getMaterialColor = () => {
+    return selectedMaterial === 'PET' ? 
+      'from-blue-500 via-indigo-500 to-purple-600' : 
+      'from-teal-400 via-cyan-500 to-blue-500';
+  };
 
-      <div className="predicciones-content">
-        <div className="predicciones-selectors">
-          <div className="predicciones-material-selector">
+  // Obtener el color del indicador según el parámetro
+  const getParameterColor = () => {
+    switch (selectedParameter) {
+      case 'gramaje':
+        return 'bg-blue-500';
+      case 'temperatura':
+        return 'bg-red-500';
+      case 'tiempo':
+        return 'bg-purple-500';
+      default:
+        return 'bg-indigo-500';
+    }
+  };
+
+  // Formatear el título de la métrica (convertir camelCase a palabras)
+  const formatMetricTitle = (key: string) => {
+    return key
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase());
+  };
+
+  return (
+    <div className="predicciones-container">
+      {/* Encabezado con efecto de glassmorphism */}
+      <header className="predicciones-header">
+        <h1 className="header-title">Predicciones de Material</h1>
+        <p className="header-subtitle">Análisis predictivo para optimización de procesos de inyección</p>
+      </header>
+
+      {/* Panel principal */}
+      <div className="predicciones-panel">
+        {/* Selector de material con efecto neomórfico */}
+        <div className="selector-section">
+          <h2 className="selector-title">Seleccionar Material</h2>
+          <div className="material-selector">
             <button 
-              className={`predicciones-btn ${selectedMaterial === 'PET' ? 'predicciones-active' : ''}`} 
+              className={`material-btn ${selectedMaterial === 'PET' ? 'selected' : ''}`}
               onClick={() => setSelectedMaterial('PET')}
             >
-              PET
+              <div className="material-icon pet">PET</div>
+              <span>Tereftalato de Polietileno</span>
             </button>
             <button 
-              className={`predicciones-btn ${selectedMaterial === 'POLIPROPILENO' ? 'predicciones-active' : ''}`} 
+              className={`material-btn ${selectedMaterial === 'POLIPROPILENO' ? 'selected' : ''}`}
               onClick={() => setSelectedMaterial('POLIPROPILENO')}
             >
-              POLIPROPILENO
+              <div className="material-icon pp">PP</div>
+              <span>Polipropileno</span>
             </button>
           </div>
 
-          <div className="predicciones-parameters">
+          {/* Selector de parámetros */}
+          <h2 className="selector-title">Seleccionar Parámetro</h2>
+          <div className="parameter-selector">
             <button 
-              className={`predicciones-param-btn ${selectedParameter === 'temperatura' ? 'predicciones-active' : ''}`} 
+              className={`parameter-btn ${selectedParameter === 'temperatura' ? 'selected' : ''}`}
               onClick={() => setSelectedParameter('temperatura')}
             >
-              Temperatura
+              <span className="parameter-icon">🌡️</span>
+              <span>Temperatura</span>
             </button>
             <button 
-              className={`predicciones-param-btn ${selectedParameter === 'gramaje' ? 'predicciones-active' : ''}`} 
+              className={`parameter-btn ${selectedParameter === 'gramaje' ? 'selected' : ''}`}
               onClick={() => setSelectedParameter('gramaje')}
             >
-              Gramaje
+              <span className="parameter-icon">⚖️</span>
+              <span>Gramaje</span>
             </button>
             <button 
-              className={`predicciones-param-btn ${selectedParameter === 'tiempo' ? 'predicciones-active' : ''}`} 
+              className={`parameter-btn ${selectedParameter === 'tiempo' ? 'selected' : ''}`}
               onClick={() => setSelectedParameter('tiempo')}
             >
-              Tiempo
+              <span className="parameter-icon">⏱️</span>
+              <span>Tiempo</span>
             </button>
           </div>
         </div>
 
-        <div className="predicciones-layout">
-          <div className="predicciones-image-section">
-            {selectedParameter === 'gramaje' && (
-              <i className="fi fi-rr-scale huge-icon"></i>
-            )}
-            {selectedParameter === 'temperatura' && (
-              <i className="fi fi-rr-temperature-high huge-icon"></i>
-            )}
-            {selectedParameter === 'tiempo' && (
-              <i className="fi fi-rr-time-fast huge-icon"></i>
-            )}
+        {/* Visualización de datos */}
+        <div className="data-visualization">
+          {/* Tarjeta de datos principal */}
+          <div className="primary-data-card">
+            <div className={`data-icon ${getParameterColor()}`}>
+              <span>{getParameterIcon()}</span>
+            </div>
+            <h3 className="primary-data-value">{currentContent.text}</h3>
+            <div className={`material-badge ${getMaterialColor()}`}>
+              {selectedMaterial}
+            </div>
           </div>
-          <div className="predicciones-info-section">
-            <h3 className="predicciones-text">{currentContent.text}</h3>
-            <div className="predicciones-metrics">
+
+          {/* Métricas adicionales */}
+          <div className="metrics-container">
+            <h3 className="metrics-title">Parámetros Asociados</h3>
+            <div className="metrics-grid">
               {Object.entries(currentContent)
                 .filter(([key]) => key !== 'text' && key !== 'image')
                 .map(([key, value]) => (
-                  <div key={key} className="predicciones-metric-card">
-                    <h4 className="predicciones-metric-title">
-                      {key.replace(/([A-Z])/g, ' $1').toUpperCase()}
-                    </h4>
-                    <div className="predicciones-metric-value">{value}</div>
+                  <div key={key} className="metric-card">
+                    <div className="metric-header">
+                      <div className="metric-dot"></div>
+                      <h4 className="metric-title">{formatMetricTitle(key)}</h4>
+                    </div>
+                    <div className="metric-value">{value}</div>
                   </div>
                 ))}
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Información adicional */}
+      <div className="info-banner">
+        <div className="info-icon">💡</div>
+        <p className="info-text">
+          Los valores mostrados son referencias basadas en condiciones óptimas de operación. 
+          Ajuste según las especificaciones de su equipo y material.
+        </p>
       </div>
     </div>
   );
