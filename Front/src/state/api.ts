@@ -12,6 +12,12 @@ export interface UserRecord {
   createdAt: string;
 }
 
+export interface TemperatureData {
+  temperature: number;
+  injectionTime: number;
+  createdAt: string;
+}
+
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:1337',
@@ -100,6 +106,29 @@ export const api = createApi({
         body: params,
       }),
       invalidatesTags: ['Production']
+    }),
+
+    getTemperatures: builder.query<TemperatureData[], void>({
+      query: () => ({
+        url: '/api/sensors', // Cambiar a la misma ruta que usa Row3
+        method: 'GET',
+        credentials: 'include'
+      }),
+      transformResponse: (response: any) => {
+        console.log('Raw response:', response);
+        // Transformar los datos al formato esperado
+        if (Array.isArray(response)) {
+          return response.map(item => ({
+            temperature: Number(item.temperature),
+            injectionTime: Number(item.injectionTime),
+            createdAt: item.timestamp || new Date().toISOString()
+          }));
+        }
+        return [];
+      },
+      // Actualizar cada 3 segundos como en Row3
+      pollingInterval: 3000,
+      providesTags: ['SensorData']
     })
   })
 });
@@ -115,5 +144,6 @@ export const {
   useGetQualityMetricsQuery,
   useGetMaintenanceScheduleQuery,
   useUpdateMachineParamsMutation,
-  useGetUserRecordsQuery
+  useGetUserRecordsQuery,
+  useGetTemperaturesQuery
 } = api;

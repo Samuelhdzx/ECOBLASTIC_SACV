@@ -281,16 +281,25 @@ void loop() {
     injectionStartTime = 0;
   }
 
-  // Convertir tiempo de inyección de ms a segundos
-  float injectionTimeSeconds = injectionDuration / 1000.0;
+  // Convertir tiempo de inyección de ms a segundos y asegurarse que no sea 0
+  float injectionTimeSeconds = (injectionDuration > 0) ? (injectionDuration / 1000.0) : 
+                              (digitalRead(injectionPin) == HIGH ? (millis() - injectionStartTime) / 1000.0 : 0);
+
+  // Depuración del tiempo de inyección
+  if (debugMode) {
+    Serial.print("Estado pin inyección: ");
+    Serial.println(digitalRead(injectionPin));
+    Serial.print("Tiempo inyección (s): ");
+    Serial.println(injectionTimeSeconds);
+  }
 
   // Preparar el JSON para enviar al servidor
   // Usamos la ruta que está definida en app.js
   String path = "/api/temperature";
   
   // Formato JSON que coincide con el modelo Temperature
-  String jsonPayload = "{\"temperature\":" + String(temperature) + 
-                       ",\"injectionTime\":" + String(injectionTimeSeconds) + "}";
+  String jsonPayload = "{\"temperature\":" + String(temperature, 1) + 
+                       ",\"injectionTime\":" + String(injectionTimeSeconds, 2) + "}";
   
   if (debugMode) {
     Serial.println("\n--- ENVIANDO DATOS ---");

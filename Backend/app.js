@@ -44,15 +44,22 @@ app.post('/api/temperature', async (req, res) => {
     try {
         const { temperature, injectionTime } = req.body;
 
-        // Verificar que ambos campos estén presentes
-        if (temperature === undefined || injectionTime === undefined) {
-            return res.status(400).json({ error: 'Faltan datos: temperature o injectionTime' });
+        // Verificar y validar datos
+        const temp = Number(temperature);
+        const time = Number(injectionTime);
+
+        if (isNaN(temp) || isNaN(time)) {
+            return res.status(400).json({ error: 'Datos inválidos' });
         }
 
-        console.log(`Temperatura recibida: ${temperature}°C, Tiempo de inyección: ${injectionTime}s`);
+        console.log(`Temperatura: ${temp}°C, Tiempo inyección: ${time}s`);
         
-        // Guardar en MongoDB
-        const tempRecord = new Temperature({ temperature, injectionTime });
+        // Guardar con timestamp actual
+        const tempRecord = new Temperature({
+            temperature: temp,
+            injectionTime: time,
+            timestamp: new Date()
+        });
         await tempRecord.save();
         
         res.status(200).json({ message: 'Datos guardados correctamente' });
@@ -65,11 +72,23 @@ app.post('/api/temperature', async (req, res) => {
 // Nueva ruta para obtener los datos de sensores
 app.get('/api/sensors', async (req, res) => {
     try {
-        const data = await Temperature.find().sort({ timestamp: -1 }).limit(50); // Obtener los últimos 50 registros
-        res.status(200).json(data);
+        const data = await Temperature.find()
+            .sort({ timestamp: -1 })
+            .limit(50);
+        
+        // Formatear datos antes de enviar
+        const formattedData = data.map(record => ({
+            temperature: record.temperature,
+            injectionTime: record.injectionTime,
+            timestamp: record.timestamp.toISOString(),
+            _id: record._id
+        }));
+        
+        console.log('Sending formatted data:', formattedData[0]); // Debug primer registro
+        res.status(200).json(formattedData);
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ error: 'Error al obtener los datos' });
+        res.status(500).json({ error: 'Error al obtener datos' });
     }
 });
 

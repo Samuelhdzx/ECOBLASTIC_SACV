@@ -560,9 +560,10 @@ body {
 }
 
 .chart-container {
-  background: rgba(37, 39, 50, 0.7);
-  padding: var(--spacing-xl);
-  border-radius: var(--border-radius-xl);
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-xl);
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: var(--shadow-lg);
   backdrop-filter: blur(10px);
@@ -1228,4 +1229,29 @@ tr:hover td {
 
 .metric-card:nth-child(4) {
   animation-delay: 0.4s;
+}
+
+/* Estilos para nuevos elementos */
+.no-data-message {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius-lg);
+  margin: 2rem 0;
+}
+
+.retry-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--primary);
+  border: none;
+  border-radius: var(--border-radius-md);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retry-button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
 }
