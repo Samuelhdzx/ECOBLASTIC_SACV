@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import data_sensorsRoutes from "./src/routes/data_sensors.js";
 import authRoutes from "./src/routes/auth.routes.js";
-import esp32Routes from "./src/routes/esp32.routes.js";
+
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
@@ -24,7 +24,6 @@ app.use(helmet());
 app.use(cookieParser());
 app.use('/api', data_sensorsRoutes);
 app.use('/api', authRoutes);
-app.use('/api/esp32', esp32Routes);
 
 //mongo db connection
 mongoose
@@ -76,18 +75,18 @@ app.get('/api/sensors', async (req, res) => {
             .sort({ timestamp: -1 })
             .limit(50);
         
-        // Formatear datos antes de enviar
+        // Ensure temperature and timestamp are properly formatted
         const formattedData = data.map(record => ({
-            temperature: record.temperature,
-            injectionTime: record.injectionTime,
+            temperature: Number(record.temperature) || 0, // Ensure it's a number
+            injectionTime: Number(record.injectionTime) || 0,
             timestamp: record.timestamp.toISOString(),
             _id: record._id
         }));
         
-        console.log('Sending formatted data:', formattedData[0]); // Debug primer registro
+        console.log('Sending sensor data:', formattedData[0]); // Debug logging
         res.status(200).json(formattedData);
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching sensor data:', error);
         res.status(500).json({ error: 'Error al obtener datos' });
     }
 });

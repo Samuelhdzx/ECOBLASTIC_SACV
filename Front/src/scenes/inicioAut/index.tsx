@@ -1,15 +1,23 @@
 import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './style.css';
 
-// Importamos las imágenes (ajusta las rutas según tu estructura de proyecto)
-import celular from 'front/public/img/PÁGINA PRINCIPAL/celular.png';
-import computadora from 'front/public/img/PÁGINA PRINCIPAL/compu.png';
+// Corregir rutas de imágenes
+import celular from '../../../public/img/PÁGINA PRINCIPAL/celular.png';
+import computadora from '../../../public/img/PÁGINA PRINCIPAL/compu.png';
 
-const Inicio: React.FC = () => {
+const InicioAut: React.FC = () => {
   const featuresRef = useRef<HTMLDivElement>(null);
   const dashboardRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     // Función para animar elementos al hacer scroll
@@ -52,10 +60,6 @@ const Inicio: React.FC = () => {
                 >
                   <span className="btn-icon">🚀</span>
                   <span>{localStorage.getItem('user') ? 'Ingresar Datos' : 'Iniciar Ahora'}</span>
-                </Link>
-                <Link to="/createAdmin" className="secondary-btn">
-                  <span className="btn-icon">👤</span>
-                  <span>Acceso Administrativo</span>
                 </Link>
               </div>
             </div>
@@ -228,4 +232,4 @@ const Inicio: React.FC = () => {
   );
 };
 
-export default Inicio;
+export default InicioAut;

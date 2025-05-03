@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useGetSensorDataQuery } from '@/state/api';
+import React, { useState, useEffect } from 'react';
+import { useGetSensorDataQuery, useGetTemperaturesQuery } from '@/state/api';
 import { format } from 'date-fns';
 import './profile.css';
 
@@ -36,13 +36,33 @@ const getLocalDateString = (date: Date): string => {
 
 const Profile = () => {
   const { data: records, isLoading } = useGetSensorDataQuery({});
+  const { data: temperatureData } = useGetTemperaturesQuery();
+  const [lastKnownTemp, setLastKnownTemp] = useState({ temperature: 0, injectionTime: 0 });
+
+  useEffect(() => {
+    if (temperatureData && temperatureData.length > 0) {
+      setLastKnownTemp({
+        temperature: temperatureData[0].temperature,
+        injectionTime: temperatureData[0].injectionTime
+      });
+    }
+  }, [temperatureData]);
+
   const [searchDate, setSearchDate] = useState('');
   const [searchType, setSearchType] = useState('all'); // 'all', 'day', 'month', 'year'
   const [activeRecord, setActiveRecord] = useState<number | null>(null);
 
   const filterRecords = (records: SensorRecord[]) => {
-    if (!searchDate) return records;
-    return records.filter((record) => {
+    if (!records || records.length === 0) return [];
+    
+    let enhancedRecords = records.map(record => ({
+      ...record,
+      temperature: lastKnownTemp.temperature,
+      injectionTime: lastKnownTemp.injectionTime
+    }));
+
+    if (!searchDate) return enhancedRecords;
+    return enhancedRecords.filter((record) => {
       const recordDateStr = getLocalDateString(new Date(record.date));
       // searchDate ya viene en formato "yyyy-MM-dd" cuando type="date"
       switch (searchType) {

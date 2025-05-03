@@ -18,6 +18,13 @@ export interface TemperatureData {
   createdAt: string;
 }
 
+export interface ProductivityMetrics {
+  totalPieces: number;
+  hourlyProduction: Array<{ hour: string; pieces: number }>;
+  cycleProduction: Array<{ cycle: string; time: number }>;
+  averageCycleTime: number;
+}
+
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:1337',
@@ -30,7 +37,7 @@ export const api = createApi({
       return headers;
     }
   }),
-  tagTypes: ['SensorData', 'Users', 'Production', 'Inventory', 'Maintenance', 'Quality'],
+  tagTypes: ['SensorData'],
   endpoints: (builder) => ({
     getSensorData: builder.query({
       query: () => ({
@@ -38,6 +45,10 @@ export const api = createApi({
         method: 'GET',
         credentials: 'include'
       }),
+      transformResponse: (response: any) => {
+        console.log('Raw sensor data:', response);
+        return Array.isArray(response) ? response : [];
+      },
       providesTags: ['SensorData']
     }),
 
@@ -109,27 +120,25 @@ export const api = createApi({
     }),
 
     getTemperatures: builder.query<TemperatureData[], void>({
+      query: () => 'api/sensors',
+      providesTags: ['SensorData']
+    }),
+
+    getProductivityMetrics: builder.query<ProductivityMetrics, void>({
       query: () => ({
-        url: '/api/sensors', // Cambiar a la misma ruta que usa Row3
+        url: '/api/metrics/productivity',
         method: 'GET',
         credentials: 'include'
       }),
       transformResponse: (response: any) => {
-        console.log('Raw response:', response);
-        // Transformar los datos al formato esperado
-        if (Array.isArray(response)) {
-          return response.map(item => ({
-            temperature: Number(item.temperature),
-            injectionTime: Number(item.injectionTime),
-            createdAt: item.timestamp || new Date().toISOString()
-          }));
-        }
-        return [];
-      },
-      // Actualizar cada 3 segundos como en Row3
-      pollingInterval: 3000,
-      providesTags: ['SensorData']
-    })
+        return {
+          totalPieces: response.totalPieces || 0,
+          hourlyProduction: response.hourlyProduction || [],
+          cycleProduction: response.cycleProduction || [],
+          averageCycleTime: response.averageCycleTime || 0
+        };
+      }
+    }),
   })
 });
 
@@ -145,5 +154,6 @@ export const {
   useGetMaintenanceScheduleQuery,
   useUpdateMachineParamsMutation,
   useGetUserRecordsQuery,
-  useGetTemperaturesQuery
+  useGetTemperaturesQuery,
+  useGetProductivityMetricsQuery
 } = api;

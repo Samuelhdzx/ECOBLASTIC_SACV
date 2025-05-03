@@ -58,24 +58,25 @@ const Row4 = () => {
   const { data, isLoading } = useGetSensorDataQuery(undefined, { pollingInterval: 3000 });
   const { palette } = useTheme();
 
-  // Regiones de referencia para alertas visuales de corriente
-  const normalRange = { start: 0, end: 8, color: 'rgba(16, 185, 129, 0.1)' }; // Verde
-  const warningRange = { start: 8, end: 12, color: 'rgba(251, 191, 36, 0.1)' }; // Amarillo
-  const alertRange = { start: 12, end: 20, color: 'rgba(239, 68, 68, 0.1)' }; // Rojo
-
-  // Ejemplo de cálculo: Corriente = (potentiometerEnergy.used + injectorEnergy.used) / 10
+  // Usar directamente el valor de corriente del sensor
   const currentData = data
     ? data.map(record => ({
         ...record,
-        current: (record.potentiometerEnergy.used + record.injectorEnergy.used) / 10,
-        dateFormatted: new Date(record.date).toLocaleString('es-ES', { 
-          day: '2-digit', 
-          month: '2-digit', 
-          hour: '2-digit', 
-          minute: '2-digit' 
-        }),
-      }))
+        current: record.current || 0, // Usar el valor directo del sensor
+        dateFormatted: new Date(record.date).toLocaleString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        })
+      })).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     : [];
+
+  // Rangos ajustados para el motor real
+  const normalRange = { start: 0, end: 5, color: 'rgba(16, 185, 129, 0.1)' }; // Verde
+  const warningRange = { start: 5, end: 7, color: 'rgba(251, 191, 36, 0.1)' }; // Amarillo
+  const alertRange = { start: 7, end: 10, color: 'rgba(239, 68, 68, 0.1)' }; // Rojo
 
   // Calcular estadísticas de corriente
   const calculateStats = () => {
