@@ -26,9 +26,18 @@ interface FormData {
   };
   temperature: number;
   injectionTime: number;
+
+  // Nuevos campos para KPIs
+  piezasProducidas: number;
+  piezasDefectuosas: number;
+  materialUtilizado: number;
+  materialDesperdiciado: number;
+  tiempoRespuesta: number;
+  costoMaterial: number;
+  tiempoCiclo: number;
 }
 
-const DataEntryForm = () => {
+const DataEntryForm: React.FC = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<number>(1);
   const [formData, setFormData] = useState<FormData>({
@@ -38,6 +47,14 @@ const DataEntryForm = () => {
     injectorEnergy: { used: 0, remaining: 100 },
     temperature: 0,
     injectionTime: 0,
+
+    piezasProducidas: 0,
+    piezasDefectuosas: 0,
+    materialUtilizado: 0,
+    materialDesperdiciado: 0,
+    tiempoRespuesta: 0,
+    costoMaterial: 0,
+    tiempoCiclo: 0
   });
 
   const [addSensorData] = useAddSensorDataMutation();
@@ -76,6 +93,14 @@ const DataEntryForm = () => {
         injectorEnergy: { used: 0, remaining: 100 },
         temperature: 0,
         injectionTime: 0,
+
+        piezasProducidas: 0,
+        piezasDefectuosas: 0,
+        materialUtilizado: 0,
+        materialDesperdiciado: 0,
+        tiempoRespuesta: 0,
+        costoMaterial: 0,
+        tiempoCiclo: 0
       });
       navigate('/dashboard');
     } catch (error) {
@@ -275,6 +300,36 @@ const DataEntryForm = () => {
                   className="input-field"
                   min="0"
                   step="0.1"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          {/* Nuevos campos para KPIs */}
+          <div className="form-section">
+            <h2 className="section-title">
+              <span className="section-icon">📊</span> Métricas de Producción
+            </h2>
+            <div className="grid-2">
+              <div className="input-group">
+                <label className="input-label">Piezas Producidas</label>
+                <input
+                  type="number"
+                  name="piezasProducidas"
+                  value={formData.piezasProducidas}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Piezas Defectuosas</label>
+                <input
+                  type="number"
+                  name="piezasDefectuosas"
+                  value={formData.piezasDefectuosas}
+                  onChange={handleInputChange}
+                  className="input-field"
                   required
                 />
               </div>

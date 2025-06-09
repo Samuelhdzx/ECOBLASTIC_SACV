@@ -7,73 +7,57 @@ type Props = {
   subtitle?: string;
   icon?: React.ReactNode;
   sideText?: string;
-}
+};
 
-const BoxHeader = ({ title, subtitle, icon, sideText }: Props) => {
+const BoxHeader = ({ icon, title, subtitle, sideText }: Props) => {
   const { palette } = useTheme();
   
   return (
-    <FlexBetween 
-      color={palette.grey[400]} 
-      margin="0 0 1rem 0" 
-      padding="0 1rem"
+    <FlexBetween
+      color={palette.grey[400]}
+      margin="1.5rem 1rem 0 1rem"
       sx={{
-        borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-        paddingBottom: "0.75rem",
+        "& > div": { display: "flex", alignItems: "center", gap: "0.5rem" },
       }}
     >
-      <Box display="flex" alignItems="center" gap="0.5rem">
+      <Box>
         {icon && (
-          <Box sx={{ 
-            color: palette.secondary.main,
-            fontSize: "1.5rem",
-            marginRight: "0.5rem"
-          }}>
+          <Box
+            sx={{
+              background: "linear-gradient(90deg, #3a86ff 0%, #8338ec 100%)",
+              borderRadius: "50%",
+              padding: "0.5rem",
+              marginRight: "0.5rem",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             {icon}
           </Box>
         )}
         <Box>
           <Typography
-            variant="h5"
+            variant="h4"
             sx={{
-              color: "white",
+              color: palette.grey[100],
               fontWeight: "600",
-              fontSize: "1.2rem",
-              backgroundImage: "linear-gradient(90deg, #3a86ff, #8338ec)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
+              fontSize: "1.1rem"
             }}
           >
             {title}
           </Typography>
           {subtitle && (
-            <Typography 
-              variant="body2" 
-              color={palette.grey[500]}
-              sx={{
-                fontSize: "0.85rem",
-                opacity: 0.9
-              }}
-            >
+            <Typography variant="h6" sx={{ color: palette.grey[400] }}>
               {subtitle}
             </Typography>
           )}
         </Box>
       </Box>
       {sideText && (
-        <Typography 
-          variant="h6" 
-          color={palette.secondary.main}
-          sx={{
-            fontWeight: "600",
-            fontSize: "0.9rem",
-            padding: "0.25rem 0.75rem",
-            borderRadius: "4px",
-            backgroundColor: "rgba(131, 56, 236, 0.1)",
-            border: "1px solid rgba(131, 56, 236, 0.2)"
-          }}
+        <Typography
+          variant="h6"
+          sx={{ color: palette.grey[400], fontWeight: "500" }}
         >
           {sideText}
         </Typography>

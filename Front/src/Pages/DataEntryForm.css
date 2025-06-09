@@ -34,11 +34,35 @@
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
   }
   
   .form-section:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+  }
+  
+  .form-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .form-section:hover::after {
+    opacity: 1;
   }
   
   .section-title {
@@ -182,3 +206,43 @@
            mt-8;
   }
   
+  .selection-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  
+  .selection-buttons button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--primary);
+    padding: 1.5rem;
+    border-radius: 16px;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .selection-buttons button:hover {
+    transform: translateY(-4px);
+    background: rgba(99, 102, 241, 0.1);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
+  }
+  
+  /* Animaciones para los pasos */
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .form-container {
+    animation: slideIn 0.5s ease forwards;
+  }

@@ -1,7 +1,7 @@
 // scenes/dashboard/Row1.tsx
 import React from 'react';
 import DashboardBox from '@/components/DashboardBox';
-import BoxHeader from '@/components/BoxHeader';
+import { BoxHeader } from '@/components/DashboardBox';
 import { useGetSensorDataQuery } from '@/state/api';
 import {
   ResponsiveContainer,

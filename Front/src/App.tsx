@@ -1,4 +1,4 @@
-  // App.tsx
+// App.tsx
   import { createTheme, ThemeProvider } from "@mui/material/styles";
   import { useMemo, useState, useEffect, ReactNode } from "react";
   import { getThemeSettings } from "./theme";
@@ -23,12 +23,13 @@
   import DataEntryForm from "./Pages/DataEntryForm";
   import Reports from "./Pages/Reports";
   import Profile from "./Pages/Profile";
-  import Manuales from "./Pages/Manuales";
+  import Manuals from "./scenes/manuals";
   import AllRecords from "./Pages/AllRecords";
   import Settings from "./Pages/Settings";
   import Help from "./Pages/Help";
   import { UserRecords } from "./Pages/UserRecors";
   import Predicciones from "./scenes/Predicciones/Predicciones";
+  import Analytics from "@/scenes/analytics";
 
   // 5. INTERFACES Y TIPOS
   interface PropiedadesLayout {
@@ -177,14 +178,14 @@
      
         <Route path="/manuals" element={
           <LayoutProtegido>
-            <Manuales />
+            <Manuals />
           </LayoutProtegido>
         } />
-        <Route path="/help" element={
+        {/* <Route path="/help" element={
           <LayoutProtegido>
             <Help />
           </LayoutProtegido>
-        } />
+        } /> */}
         <Route path="/data-entry" element={
           <LayoutProtegido>
             <DataEntryForm />
@@ -193,6 +194,11 @@
         <Route path="/profile" element={
           <LayoutProtegido>
             <Profile />
+          </LayoutProtegido>
+        } />
+        <Route path="/analytics" element={
+          <LayoutProtegido>
+            <Analytics />
           </LayoutProtegido>
         } />
         <Route path="*" element={<Navigate to="/inicio" replace />} />

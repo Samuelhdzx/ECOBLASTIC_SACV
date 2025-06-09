@@ -1,7 +1,7 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
-const DashboardBox = styled(Box)(({ theme }) => ({
+const StyledDashboardBox = styled(Box)(({ theme }) => ({
   backgroundColor: "rgba(17, 25, 40, 0.8)",
   borderRadius: "1rem",
   boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.3)",
@@ -35,4 +35,26 @@ const DashboardBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const DashboardBox = ({ children, gridArea }: { children: React.ReactNode, gridArea?: string }) => (
+  <StyledDashboardBox
+    gridArea={gridArea}
+  >
+    {children}
+  </StyledDashboardBox>
+);
+
+const BoxHeader = ({ title }: { title: string }) => (
+  <Typography
+    variant="h6"
+    sx={{
+      color: "#ffffff",
+      marginBottom: "1rem",
+      fontWeight: "600",
+    }}
+  >
+    {title}
+  </Typography>
+);
+
+export { DashboardBox, BoxHeader };
 export default DashboardBox;
