@@ -79,7 +79,7 @@ interface DataResponse {
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:1337',
+    baseUrl: import.meta.env.VITE_BASE_URL || 'https://ecoblastic-sacv.onrender.com',
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
