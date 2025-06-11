@@ -1,0 +1,9 @@
+{
+  "name": "ecoblastic",
+  "version": "1.0.0",
+  "scripts": {
+    "install-all": "cd Backend && npm install cookie-parser && npm install && cd ../Frontend && npm install",
+    "build": "cd Frontend && npm run build && cd ../Backend && npm run build",
+    "start": "cd Backend && npm start"
+  }
+}

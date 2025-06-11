@@ -1,5 +1,5 @@
 {
-  "name": "front",
+  "name": "ecoblastic-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "vite preview --port 5173 "
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
