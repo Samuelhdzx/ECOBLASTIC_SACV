@@ -127,7 +127,7 @@
             <RegisterPage />
           </LayoutPublico>
         } />
-        <Route path="/ini" element={
+        <Route path="/inicio" element={
           <LayoutPublico>
             <Inicio />
           </LayoutPublico>
@@ -150,7 +150,7 @@
     const rutasProtegidas = (
       <Routes>
         <Route path="/" element={<Navigate to="/inicio" replace />} />
-        <Route path="/inicio" element={
+        <Route path="/ini" element={
           <LayoutProtegido>
             <InicioAut />
           </LayoutProtegido>
