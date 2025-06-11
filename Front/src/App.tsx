@@ -150,7 +150,7 @@
     const rutasProtegidas = (
       <Routes>
         <Route path="/" element={<Navigate to="/inicio" replace />} />
-        <Route path="/ini" element={
+        <Route path="/inicio" element={
           <LayoutProtegido>
             <InicioAut />
           </LayoutProtegido>
