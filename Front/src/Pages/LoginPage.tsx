@@ -26,7 +26,6 @@ const LoginPage = () => {
       if (res.ok) {
         localStorage.setItem('user', JSON.stringify(data));
         navigate('/dashboard');
-        window.location.reload();
       } else {
         setError(data.message || 'Credenciales inválidas');
       }
