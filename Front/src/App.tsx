@@ -127,7 +127,7 @@
             <RegisterPage />
           </LayoutPublico>
         } />
-        <Route path="/inicio" element={
+        <Route path="/ini" element={
           <LayoutPublico>
             <Inicio />
           </LayoutPublico>
