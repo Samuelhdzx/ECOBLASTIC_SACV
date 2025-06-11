@@ -10,11 +10,70 @@ export interface UserRecord {
   efficiency: number;
   status: string;
   createdAt: string;
+  production: {
+    hourlyProduction: number;
+    piecesProduced: number;
+    defectivePieces: number;
+    efficiency: number;
+  };
+  quality: {
+    defectRate: number;
+    materialWaste: number;
+    qualityRate: number;
+  };
+  costs: {
+    materialCost: number;
+    operationalCost: number;
+    wasteCost: number;
+  };
+  machine: {
+    cycleTime: number;
+    oee: number;
+    mtbf: number;
+    maintenanceStatus: string;
+  };
+  operator: {
+    id: string;
+    name: string;
+    responseTime: number;
+    productivity: number;
+  };
 }
 
 export interface TemperatureData {
   temperature: number;
   injectionTime: number;
+  createdAt: string;
+}
+
+interface DataResponse {
+  temperature: number;
+  injectionTime: number;
+  polymerUsage: {
+    pet: number;
+    polypropylene: number;
+  };
+  moldUsage: {
+    mold1: number;
+    mold2: number;
+    mold3: number;
+  };
+  production: {
+    hourlyProduction: number;
+    piecesProduced: number;
+    defectivePieces: number;
+    efficiency: number;
+  };
+  quality: {
+    defectRate: number;
+    materialWaste: number;
+    qualityRate: number;
+  };
+  costs: {
+    materialCost: number;
+    operationalCost: number;
+    wasteCost: number;
+  };
   createdAt: string;
 }
 
@@ -32,12 +91,8 @@ export const api = createApi({
   }),
   tagTypes: ['SensorData', 'Users', 'Production', 'Inventory', 'Maintenance', 'Quality'],
   endpoints: (builder) => ({
-    getSensorData: builder.query({
-      query: () => ({
-        url: '/api/data_sensors',
-        method: 'GET',
-        credentials: 'include'
-      }),
+    getSensorData: builder.query<DataResponse[], void>({
+      query: () => 'api/data_sensors',
       providesTags: ['SensorData']
     }),
 
@@ -129,7 +184,11 @@ export const api = createApi({
       // Actualizar cada 3 segundos como en Row3
       pollingInterval: 3000,
       providesTags: ['SensorData']
-    })
+    }),
+
+    getLatestData: builder.query<DataResponse, void>({
+      query: () => 'api/data_sensors/latest'
+    }),
   })
 });
 
@@ -145,5 +204,6 @@ export const {
   useGetMaintenanceScheduleQuery,
   useUpdateMachineParamsMutation,
   useGetUserRecordsQuery,
-  useGetTemperaturesQuery
+  useGetTemperaturesQuery,
+  useGetLatestDataQuery
 } = api;

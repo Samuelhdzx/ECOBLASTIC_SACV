@@ -25,7 +25,41 @@ const data_sensorsSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    // Campos adicionales para KPIs y gráficos
+    production: {
+        hourlyProduction: Number,
+        piecesProduced: Number,
+        defectivePieces: Number,
+        efficiency: Number
+    },
+    quality: {
+        defectRate: Number,
+        materialWaste: Number,
+        qualityRate: Number
+    },
+    costs: {
+        materialCost: Number,
+        operationalCost: Number,
+        wasteCost: Number
+    },
+    machine: {
+        cycleTime: Number,
+        oee: Number, // Overall Equipment Effectiveness
+        mtbf: Number, // Mean Time Between Failures
+        maintenanceStatus: {
+            type: String,
+            enum: ['good', 'warning', 'critical']
+        }
+    },
+    operator: {
+        id: String,
+        name: String,
+        responseTime: Number,
+        productivity: Number
     }
+}, {
+    timestamps: true // Esto agregará automáticamente createdAt y updatedAt
 });
 
 export default mongoose.model('DataSensors', data_sensorsSchema)

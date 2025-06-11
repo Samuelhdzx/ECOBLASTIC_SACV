@@ -27,14 +27,35 @@ interface FormData {
   temperature: number;
   injectionTime: number;
 
-  // Nuevos campos para KPIs
-  piezasProducidas: number;
-  piezasDefectuosas: number;
-  materialUtilizado: number;
-  materialDesperdiciado: number;
-  tiempoRespuesta: number;
-  costoMaterial: number;
-  tiempoCiclo: number;
+  // Nuevos campos para producción
+  production: {
+    hourlyProduction: number;
+    piecesProduced: number;
+    defectivePieces: number;
+    efficiency: number;
+  };
+  quality: {
+    defectRate: number;
+    materialWaste: number;
+    qualityRate: number;
+  };
+  costs: {
+    materialCost: number;
+    operationalCost: number;
+    wasteCost: number;
+  };
+  machine: {
+    cycleTime: number;
+    oee: number;
+    mtbf: number;
+    maintenanceStatus: 'good' | 'warning' | 'critical';
+  };
+  operator: {
+    id: string;
+    name: string;
+    responseTime: number;
+    productivity: number;
+  };
 }
 
 const DataEntryForm: React.FC = () => {
@@ -48,13 +69,34 @@ const DataEntryForm: React.FC = () => {
     temperature: 0,
     injectionTime: 0,
 
-    piezasProducidas: 0,
-    piezasDefectuosas: 0,
-    materialUtilizado: 0,
-    materialDesperdiciado: 0,
-    tiempoRespuesta: 0,
-    costoMaterial: 0,
-    tiempoCiclo: 0
+    production: {
+      hourlyProduction: 0,
+      piecesProduced: 0,
+      defectivePieces: 0,
+      efficiency: 0
+    },
+    quality: {
+      defectRate: 0,
+      materialWaste: 0,
+      qualityRate: 100
+    },
+    costs: {
+      materialCost: 0,
+      operationalCost: 0,
+      wasteCost: 0
+    },
+    machine: {
+      cycleTime: 0,
+      oee: 0,
+      mtbf: 0,
+      maintenanceStatus: 'good'
+    },
+    operator: {
+      id: '',
+      name: '',
+      responseTime: 0,
+      productivity: 0
+    }
   });
 
   const [addSensorData] = useAddSensorDataMutation();
@@ -94,13 +136,34 @@ const DataEntryForm: React.FC = () => {
         temperature: 0,
         injectionTime: 0,
 
-        piezasProducidas: 0,
-        piezasDefectuosas: 0,
-        materialUtilizado: 0,
-        materialDesperdiciado: 0,
-        tiempoRespuesta: 0,
-        costoMaterial: 0,
-        tiempoCiclo: 0
+        production: {
+          hourlyProduction: 0,
+          piecesProduced: 0,
+          defectivePieces: 0,
+          efficiency: 0
+        },
+        quality: {
+          defectRate: 0,
+          materialWaste: 0,
+          qualityRate: 100
+        },
+        costs: {
+          materialCost: 0,
+          operationalCost: 0,
+          wasteCost: 0
+        },
+        machine: {
+          cycleTime: 0,
+          oee: 0,
+          mtbf: 0,
+          maintenanceStatus: 'good'
+        },
+        operator: {
+          id: '',
+          name: '',
+          responseTime: 0,
+          productivity: 0
+        }
       });
       navigate('/dashboard');
     } catch (error) {
@@ -312,22 +375,82 @@ const DataEntryForm: React.FC = () => {
             </h2>
             <div className="grid-2">
               <div className="input-group">
-                <label className="input-label">Piezas Producidas</label>
+                <label className="input-label">Producción por Hora</label>
                 <input
                   type="number"
-                  name="piezasProducidas"
-                  value={formData.piezasProducidas}
+                  name="production.hourlyProduction"
+                  value={formData.production.hourlyProduction}
                   onChange={handleInputChange}
                   className="input-field"
                   required
                 />
               </div>
               <div className="input-group">
-                <label className="input-label">Piezas Defectuosas</label>
+                <label className="input-label">Eficiencia (%)</label>
                 <input
                   type="number"
-                  name="piezasDefectuosas"
-                  value={formData.piezasDefectuosas}
+                  name="production.efficiency"
+                  value={formData.production.efficiency}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          {/* Nueva sección de calidad */}
+          <div className="form-section">
+            <h2 className="section-title">
+              <span className="section-icon">🎯</span> Métricas de Calidad
+            </h2>
+            <div className="grid-2">
+              <div className="input-group">
+                <label className="input-label">Tasa de Defectos (%)</label>
+                <input
+                  type="number"
+                  name="quality.defectRate"
+                  value={formData.quality.defectRate}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Desperdicio de Material (kg)</label>
+                <input
+                  type="number"
+                  name="quality.materialWaste"
+                  value={formData.quality.materialWaste}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          {/* Nueva sección de costos */}
+          <div className="form-section">
+            <h2 className="section-title">
+              <span className="section-icon">💰</span> Costos
+            </h2>
+            <div className="grid-3">
+              <div className="input-group">
+                <label className="input-label">Costo de Material</label>
+                <input
+                  type="number"
+                  name="costs.materialCost"
+                  value={formData.costs.materialCost}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  required
+                />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Costo Operacional</label>
+                <input
+                  type="number"
+                  name="costs.operationalCost"
+                  value={formData.costs.operationalCost}
                   onChange={handleInputChange}
                   className="input-field"
                   required
