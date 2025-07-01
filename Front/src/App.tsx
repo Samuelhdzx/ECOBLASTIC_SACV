@@ -1,8 +1,7 @@
   // App.tsx
-  import React from 'react';
-  import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+  import React, { useState, useEffect, useMemo, ReactNode } from 'react';
+  import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
   import { ThemeProvider, createTheme } from '@mui/material/styles';
-  import { useMediaQuery } from '@mui/material';
   import CssBaseline from '@mui/material/CssBaseline';
   import { getThemeSettings } from "./theme";
   import { Box } from "@mui/material";
@@ -105,7 +104,7 @@
         setEstaAutenticado(!!localStorage.getItem('user'));
         setEsAdmin(!!localStorage.getItem('admin'));
       };
-      
+    
       window.addEventListener('authChange', manejarCambioAuth);
       return () => window.removeEventListener('authChange', manejarCambioAuth);
     }, []);
@@ -161,11 +160,6 @@
             <Dashboard />
           </LayoutProtegido>
         } />
-        {/* <Route path="/reports" element={
-          <LayoutProtegido>
-            <Reports />
-          </LayoutProtegido>
-        } /> */}
         <Route path="/predictions" element={
           <LayoutProtegido>
             <Predicciones/>
@@ -176,7 +170,6 @@
             <AllRecords />
           </LayoutProtegido>
         } />
-     
         <Route path="/manuals" element={
           <LayoutProtegido>
             <Manuales />
@@ -226,10 +219,14 @@
 
     return (
       <div className="app">
-        <BrowserRouter>
+        <BrowserRouter
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true
+          }}
+        >
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            {/* Envolvemos toda la aplicación en un Box con fondo blanco */}
             <Box
               width="100%"
               minHeight="100vh"
@@ -242,4 +239,5 @@
       </div>
     );
   }
+
   export default App;
