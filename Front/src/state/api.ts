@@ -20,7 +20,7 @@ export interface TemperatureData {
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:1337',
+    baseUrl: import.meta.env.VITE_API_BASE_URL || 'https://ecoblastic-sacv.onrender.com',
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');

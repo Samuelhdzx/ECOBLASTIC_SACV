@@ -27,7 +27,7 @@ const AdminNavbar = () => {
   const handleLogout = async () => {
     if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
         try {
-            const response = await fetch('http://localhost:1337/api/logoutAdmin', {
+            const response = await fetch('https://ecoblastic-sacv.onrender.com/api/logoutAdmin', {
                 method: 'GET',
                 credentials: 'include',
             });

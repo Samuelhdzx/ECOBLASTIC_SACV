@@ -55,7 +55,7 @@ const Navbar = ({ userType }: { userType: "user" | "admin" }) => {
     const handleLogout = async () => {
         if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
             try {
-                const response = await fetch('http://localhost:1337/api/logout', {
+                const response = await fetch('https://ecoblastic-sacv.onrender.com/api/logout', {
                     method: 'GET',
                     credentials: 'include',
                 });

@@ -16,7 +16,7 @@ const AdminLoginPage = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:1337/api/loginAdmin', {
+      const res = await fetch('https://ecoblastic-sacv.onrender.com/api/loginAdmin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

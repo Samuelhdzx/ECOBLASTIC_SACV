@@ -122,7 +122,7 @@ const Row3 = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://localhost:1337/api/sensors');
+        const response = await axios.get('https://ecoblastic-sacv.onrender.com/api/sensors');
         
         // Formatear los datos con fechas legibles y asegurar tipos
         const formattedData = response.data.map((record: any) => ({
