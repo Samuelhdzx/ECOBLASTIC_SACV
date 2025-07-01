@@ -1,25 +1,27 @@
   // App.tsx
-  import { createTheme, ThemeProvider } from "@mui/material/styles";
-  import { useMemo, useState, useEffect, ReactNode } from "react";
+  import React from 'react';
+  import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+  import { ThemeProvider, createTheme } from '@mui/material/styles';
+  import { useMediaQuery } from '@mui/material';
+  import CssBaseline from '@mui/material/CssBaseline';
   import { getThemeSettings } from "./theme";
-  import { Box, CssBaseline } from "@mui/material";
-  import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+  import { Box } from "@mui/material";
 
   // 2. COMPONENTES DE NAVEGACIÓN
-  import Navbar from "@/scenes/navbar/index";
-  import NavbarPublic from "@/scenes/navbar/index";
+  import Navbar from "./scenes/navbar";
+  import NavbarPublic from "./scenes/navbar/index";
 
   // 3. PÁGINAS PÚBLICAS
-  import Inicio from "@/scenes/Inicio/index";
-  import LoginPage from "@/Pages/LoginPage";
-  import RegisterPage from "@/Pages/RegisterPage";
-  import AdminLoginPage from "@/Pages/AdminLoginPage";
-  import AdminRegisterPage from "@/Pages/AdminRegisterPage";
-  import AdminDashboard from "@/Pages/AdminDashboard";
+  import Inicio from "./scenes/Inicio/index";
+  import LoginPage from "./Pages/LoginPage";
+  import RegisterPage from "./Pages/RegisterPage";
+  import AdminLoginPage from "./Pages/AdminLoginPage";
+  import AdminRegisterPage from "./Pages/AdminRegisterPage";
+  import AdminDashboard from "./Pages/AdminDashboard";
 
   // 4. PÁGINAS PROTEGIDAS
   import InicioAut from "./scenes/inicioAut";
-  import Dashboard from "@/scenes/dashboard";
+  import Dashboard from "./scenes/dashboard";
   import DataEntryForm from "./Pages/DataEntryForm";
   import Reports from "./Pages/Reports";
   import Profile from "./Pages/Profile";

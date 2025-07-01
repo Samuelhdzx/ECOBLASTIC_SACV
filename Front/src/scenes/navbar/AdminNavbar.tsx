@@ -9,7 +9,7 @@ const AdminNavbar = () => {
   const { palette } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const isMobile = useMediaQuery('(max-width:968px)');
+  const isMobile = useMediaQuery('(max-width: 768px)');
   
   const [selected, setSelected] = useState(() => {
     const path = location.pathname.slice(1);
