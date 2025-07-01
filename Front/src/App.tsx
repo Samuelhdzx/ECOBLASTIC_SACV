@@ -1,6 +1,6 @@
   // App.tsx
   import React, { useState, useEffect, useMemo, ReactNode } from 'react';
-  import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+  import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
   import { ThemeProvider, createTheme } from '@mui/material/styles';
   import CssBaseline from '@mui/material/CssBaseline';
   import { getThemeSettings } from "./theme";
@@ -28,7 +28,6 @@
   import AllRecords from "./Pages/AllRecords";
   import Settings from "./Pages/Settings";
   import Help from "./Pages/Help";
-  import { UserRecords } from "./Pages/UserRecors";
   import Predicciones from "./scenes/Predicciones/Predicciones";
 
   // 5. INTERFACES Y TIPOS
@@ -219,12 +218,7 @@
 
     return (
       <div className="app">
-        <BrowserRouter
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true
-          }}
-        >
+        <BrowserRouter>
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box
