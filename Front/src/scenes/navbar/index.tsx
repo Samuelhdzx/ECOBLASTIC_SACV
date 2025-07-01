@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 import { Box, Typography, useTheme } from "@mui/material";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 // ✅ Ruta correcta para la imagen
 import logo from "../../../public/img/logo.png";
