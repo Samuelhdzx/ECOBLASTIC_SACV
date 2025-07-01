@@ -1,10 +1,12 @@
+import React, { useState } from 'react';
+
 interface PropiedadesSeleccionMaterial {
     onSelection: (material: string, molde: string) => void;
   }
   
   const FormularioSeleccionMaterial: React.FC<PropiedadesSeleccionMaterial> = ({ onSelection }) => {
-    const [materialSeleccionado, setMaterialSeleccionado] = useState('');
-    const [moldeSeleccionado, setMoldeSeleccionado] = useState('');
+    const [material, setMaterial] = useState('');
+    const [molde, setMolde] = useState('');
   
     const materiales = [
       { id: 'pet', nombre: 'PET' },
@@ -19,8 +21,8 @@ interface PropiedadesSeleccionMaterial {
   
     const manejarEnvio = (e: React.FormEvent) => {
       e.preventDefault();
-      if (materialSeleccionado && moldeSeleccionado) {
-        onSelection(materialSeleccionado, moldeSeleccionado);
+      if (material && molde) {
+        onSelection(material, molde);
       }
     };
   
@@ -29,8 +31,8 @@ interface PropiedadesSeleccionMaterial {
         <div className="grupo-formulario">
           <label>Seleccionar Material:</label>
           <select 
-            value={materialSeleccionado}
-            onChange={(e) => setMaterialSeleccionado(e.target.value)}
+            value={material}
+            onChange={(e) => setMaterial(e.target.value)}
             required
           >
             <option value="">Seleccione un material</option>
@@ -45,8 +47,8 @@ interface PropiedadesSeleccionMaterial {
         <div className="grupo-formulario">
           <label>Seleccionar Molde:</label>
           <select 
-            value={moldeSeleccionado}
-            onChange={(e) => setMoldeSeleccionado(e.target.value)}
+            value={molde}
+            onChange={(e) => setMolde(e.target.value)}
             required
           >
             <option value="">Seleccione un molde</option>
@@ -64,4 +66,5 @@ interface PropiedadesSeleccionMaterial {
       </form>
     );
   };
-  
+
+  export default FormularioSeleccionMaterial;

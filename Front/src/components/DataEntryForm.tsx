@@ -1,13 +1,13 @@
+import React, { useState } from 'react';
+
 const DataEntryForm: React.FC = () => {
   const [showMaterialSelection, setShowMaterialSelection] = useState(true);
   const [selectedMaterial, setSelectedMaterial] = useState('');
   const [selectedMold, setSelectedMold] = useState('');
-  const [formData, setFormData] = useState({
-    temperatura: '',
-    presion: '',
-    velocidad: '',
-    tiempoCiclo: ''
-  });
+  const [temperature, setTemperature] = useState(0);
+  const [pressure, setPressure] = useState(0);
+  const [speed, setSpeed] = useState(0);
+  const [formData, setFormData] = useState({});
 
   const MaterialMoldSelection = () => (
     <div className="material-mold-selection">
@@ -68,3 +68,5 @@ const DataEntryForm: React.FC = () => {
     </div>
   );
 };
+
+export default DataEntryForm;

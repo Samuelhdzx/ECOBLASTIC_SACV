@@ -125,7 +125,6 @@ export const api = createApi({
         }
         return [];
       },
-      pollingInterval: 3000,
       providesTags: ['SensorData']
     })
   })

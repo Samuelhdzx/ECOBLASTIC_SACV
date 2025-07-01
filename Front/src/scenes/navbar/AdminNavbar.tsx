@@ -73,7 +73,7 @@ const AdminNavbar = () => {
             position: 'sticky',
             top: 0,
             zIndex: 1000,
-            backgroundColor: palette.background.defaut
+            backgroundColor: palette.background.default
         }}
     >
 
