@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Box, Typography, useTheme, IconButton, Menu, MenuItem, useMediaQuery } from "@mui/material";
-import { Menu as MenuIcon, User, LogOut } from "lucide-react";
-import FlexBetween from "@/components/FlexBetween";
-import logo from "front/public/img/LOGO.png";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import FlexBetween from "../../components/FlexBetween";
+import { Box, Typography, useTheme } from "@mui/material";
+
+// ✅ Ruta correcta para la imagen
+import logo from "/img/LOGO.png";
 
 type NavItem = {
     path: string;
@@ -12,7 +13,7 @@ type NavItem = {
     icon?: React.ReactNode;
 };
 
-const Navbar = () => {
+const Navbar = ({ userType }: { userType: "user" | "admin" }) => {
     const { palette } = useTheme();
     const navigate = useNavigate();
     const location = useLocation();
