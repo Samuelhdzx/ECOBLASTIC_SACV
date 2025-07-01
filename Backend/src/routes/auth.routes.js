@@ -17,6 +17,7 @@ router.get('/logout', authRequired,logout);
 
 router.get('/profile', authRequired,profile);
 
+
 router.get('/users', getAllUsers);
 
 router.get('/data_sensors/all', authRequired, async (req, res) => {
