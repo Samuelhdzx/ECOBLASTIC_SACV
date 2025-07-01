@@ -3,6 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "../../components/FlexBetween";
 import { Box, Typography, useTheme } from "@mui/material";
 import useMediaQuery from '@mui/material/useMediaQuery';
+import MenuIcon from '@mui/icons-material/Menu';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { User, LogOut } from 'lucide-react';
 
 // ✅ Ruta correcta para la imagen
 import logo from "../../../public/img/logo.png";
