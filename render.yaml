@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ecoblastic-frontend
+    env: static
+    buildCommand: cd Front && npm run build
+    staticPublishPath: ./Front/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
