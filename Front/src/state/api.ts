@@ -20,7 +20,7 @@ export interface TemperatureData {
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:1337',
+    baseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:1337',
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
@@ -110,23 +110,21 @@ export const api = createApi({
 
     getTemperatures: builder.query<TemperatureData[], void>({
       query: () => ({
-        url: '/api/sensors', // Cambiar a la misma ruta que usa Row3
+        url: '/api/data_sensors',
         method: 'GET',
         credentials: 'include'
       }),
       transformResponse: (response: any) => {
         console.log('Raw response:', response);
-        // Transformar los datos al formato esperado
         if (Array.isArray(response)) {
           return response.map(item => ({
             temperature: Number(item.temperature),
             injectionTime: Number(item.injectionTime),
-            createdAt: item.timestamp || new Date().toISOString()
+            createdAt: item.timestamp || item.createdAt || new Date().toISOString()
           }));
         }
         return [];
       },
-      // Actualizar cada 3 segundos como en Row3
       pollingInterval: 3000,
       providesTags: ['SensorData']
     })
