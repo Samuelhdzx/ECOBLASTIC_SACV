@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 // Importa tus videos locales (se cargarán bajo demanda)
 import video1 from '../../public/video/videouno.mp4';
 import video2 from '../../public/video/videodos.mp4';
 import video3 from '../../public/video/videotres.mp4';
-import './help.css';
 
 interface FAQ {
   question: string;
