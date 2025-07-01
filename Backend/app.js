@@ -92,6 +92,19 @@ app.get('/api/sensors', async (req, res) => {
     }
 });
 
+// Agregar antes de las otras rutas
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'ECOBLASTIC API is running!', 
+        status: 'OK',
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/health', (req, res) => {
+    res.json({ status: 'OK', service: 'ECOBLASTIC Backend' });
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
