@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useGetSensorDataQuery } from '@/state/api';
 import { format } from 'date-fns';
-import './profile.css';
+import './Profile.css';
 
 interface SensorRecord {
   date: string;
