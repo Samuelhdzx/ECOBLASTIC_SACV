@@ -4,7 +4,7 @@ import FlexBetween from "../../components/FlexBetween";
 import { Box, Typography, useTheme } from "@mui/material";
 
 // ✅ Ruta correcta para la imagen
-import logo from "/img/LOGO.png";
+import logo from "../../../public/img/logo.png";
 
 type NavItem = {
     path: string;
