@@ -167,7 +167,7 @@
         <Route path="/registers" element={
           <LayoutProtegido>
             <AllRecords />
-          </LayoutProtegida>
+          </LayoutProtegido>
         } />
         <Route path="/manuals" element={
           <LayoutProtegido>
