@@ -99,6 +99,12 @@ const Row3 = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { palette } = useTheme();
 
+  // URL de la API
+  const API_URL =
+    import.meta.env.MODE === 'development'
+      ? 'http://localhost:1337/api/sensors'
+      : 'https://ecoblastic-sacv.onrender.com/api/sensors';
+
   // Calcular estadísticas
   const calculateStats = (dataKey: keyof SensorData) => {
     if (!data || data.length === 0) return { avg: 0, min: 0, max: 0 };
@@ -122,8 +128,8 @@ const Row3 = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('https://ecoblastic-sacv.onrender.com/api/sensors');
-        
+        const response = await axios.get(API_URL);
+
         // Formatear los datos con fechas legibles y asegurar tipos
         const formattedData = response.data.map((record: any) => ({
           ...record,
@@ -141,9 +147,11 @@ const Row3 = () => {
 
         setData(formattedData);
         setIsLoading(false);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error al obtener los datos:', error);
         setIsLoading(false);
+        // Opcional: muestra un mensaje de error si la API no responde o da 404
+        setData([]);
       }
     };
 
