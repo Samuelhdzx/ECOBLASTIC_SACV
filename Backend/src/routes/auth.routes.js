@@ -32,3 +32,23 @@ router.get('/data_sensors/all', authRequired, async (req, res) => {
 router.delete('/users/:userId', authRequired, deleteUser);
 
 export default router;
+
+// Agrega esto en tu archivo principal del servidor (por ejemplo, server.js o app.js):
+// Debe ir después de todas las rutas de API
+
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Solo en producción
+if (process.env.NODE_ENV === 'production') {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+
+  // Sirve archivos estáticos del build de React
+  app.use(express.static(path.join(__dirname, '../../Front/dist')));
+
+  // Para cualquier ruta que no sea API, devuelve index.html
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../Front/dist/index.html'));
+  });
+}

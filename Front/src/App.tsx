@@ -1,4 +1,4 @@
-  // App.tsx
+// App.tsx
   import React, { useState, useEffect, useMemo, ReactNode } from 'react';
   import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
   import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -148,7 +148,7 @@
     // 10. RUTAS PROTEGIDAS USUARIO
     const rutasProtegidas = (
       <Routes>
-        <Route path="/" element={<Navigate to="/inicio" replace />} />
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/inicio" element={
           <LayoutProtegido>
             <InicioAut />
@@ -167,7 +167,7 @@
         <Route path="/registers" element={
           <LayoutProtegido>
             <AllRecords />
-          </LayoutProtegido>
+          </LayoutProtegida>
         } />
         <Route path="/manuals" element={
           <LayoutProtegido>
@@ -189,7 +189,7 @@
             <Profile />
           </LayoutProtegido>
         } />
-        <Route path="*" element={<Navigate to="/inicio" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     );
 
