@@ -34,7 +34,7 @@ export const api = createApi({
   endpoints: (builder) => ({
     getSensorData: builder.query({
       query: () => ({
-        url: '/api/data_sensors',
+        url: '/api/data_sensors-analysis',
         method: 'GET',
         credentials: 'include'
       }),
@@ -152,8 +152,6 @@ export const api = createApi({
         }
         return [];
       },
-      // Actualizar cada 3 segundos como en Row3
-      pollingInterval: 3000,
       providesTags: ['SensorData']
     })
   })

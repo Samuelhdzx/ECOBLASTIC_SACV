@@ -1,0 +1,231 @@
+/* AdvancedDataAnalysis.css */
+
+.advanced-analysis-container {
+  background: #18181b; /* Fondo negro/gris oscuro */
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.analysis-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: #fff; /* Fondo blanco */
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+}
+
+.analysis-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #7c3aed, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.analysis-subtitle {
+  color: #64748b;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* KPIs Grid */
+.kpi-grid {
+  margin-bottom: 3rem;
+}
+
+.kpi-card {
+  background: #fff; /* Fondo blanco */
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.kpi-value {
+  font-weight: 700;
+  color: #18181b;
+  margin-top: 0.5rem;
+}
+
+.kpi-icon {
+  font-size: 2.5rem !important;
+  color: #7c3aed;
+  opacity: 0.9;
+}
+
+/* Charts Grid */
+.charts-grid {
+  margin-bottom: 3rem;
+}
+
+.chart-card {
+  background: #fff; /* Fondo blanco */
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+  transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  height: 100%;
+}
+
+.chart-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.chart-card .MuiCardContent-root {
+  padding: 1.5rem;
+}
+
+/* Conclusion Button */
+.conclusion-button {
+  background: linear-gradient(135deg, #3b82f6, #7c3aed) !important;
+  color: white !important;
+  transition: all 0.2s ease;
+}
+
+.conclusion-button:hover {
+  background: linear-gradient(135deg, #7c3aed, #3b82f6) !important;
+  transform: scale(1.1);
+}
+
+/* Summary Card */
+.summary-card {
+  background: #fff; /* Fondo blanco */
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+  border: 2px solid #e2e8f0;
+}
+
+.summary-card .MuiCardContent-root {
+  padding: 2rem;
+}
+
+/* Alert Styles */
+.MuiAlert-root {
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.MuiAlert-info {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #3b82f6;
+  color: #1e40af;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .advanced-analysis-container {
+    padding: 1rem;
+  }
+  
+  .analysis-header {
+    padding: 1.5rem;
+  }
+  
+  .analysis-title {
+    font-size: 2rem;
+  }
+  
+  .kpi-card {
+    margin-bottom: 1rem;
+  }
+  
+  .chart-card {
+    margin-bottom: 1.5rem;
+  }
+  
+  .summary-card .MuiCardContent-root {
+    padding: 1.5rem;
+  }
+}
+
+/* Chart Customizations */
+.recharts-wrapper {
+  font-family: 'Inter', sans-serif;
+}
+
+.recharts-tooltip-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.recharts-default-tooltip {
+  background: white !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.recharts-tooltip-label {
+  color: #64748b !important;
+  font-weight: 600 !important;
+}
+
+.recharts-tooltip-item {
+  color: #1e293b !important;
+  font-weight: 500 !important;
+}
+
+/* Animation for cards */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kpi-card,
+.chart-card,
+.summary-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.kpi-card:nth-child(1) { animation-delay: 0.1s; }
+.kpi-card:nth-child(2) { animation-delay: 0.2s; }
+.kpi-card:nth-child(3) { animation-delay: 0.3s; }
+.kpi-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Loading state */
+.MuiCircularProgress-root {
+  color: #3b82f6 !important;
+}
+
+/* Error state */
+.MuiAlert-error {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border: 1px solid #ef4444;
+  color: #dc2626;
+}
+
+/* Info state */
+.MuiAlert-info {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1px solid #3b82f6;
+  color: #1e40af;
+}
+
+/* Success state */
+.MuiAlert-success {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1px solid #22c55e;
+  color: #166534;
+}
+
+/* Warning state */
+.MuiAlert-warning {
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #f59e0b;
+  color: #d97706;
+} 

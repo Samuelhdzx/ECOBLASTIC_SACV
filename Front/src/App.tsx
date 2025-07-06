@@ -29,6 +29,7 @@
   import Help from "./Pages/Help";
   import { UserRecords } from "./Pages/UserRecors";
   import Predicciones from "./scenes/Predicciones/Predicciones";
+  import AdvancedDataAnalysis from "./Pages/AdvancedDataAnalysis";
 
   // 5. INTERFACES Y TIPOS
   interface PropiedadesLayout {
@@ -216,6 +217,11 @@
         <Route path="/reports" element={
           <LayoutAdmin>
             <Reports />
+          </LayoutAdmin>
+        } />
+        <Route path="/advanced-analysis" element={
+          <LayoutAdmin>
+            <AdvancedDataAnalysis />
           </LayoutAdmin>
         } />
         <Route path="*" element={<Navigate to="/admin-dashboard" replace />} />

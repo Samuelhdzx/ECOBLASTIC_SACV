@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import AnalyticsIcon from '@mui/icons-material/Analytics';
 import AdminNavbar from '@/scenes/navbar/AdminNavbar';
 import './AdminDashboard.css';
 
@@ -62,6 +63,12 @@ const AdminDashboard: React.FC = () => {
                 <AssessmentIcon sx={{ fontSize: 50 }} />
                 <h3>Reportes y Análisis</h3>
                 <p>Estadísticas y métricas del sistema</p>
+              </Link>
+
+              <Link to="/advanced-analysis" className="admin-feature-card">
+                <AnalyticsIcon sx={{ fontSize: 50 }} />
+                <h3>Análisis de Datos Avanzado</h3>
+                <p>KPIs y métricas especializadas de producción</p>
               </Link>
             </div>
           </section>

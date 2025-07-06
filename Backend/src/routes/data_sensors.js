@@ -1,7 +1,7 @@
 import {Router} from "express";
 import { authRequired } from "../middlewares/validateToken.js";
 import data_sensorsSchema from "../models/data_sensors.js";
-import { getDatas, getData, createData, updateData, deleteData } from "../controllers/dash_controller.js";
+import { getDatas, getData, createData, updateData, deleteData, getAllDataForAnalysis } from "../controllers/dash_controller.js";
 import { addSensorData, getAllSensorData, getSensorDataById, finalizeMonitoring, getActiveMonitoring } from "../controllers/esp32_controller.js";
 
 const router = Router();
@@ -9,6 +9,9 @@ const router = Router();
 //ENDPOINTS EXISTENTES
 // get all dates
 router.get('/data_sensors', authRequired, getDatas);
+
+// get all data for advanced analysis (admin only)
+router.get('/data_sensors-analysis', authRequired, getAllDataForAnalysis);
 
 // get a date
 router.get('/data_sensors/:id', authRequired, getData);

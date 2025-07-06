@@ -54,6 +54,20 @@
     };
 
     /**
+     * Get all sensor data entries for advanced analysis (admin only)
+     * @param {Request} req - Express request object
+     * @param {Response} res - Express response object
+     */
+    export const getAllDataForAnalysis = async (req, res) => {
+        try {
+            const datas = await data_sensorsSchema.find({}).populate('user');
+            res.json({ data: datas });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    };
+
+    /**
      * Get specific sensor data entry by ID
      * @param {Request} req - Express request object containing data ID
      * @param {Response} res - Express response object
