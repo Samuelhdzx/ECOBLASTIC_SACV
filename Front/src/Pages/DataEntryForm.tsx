@@ -1,6 +1,6 @@
 // DataEntryForm.tsx
 import React, { useState } from 'react';
-import { useAddSensorDataMutation } from '@/state/api';
+import { useStartMonitoringMutation } from '@/state/api';
 import { useNavigate } from 'react-router-dom';
 import './DataEntryForm.css';
 
@@ -26,14 +26,7 @@ interface FormData {
     remaining: number;
   };
   
-  // Parámetros de temperatura
-  temperature: number;
-  temperatureZone1: number;
-  temperatureZone2: number;
-  temperatureZone3: number;
-  
   // Parámetros de inyección
-  injectionTime: number;
   injectionPressure: number;
   injectionSpeed: number;
   holdingPressure: number;
@@ -43,7 +36,7 @@ interface FormData {
   coolingTime: number;
   coolingTemperature: number;
   
-  // Control de calidad
+  // Control de calidad (se llena al final)
   cycleTime: number;
   partWeight: number;
   partDimensions: {
@@ -71,6 +64,11 @@ interface FormData {
   
   // Estado del proceso
   processStatus: string;
+  
+  // Tiempo de monitoreo (se calcula automáticamente)
+  monitoringStartTime?: Date;
+  monitoringEndTime?: Date;
+  monitoringDuration?: number; // en segundos
 }
 
 const DataEntryForm = () => {
@@ -81,11 +79,6 @@ const DataEntryForm = () => {
     moldUsage: { mold1: 0, mold2: 0, mold3: 0 },
     potentiometerEnergy: { used: 0, remaining: 100 },
     injectorEnergy: { used: 0, remaining: 100 },
-    temperature: 0,
-    temperatureZone1: 0,
-    temperatureZone2: 0,
-    temperatureZone3: 0,
-    injectionTime: 0,
     injectionPressure: 0,
     injectionSpeed: 0,
     holdingPressure: 0,
@@ -105,7 +98,7 @@ const DataEntryForm = () => {
     processStatus: 'en_proceso'
   });
 
-  const [addSensorData] = useAddSensorDataMutation();
+  const [startMonitoring] = useStartMonitoringMutation();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -145,39 +138,47 @@ const DataEntryForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validar que se haya seleccionado un material
+    if (formData.polymerUsage.pet === 0 && formData.polymerUsage.polypropylene === 0) {
+      alert('Por favor selecciona un material antes de continuar');
+      return;
+    }
+    
+    // Validar que se haya seleccionado un molde
+    if (formData.moldUsage.mold1 === 0 && formData.moldUsage.mold2 === 0 && formData.moldUsage.mold3 === 0) {
+      alert('Por favor selecciona un molde antes de continuar');
+      return;
+    }
+    
     try {
-      await addSensorData(formData).unwrap();
-      setFormData({
-        polymerUsage: { pet: 0, polypropylene: 0 },
-        moldUsage: { mold1: 0, mold2: 0, mold3: 0 },
-        potentiometerEnergy: { used: 0, remaining: 100 },
-        injectorEnergy: { used: 0, remaining: 100 },
-        temperature: 0,
-        temperatureZone1: 0,
-        temperatureZone2: 0,
-        temperatureZone3: 0,
-        injectionTime: 0,
-        injectionPressure: 0,
-        injectionSpeed: 0,
-        holdingPressure: 0,
-        holdingTime: 0,
-        coolingTime: 0,
-        coolingTemperature: 0,
-        cycleTime: 0,
-        partWeight: 0,
-        partDimensions: { length: 0, width: 0, height: 0 },
-        qualityStatus: 'bueno',
-        defects: { warping: false, sinkMarks: false, flash: false, shortShot: false, other: '' },
-        operatorName: '',
-        shift: 'mañana',
-        batchNumber: '',
-        lotNumber: '',
-        notes: '',
-        processStatus: 'en_proceso'
+      // Guardar tiempo de inicio del monitoreo
+      const startTime = new Date();
+      
+      // Preparar datos para enviar
+      const dataToSend = {
+        ...formData,
+        monitoringStartTime: startTime,
+        processStatus: 'monitoreando'
+      };
+      
+      console.log('Enviando datos:', dataToSend);
+      
+      // Guardar datos iniciales y redirigir al dashboard
+      const result = await startMonitoring(dataToSend).unwrap();
+      
+      console.log('Respuesta del servidor:', result);
+      
+      // Redirigir al dashboard con el ID del proceso para poder finalizarlo
+      navigate('/dashboard', { 
+        state: { 
+          monitoringStartTime: startTime,
+          processId: result.data?._id || 'temp-id'
+        }
       });
-      navigate('/dashboard');
     } catch (error) {
       console.error('Error submitting data:', error);
+      alert('Error al iniciar el monitoreo. Por favor intenta de nuevo.');
     }
   };
 
@@ -186,11 +187,11 @@ const DataEntryForm = () => {
       <div className="progress-bar">
         <div 
           className="progress-fill" 
-          style={{ width: `${(step / 7) * 100}%` }}
+          style={{ width: `${(step / 5) * 100}%` }}
         ></div>
       </div>
       <div className="progress-steps">
-        {['Material', 'Molde', 'Energía', 'Temperatura', 'Inyección', 'Calidad', 'Resumen'].map((stepName, index) => (
+        {['Material', 'Molde', 'Energía', 'Inyección', 'Configuración'].map((stepName, index) => (
           <div 
             key={index} 
             className={`progress-step ${step > index + 1 ? 'completed' : step === index + 1 ? 'active' : ''}`}
@@ -402,95 +403,8 @@ const DataEntryForm = () => {
     );
   }
 
-  // Paso 4: Parámetros de temperatura
+  // Paso 4: Parámetros de inyección
   if (step === 4) {
-    return (
-      <div className="form-container">
-        {renderProgressBar()}
-        <div className="step-content">
-          <div className="step-header">
-            <h2>🌡️ Control de Temperatura</h2>
-            <p>Registra las temperaturas del sistema</p>
-          </div>
-          <form onSubmit={(e) => { e.preventDefault(); setStep(5); }} className="temperature-form">
-            <div className="form-grid">
-              <div className="form-section">
-                <h3 className="section-title">
-                  <span className="section-icon">🔥</span> Temperatura General
-                </h3>
-                <div className="input-group">
-                  <label className="input-label">Temperatura Principal (°C)</label>
-                  <input
-                    type="number"
-                    name="temperature"
-                    value={formData.temperature}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="500"
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="form-section">
-                <h3 className="section-title">
-                  <span className="section-icon">🌡️</span> Zonas de Temperatura
-                </h3>
-                <div className="input-group">
-                  <label className="input-label">Zona 1 (°C)</label>
-                  <input
-                    type="number"
-                    name="temperatureZone1"
-                    value={formData.temperatureZone1}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="500"
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Zona 2 (°C)</label>
-                  <input
-                    type="number"
-                    name="temperatureZone2"
-                    value={formData.temperatureZone2}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="500"
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Zona 3 (°C)</label>
-                  <input
-                    type="number"
-                    name="temperatureZone3"
-                    value={formData.temperatureZone3}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="500"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="form-actions">
-              <button type="button" onClick={() => setStep(3)} className="btn-secondary">
-                ← Anterior
-              </button>
-              <button type="submit" className="btn-primary">
-                Siguiente →
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
-  // Paso 5: Parámetros de inyección
-  if (step === 5) {
     return (
       <div className="form-container">
         {renderProgressBar()}
@@ -499,25 +413,12 @@ const DataEntryForm = () => {
             <h2>💉 Parámetros de Inyección</h2>
             <p>Configura los parámetros del proceso de inyección</p>
           </div>
-          <form onSubmit={(e) => { e.preventDefault(); setStep(6); }} className="injection-form">
+          <form onSubmit={(e) => { e.preventDefault(); setStep(5); }} className="injection-form">
             <div className="form-grid">
               <div className="form-section">
                 <h3 className="section-title">
                   <span className="section-icon">⏱️</span> Tiempos
                 </h3>
-                <div className="input-group">
-                  <label className="input-label">Tiempo de Inyección (s)</label>
-                  <input
-                    type="number"
-                    name="injectionTime"
-                    value={formData.injectionTime}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    step="0.1"
-                    required
-                  />
-                </div>
                 <div className="input-group">
                   <label className="input-label">Tiempo de Mantenimiento (s)</label>
                   <input
@@ -536,18 +437,6 @@ const DataEntryForm = () => {
                     type="number"
                     name="coolingTime"
                     value={formData.coolingTime}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    step="0.1"
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Tiempo de Ciclo Total (s)</label>
-                  <input
-                    type="number"
-                    name="cycleTime"
-                    value={formData.cycleTime}
                     onChange={handleInputChange}
                     className="input-field"
                     min="0"
@@ -611,7 +500,7 @@ const DataEntryForm = () => {
               </div>
             </div>
             <div className="form-actions">
-              <button type="button" onClick={() => setStep(4)} className="btn-secondary">
+              <button type="button" onClick={() => setStep(3)} className="btn-secondary">
                 ← Anterior
               </button>
               <button type="submit" className="btn-primary">
@@ -624,148 +513,17 @@ const DataEntryForm = () => {
     );
   }
 
-  // Paso 6: Control de calidad y información adicional
-  if (step === 6) {
+  // Paso 5: Configuración final e información del operador
+  if (step === 5) {
     return (
       <div className="form-container">
         {renderProgressBar()}
         <div className="step-content">
           <div className="step-header">
-            <h2>✅ Control de Calidad</h2>
-            <p>Registra información de calidad y datos adicionales</p>
+            <h2>⚙️ Configuración Final</h2>
+            <p>Completa la información del operador y configuración</p>
           </div>
-          <form onSubmit={(e) => { e.preventDefault(); setStep(7); }} className="quality-form">
-            <div className="form-grid">
-              <div className="form-section">
-                <h3 className="section-title">
-                  <span className="section-icon">📏</span> Dimensiones y Peso
-                </h3>
-                <div className="input-group">
-                  <label className="input-label">Peso de la Pieza (g)</label>
-                  <input
-                    type="number"
-                    name="partWeight"
-                    value={formData.partWeight}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    step="0.1"
-                  />
-                </div>
-                <div className="dimensions-grid">
-                  <div className="input-group">
-                    <label className="input-label">Longitud (mm)</label>
-                    <input
-                      type="number"
-                      name="partDimensions.length"
-                      value={formData.partDimensions.length}
-                      onChange={handleInputChange}
-                      className="input-field"
-                      min="0"
-                      step="0.1"
-                    />
-                  </div>
-                  <div className="input-group">
-                    <label className="input-label">Ancho (mm)</label>
-                    <input
-                      type="number"
-                      name="partDimensions.width"
-                      value={formData.partDimensions.width}
-                      onChange={handleInputChange}
-                      className="input-field"
-                      min="0"
-                      step="0.1"
-                    />
-                  </div>
-                  <div className="input-group">
-                    <label className="input-label">Altura (mm)</label>
-                    <input
-                      type="number"
-                      name="partDimensions.height"
-                      value={formData.partDimensions.height}
-                      onChange={handleInputChange}
-                      className="input-field"
-                      min="0"
-                      step="0.1"
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              <div className="form-section">
-                <h3 className="section-title">
-                  <span className="section-icon">🔍</span> Estado de Calidad
-                </h3>
-                <div className="input-group">
-                  <label className="input-label">Estado de Calidad</label>
-                  <select
-                    name="qualityStatus"
-                    value={formData.qualityStatus}
-                    onChange={handleInputChange}
-                    className="input-field"
-                  >
-                    <option value="excelente">Excelente</option>
-                    <option value="bueno">Bueno</option>
-                    <option value="regular">Regular</option>
-                    <option value="defectuoso">Defectuoso</option>
-                  </select>
-                </div>
-                
-                <div className="defects-section">
-                  <h4>Defectos Detectados</h4>
-                  <div className="defects-grid">
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        name="defects.warping"
-                        checked={formData.defects.warping}
-                        onChange={handleInputChange}
-                      />
-                      <span>Deformación (Warping)</span>
-                    </label>
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        name="defects.sinkMarks"
-                        checked={formData.defects.sinkMarks}
-                        onChange={handleInputChange}
-                      />
-                      <span>Hundimientos (Sink Marks)</span>
-                    </label>
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        name="defects.flash"
-                        checked={formData.defects.flash}
-                        onChange={handleInputChange}
-                      />
-                      <span>Rebaba (Flash)</span>
-                    </label>
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        name="defects.shortShot"
-                        checked={formData.defects.shortShot}
-                        onChange={handleInputChange}
-                      />
-                      <span>Inyección Incompleta</span>
-                    </label>
-                  </div>
-                  <div className="input-group">
-                    <label className="input-label">Otros Defectos</label>
-                    <input
-                      type="text"
-                      name="defects.other"
-                      value={formData.defects.other}
-                      onChange={handleInputChange}
-                      className="input-field"
-                      placeholder="Describe otros defectos..."
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            
+          <form onSubmit={handleSubmit} className="final-config-form">
             <div className="form-section">
               <h3 className="section-title">
                 <span className="section-icon">👤</span> Información del Operador
@@ -780,6 +538,7 @@ const DataEntryForm = () => {
                     onChange={handleInputChange}
                     className="input-field"
                     placeholder="Ingresa tu nombre"
+                    required
                   />
                 </div>
                 <div className="input-group">
@@ -789,6 +548,7 @@ const DataEntryForm = () => {
                     value={formData.shift}
                     onChange={handleInputChange}
                     className="input-field"
+                    required
                   >
                     <option value="mañana">Mañana</option>
                     <option value="tarde">Tarde</option>
@@ -822,10 +582,10 @@ const DataEntryForm = () => {
             
             <div className="form-section">
               <h3 className="section-title">
-                <span className="section-icon">📝</span> Notas y Observaciones
+                <span className="section-icon">📝</span> Notas Iniciales
               </h3>
               <div className="input-group">
-                <label className="input-label">Notas Adicionales</label>
+                <label className="input-label">Notas del Proceso</label>
                 <textarea
                   name="notes"
                   value={formData.notes}
@@ -838,189 +598,14 @@ const DataEntryForm = () => {
             </div>
             
             <div className="form-actions">
-              <button type="button" onClick={() => setStep(5)} className="btn-secondary">
+              <button type="button" onClick={() => setStep(4)} className="btn-secondary">
                 ← Anterior
               </button>
               <button type="submit" className="btn-primary">
-                Siguiente →
+                <span className="button-icon">🚀</span> Iniciar Monitoreo
               </button>
             </div>
           </form>
-        </div>
-      </div>
-    );
-  }
-
-  // Paso 7: Resumen final
-  if (step === 7) {
-    return (
-      <div className="form-container">
-        {renderProgressBar()}
-        <div className="step-content">
-          <div className="step-header">
-            <h2>📋 Resumen del Proceso</h2>
-            <p>Revisa todos los datos antes de enviar</p>
-          </div>
-          
-          <div className="summary-container">
-            <div className="summary-grid">
-              <div className="summary-section">
-                <h3 className="summary-title">
-                  <span className="summary-icon">🎯</span> Configuración Básica
-                </h3>
-                <div className="summary-item">
-                  <span className="summary-label">Material:</span>
-                  <span className="summary-value">
-                    {formData.polymerUsage.pet === 1 ? 'PET' : 'Polipropileno'}
-                  </span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Molde:</span>
-                  <span className="summary-value">
-                    {formData.moldUsage.mold1 === 1 ? 'Molde 1' : 
-                     formData.moldUsage.mold2 === 1 ? 'Molde 2' : 'Molde 3'}
-                  </span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Operador:</span>
-                  <span className="summary-value">{formData.operatorName || 'No especificado'}</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Turno:</span>
-                  <span className="summary-value">{formData.shift}</span>
-                </div>
-              </div>
-
-              <div className="summary-section">
-                <h3 className="summary-title">
-                  <span className="summary-icon">⚡</span> Energía
-                </h3>
-                <div className="summary-item">
-                  <span className="summary-label">Potenciómetro:</span>
-                  <span className="summary-value">{formData.potentiometerEnergy.used}% usado</span>
-                </div>
-                <div className="summary-item">
-                  <span className="summary-label">Inyector:</span>
-                  <span className="summary-value">{formData.injectorEnergy.used}% usado</span>
-                </div>
-              </div>
-
-              <div className="summary-section">
-                <h3 className="summary-title">
-                  <span className="summary-icon">🌡️</span> Temperatura
-                </h3>
-                <div className="summary-item">
-                  <span className="summary-label">Principal:</span>
-                  <span className="summary-value">{formData.temperature}°C</span>
-                </div>
-                {formData.temperatureZone1 > 0 && (
-                  <div className="summary-item">
-                    <span className="summary-label">Zona 1:</span>
-                    <span className="summary-value">{formData.temperatureZone1}°C</span>
-                  </div>
-                )}
-                {formData.temperatureZone2 > 0 && (
-                  <div className="summary-item">
-                    <span className="summary-label">Zona 2:</span>
-                    <span className="summary-value">{formData.temperatureZone2}°C</span>
-                  </div>
-                )}
-                {formData.temperatureZone3 > 0 && (
-                  <div className="summary-item">
-                    <span className="summary-label">Zona 3:</span>
-                    <span className="summary-value">{formData.temperatureZone3}°C</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="summary-section">
-                <h3 className="summary-title">
-                  <span className="summary-icon">💉</span> Inyección
-                </h3>
-                <div className="summary-item">
-                  <span className="summary-label">Tiempo:</span>
-                  <span className="summary-value">{formData.injectionTime}s</span>
-                </div>
-                {formData.injectionPressure > 0 && (
-                  <div className="summary-item">
-                    <span className="summary-label">Presión:</span>
-                    <span className="summary-value">{formData.injectionPressure} bar</span>
-                  </div>
-                )}
-                {formData.injectionSpeed > 0 && (
-                  <div className="summary-item">
-                    <span className="summary-label">Velocidad:</span>
-                    <span className="summary-value">{formData.injectionSpeed} mm/s</span>
-                  </div>
-                )}
-                {formData.cycleTime > 0 && (
-                  <div className="summary-item">
-                    <span className="summary-label">Ciclo Total:</span>
-                    <span className="summary-value">{formData.cycleTime}s</span>
-                  </div>
-                )}
-              </div>
-
-              <div className="summary-section">
-                <h3 className="summary-title">
-                  <span className="summary-icon">✅</span> Calidad
-                </h3>
-                <div className="summary-item">
-                  <span className="summary-label">Estado:</span>
-                  <span className={`summary-value quality-${formData.qualityStatus}`}>
-                    {formData.qualityStatus.charAt(0).toUpperCase() + formData.qualityStatus.slice(1)}
-                  </span>
-                </div>
-                {formData.partWeight > 0 && (
-                  <div className="summary-item">
-                    <span className="summary-label">Peso:</span>
-                    <span className="summary-value">{formData.partWeight}g</span>
-                  </div>
-                )}
-                {formData.partDimensions.length > 0 && (
-                  <div className="summary-item">
-                    <span className="summary-label">Dimensiones:</span>
-                    <span className="summary-value">
-                      {formData.partDimensions.length}×{formData.partDimensions.width}×{formData.partDimensions.height} mm
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <div className="summary-section">
-                <h3 className="summary-title">
-                  <span className="summary-icon">📝</span> Información Adicional
-                </h3>
-                {formData.lotNumber && (
-                  <div className="summary-item">
-                    <span className="summary-label">Lote:</span>
-                    <span className="summary-value">{formData.lotNumber}</span>
-                  </div>
-                )}
-                {formData.batchNumber && (
-                  <div className="summary-item">
-                    <span className="summary-label">Batch:</span>
-                    <span className="summary-value">{formData.batchNumber}</span>
-                  </div>
-                )}
-                {formData.notes && (
-                  <div className="summary-item">
-                    <span className="summary-label">Notas:</span>
-                    <span className="summary-value notes">{formData.notes}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="form-actions">
-              <button type="button" onClick={() => setStep(6)} className="btn-secondary">
-                ← Editar Datos
-              </button>
-              <button onClick={handleSubmit} className="btn-primary">
-                <span className="button-icon">📊</span> Generar Gráficas y Guardar
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     );

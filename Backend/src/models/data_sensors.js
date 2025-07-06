@@ -22,14 +22,7 @@ const data_sensorsSchema = mongoose.Schema({
         remaining: { type: Number, required: true }
     },
     
-    // Parámetros de temperatura
-    temperature: { type: Number, required: true },
-    temperatureZone1: { type: Number, required: false },
-    temperatureZone2: { type: Number, required: false },
-    temperatureZone3: { type: Number, required: false },
-    
     // Parámetros de inyección
-    injectionTime: { type: Number, required: true },
     injectionPressure: { type: Number, required: false },
     injectionSpeed: { type: Number, required: false },
     holdingPressure: { type: Number, required: false },
@@ -39,7 +32,7 @@ const data_sensorsSchema = mongoose.Schema({
     coolingTime: { type: Number, required: false },
     coolingTemperature: { type: Number, required: false },
     
-    // Control de calidad
+    // Control de calidad (se llena al final del proceso)
     cycleTime: { type: Number, required: false },
     partWeight: { type: Number, required: false },
     partDimensions: {
@@ -75,7 +68,7 @@ const data_sensorsSchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: false
     },
     
     // Notas y observaciones
@@ -84,9 +77,17 @@ const data_sensorsSchema = mongoose.Schema({
     // Estado del proceso
     processStatus: { 
         type: String, 
-        enum: ['en_proceso', 'completado', 'pausado', 'cancelado'], 
+        enum: ['en_proceso', 'monitoreando', 'completado', 'pausado', 'cancelado'], 
         default: 'en_proceso' 
-    }
+    },
+    
+    // Tiempo de monitoreo (se calcula automáticamente)
+    monitoringStartTime: { type: Date, required: false },
+    monitoringEndTime: { type: Date, required: false },
+    monitoringDuration: { type: Number, required: false }, // en segundos
+    
+    // Temperatura del sensor (viene automáticamente del sensor)
+    temperature: { type: Number, required: false }
 });
 
 export default mongoose.model('DataSensors', data_sensorsSchema)

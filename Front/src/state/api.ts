@@ -50,6 +50,32 @@ export const api = createApi({
       invalidatesTags: ['SensorData']
     }),
 
+    startMonitoring: builder.mutation({
+      query: (data) => ({
+        url: '/api/sensor-data',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['SensorData']
+    }),
+
+    finalizeMonitoring: builder.mutation({
+      query: ({ id, qualityData }) => ({
+        url: `/api/sensor-data/${id}/finalize`,
+        method: 'PUT',
+        body: qualityData,
+      }),
+      invalidatesTags: ['SensorData']
+    }),
+
+    getActiveMonitoring: builder.query({
+      query: () => ({
+        url: '/api/active-monitoring',
+        method: 'GET',
+      }),
+      providesTags: ['SensorData']
+    }),
+
     getAllUsers: builder.query({
       query: () => '/api/users',
       providesTags: ['Users']
@@ -136,6 +162,9 @@ export const api = createApi({
 export const {
   useGetSensorDataQuery,
   useAddSensorDataMutation,
+  useStartMonitoringMutation,
+  useFinalizeMonitoringMutation,
+  useGetActiveMonitoringQuery,
   useGetAllUsersQuery,
   useDeleteUserMutation,
   useRegisterUserMutation,

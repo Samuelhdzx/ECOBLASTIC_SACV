@@ -8,13 +8,14 @@ Se ha realizado una mejora completa al sistema de entrada de datos de ECOBLASTIC
 
 ### 1. **Diseño Moderno y Atractivo**
 - **Interfaz de usuario completamente rediseñada** con un enfoque moderno y profesional
-- **Barra de progreso visual** que guía al usuario a través de los 7 pasos del proceso
+- **Barra de progreso visual** que guía al usuario a través de los 5 pasos del proceso
 - **Componentes interactivos** con animaciones suaves y feedback visual
 - **Diseño responsive** que se adapta perfectamente a dispositivos móviles y tablets
 
-### 2. **Proceso de Entrada de Datos Mejorado**
-El formulario ahora se divide en **7 pasos organizados**:
+### 2. **Nuevo Flujo de Trabajo Optimizado**
+El proceso ahora sigue un flujo más coherente y realista:
 
+#### **Fase 1: Configuración Inicial (5 pasos)**
 1. **🎯 Selección de Material**
    - PET (Polietileno Tereftalato)
    - Polipropileno (PP)
@@ -30,98 +31,113 @@ El formulario ahora se divide en **7 pasos organizados**:
    - Energía del Inyector (usado/restante)
    - Barras de progreso visuales
 
-4. **🌡️ Control de Temperatura**
-   - Temperatura principal
-   - Temperaturas por zonas (1, 2, 3)
-   - Validación de rangos seguros
-
-5. **💉 Parámetros de Inyección**
-   - Tiempo de inyección
+4. **💉 Parámetros de Inyección**
    - Presión de inyección
    - Velocidad de inyección
    - Presión de mantenimiento
    - Tiempo de mantenimiento
    - Tiempo de enfriamiento
    - Temperatura de enfriamiento
-   - Tiempo de ciclo total
 
-6. **✅ Control de Calidad**
-   - Peso de la pieza
-   - Dimensiones (largo, ancho, alto)
-   - Estado de calidad (excelente, bueno, regular, defectuoso)
-   - Detección de defectos:
-     - Deformación (Warping)
-     - Hundimientos (Sink Marks)
-     - Rebaba (Flash)
-     - Inyección incompleta
-     - Otros defectos
+5. **⚙️ Configuración Final**
    - Información del operador
    - Turno de trabajo
    - Número de lote y batch
-   - Notas y observaciones
+   - Notas iniciales
 
-7. **📋 Resumen Final**
-   - Vista previa completa de todos los datos
-   - Confirmación antes del envío
-   - Posibilidad de editar datos antes de enviar
+#### **Fase 2: Monitoreo en Tiempo Real**
+- **Dashboard con estadísticas** en tiempo real
+- **Botón "Finalizar Monitoreo"** para terminar el proceso
+- **Cálculo automático** del tiempo de monitoreo
+- **Temperatura automática** desde el sensor
 
-### 3. **Campos de Datos Expandidos**
+#### **Fase 3: Control de Calidad (Post-Proceso)**
+- **Evaluación de calidad** después del proceso
+- **Medición de dimensiones** y peso
+- **Detección de defectos** específicos
+- **Notas finales** del proceso
 
-#### **Nuevos Campos de Temperatura**
-- `temperatureZone1`, `temperatureZone2`, `temperatureZone3`
-- Monitoreo de múltiples zonas de calentamiento
+#### **Fase 4: Resumen Completo**
+- **Vista previa completa** de todos los datos
+- **Tiempo total** del proceso
+- **Métricas de calidad** finales
+- **Confirmación** del proceso completado
 
-#### **Parámetros de Inyección Avanzados**
-- `injectionPressure` - Presión de inyección en bar
-- `injectionSpeed` - Velocidad de inyección en mm/s
+### 3. **Campos de Datos Optimizados**
+
+#### **Campos Removidos (Automáticos)**
+- ❌ **Temperatura manual** - Ahora viene automáticamente del sensor
+- ❌ **Tiempo de inyección manual** - Se calcula automáticamente
+
+#### **Campos de Configuración**
+- `polymerUsage` - Tipo de material
+- `moldUsage` - Molde seleccionado
+- `potentiometerEnergy` - Energía del potenciómetro
+- `injectorEnergy` - Energía del inyector
+- `injectionPressure` - Presión de inyección
+- `injectionSpeed` - Velocidad de inyección
 - `holdingPressure` - Presión de mantenimiento
 - `holdingTime` - Tiempo de mantenimiento
 - `coolingTime` - Tiempo de enfriamiento
 - `coolingTemperature` - Temperatura de enfriamiento
-- `cycleTime` - Tiempo total del ciclo
-
-#### **Control de Calidad**
-- `partWeight` - Peso de la pieza en gramos
-- `partDimensions` - Dimensiones (largo, ancho, alto)
-- `qualityStatus` - Estado de calidad
-- `defects` - Detección de defectos específicos
 
 #### **Información del Operador**
 - `operatorName` - Nombre del operador
 - `shift` - Turno de trabajo
 - `batchNumber` - Número de batch
 - `lotNumber` - Número de lote
-- `notes` - Notas y observaciones
+- `notes` - Notas iniciales
 
-#### **Estado del Proceso**
-- `processStatus` - Estado actual del proceso
+#### **Control de Calidad (Post-Proceso)**
+- `cycleTime` - Tiempo total del ciclo
+- `partWeight` - Peso de la pieza
+- `partDimensions` - Dimensiones (largo, ancho, alto)
+- `qualityStatus` - Estado de calidad
+- `defects` - Detección de defectos específicos
+- `additionalNotes` - Notas finales
 
-### 4. **Componente de Estadísticas en Tiem Real**
-- **ProcessStats.tsx** - Nuevo componente para mostrar estadísticas
-- Monitoreo en tiempo real de:
-  - Temperatura actual vs objetivo
-  - Presión de inyección
-  - Tiempo de ciclo
-  - Eficiencia del proceso
-  - Calidad de producción
-  - Estado general del sistema
+#### **Tiempo de Monitoreo (Automático)**
+- `monitoringStartTime` - Tiempo de inicio
+- `monitoringEndTime` - Tiempo de finalización
+- `monitoringDuration` - Duración total en segundos
+
+### 4. **Componentes Nuevos**
+
+#### **QualityControl.tsx**
+- **Formulario de calidad** que aparece después del monitoreo
+- **Evaluación de defectos** con checkboxes
+- **Medición de dimensiones** y peso
+- **Notas finales** del proceso
+
+#### **ProcessSummary.tsx**
+- **Resumen completo** del proceso
+- **Visualización del tiempo** de monitoreo
+- **Métricas finales** de calidad
+- **Modal elegante** con todos los datos
+
+#### **ProcessStats.tsx**
+- **Estadísticas en tiempo real** durante el monitoreo
+- **Indicadores visuales** de temperatura, presión, eficiencia
+- **Estado del proceso** con animaciones
 
 ### 5. **Mejoras en el Backend**
 
-#### **Modelo de Datos Expandido**
-- Nuevos campos en `data_sensors.js`
-- Validaciones mejoradas
-- Soporte para todos los nuevos parámetros
+#### **Modelo de Datos Optimizado**
+- **Campos de temperatura** removidos (automático del sensor)
+- **Campos de tiempo** calculados automáticamente
+- **Estados del proceso** expandidos (en_proceso, monitoreando, completado)
+- **Tiempo de monitoreo** automático
 
 #### **Controladores Actualizados**
-- `addSensorData` - Nuevo endpoint para el formulario mejorado
-- `getAllSensorData` - Obtener todos los datos de sensores
-- `getSensorDataById` - Obtener datos específicos por ID
-- Validaciones robustas y manejo de errores
+- `addSensorData` → `startMonitoring` - Iniciar monitoreo
+- `finalizeMonitoring` - Finalizar monitoreo y agregar calidad
+- `getActiveMonitoring` - Obtener procesos activos
+- **Validaciones mejoradas** y manejo de errores
 
 #### **Rutas Actualizadas**
-- Nuevos endpoints en `data_sensors.js`
-- Soporte para todas las nuevas funcionalidades
+- `POST /api/sensor-data` - Iniciar monitoreo
+- `PUT /api/sensor-data/:id/finalize` - Finalizar monitoreo
+- `GET /api/active-monitoring` - Procesos activos
 
 ## 🎨 Características de Diseño
 
@@ -178,22 +194,44 @@ El sistema utiliza MongoDB con el esquema actualizado en `Backend/src/models/dat
 ## 📊 Beneficios de las Mejoras
 
 ### **Para Operadores**
-- **Interfaz intuitiva** y fácil de usar
-- **Guía paso a paso** clara
-- **Validación en tiempo real** de datos
-- **Resumen visual** antes del envío
+- **Flujo más intuitivo** y coherente
+- **Menos campos manuales** (temperatura y tiempo automáticos)
+- **Control de calidad** después del proceso real
+- **Resumen visual** completo del proceso
 
 ### **Para Supervisores**
-- **Datos más completos** y detallados
+- **Datos más precisos** (temperatura del sensor)
+- **Tiempo real** del proceso
 - **Control de calidad** integrado
 - **Trazabilidad** mejorada
-- **Reportes más precisos**
 
 ### **Para la Empresa**
-- **Mejor calidad** de datos
-- **Procesos más eficientes**
-- **Reducción de errores** de entrada
+- **Procesos más eficientes** y realistas
+- **Reducción de errores** de entrada manual
+- **Datos más confiables** del sensor
 - **Análisis más profundos** posibles
+
+## 🚀 Nuevo Flujo de Trabajo
+
+### **1. Inicio del Proceso**
+```
+Operador → Clic "Iniciar Monitoreo" → Formulario de 5 pasos → Dashboard
+```
+
+### **2. Monitoreo en Tiempo Real**
+```
+Dashboard → Estadísticas en tiempo real → Botón "Finalizar Monitoreo"
+```
+
+### **3. Control de Calidad**
+```
+Finalizar Monitoreo → Formulario de Calidad → Evaluación de producto
+```
+
+### **4. Resumen Final**
+```
+Control de Calidad → Resumen Completo → Proceso Terminado
+```
 
 ## 🚀 Próximas Mejoras Sugeridas
 
