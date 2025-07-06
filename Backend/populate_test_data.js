@@ -94,7 +94,8 @@ const generateTestData = () => {
       monitoringStartTime: new Date(date.getTime() - monitoringDuration * 1000),
       monitoringEndTime: date,
       monitoringDuration: monitoringDuration,
-      temperature: temperature
+      temperature: temperature,
+      user: "674347b376448614a6680e7a"
     };
     
     testData.push(data);

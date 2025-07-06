@@ -34,6 +34,15 @@ export const api = createApi({
   endpoints: (builder) => ({
     getSensorData: builder.query({
       query: () => ({
+        url: '/api/data_sensors',
+        method: 'GET',
+        credentials: 'include'
+      }),
+      providesTags: ['SensorData']
+    }),
+
+    getAllSensorDataForAnalysis: builder.query({
+      query: () => ({
         url: '/api/data_sensors-analysis',
         method: 'GET',
         credentials: 'include'
@@ -159,6 +168,7 @@ export const api = createApi({
 
 export const {
   useGetSensorDataQuery,
+  useGetAllSensorDataForAnalysisQuery,
   useAddSensorDataMutation,
   useStartMonitoringMutation,
   useFinalizeMonitoringMutation,

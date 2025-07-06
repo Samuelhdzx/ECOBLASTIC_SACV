@@ -24,13 +24,13 @@ import {
   AttachMoney,
   Thermostat
 } from '@mui/icons-material';
-import { useGetSensorDataQuery } from '@/state/api';
+import { useGetAllSensorDataForAnalysisQuery } from '@/state/api';
 import './AdvancedDataAnalysis.css';
 
 const AdvancedDataAnalysis: React.FC = () => {
   console.log('AdvancedDataAnalysis component rendering...');
   
-  const { data: sensorData, isLoading, error } = useGetSensorDataQuery(undefined);
+  const { data: sensorData, isLoading, error } = useGetAllSensorDataForAnalysisQuery();
   const [selectedTimeframe, setSelectedTimeframe] = useState('all');
   const [showConclusions, setShowConclusions] = useState<{[key: string]: boolean}>({});
 
@@ -238,7 +238,7 @@ const AdvancedDataAnalysis: React.FC = () => {
                     Tiempo Promedio
                   </Typography>
                   <Typography variant="h4" className="kpi-value">
-                    {stats.avgCycleTime.toFixed(1)}s
+                    {(stats.avgMonitoringTime / 60).toFixed(1)} min
                   </Typography>
                 </Box>
                 <Speed className="kpi-icon" />
@@ -362,7 +362,7 @@ const AdvancedDataAnalysis: React.FC = () => {
               <Typography variant="body1" paragraph>
                 • Total de piezas producidas: <strong>{stats.totalPieces}</strong><br/>
                 • Tiempo promedio de ciclo: <strong>{stats.avgCycleTime.toFixed(1)} segundos</strong><br/>
-                • Tiempo promedio de monitoreo: <strong>{stats.avgMonitoringTime.toFixed(1)} minutos</strong>
+                • Tiempo promedio de monitoreo: <strong>{(stats.avgMonitoringTime / 60).toFixed(1)} minutos</strong>
               </Typography>
             </Grid>
             
