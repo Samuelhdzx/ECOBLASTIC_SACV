@@ -120,7 +120,7 @@ export const addSensorData = async (req, res) => {
             notes: notes || '',
             processStatus: processStatus || 'monitoreando',
             monitoringStartTime: monitoringStartTime || new Date(),
-            user: user || undefined
+            user: req.user.id
         });
         
         console.log('Creating new data entry with:', {
