@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {register, login, logout, profile, loginAdmin, createAdmin, getAllUsers, deleteUser } from "../controllers/auth_controller.js";
 const router = Router();
-import { authRequired } from "../middlewares/validateToken.js";
+import { validateToken } from "../middlewares/validateToken.js";
 import {validateSchema} from "../middlewares/validator.middleware.js";
 import { registerSchema, loginSchema, loginAdminSchema, createAdminSchema } from "../schemas/auth.schema.js";
 import { sanitizeInput } from "../middlewares/sanitizer.middleware.js";
@@ -13,13 +13,13 @@ router.post('/loginAdmin', validateSchema(loginAdminSchema), loginAdmin);
 
 router.post('/createAdmin', validateSchema(createAdminSchema), createAdmin);
 
-router.get('/logout', authRequired,logout);
+router.get('/logout', validateToken,logout);
 
-router.get('/profile', authRequired,profile);
+router.get('/profile', validateToken,profile);
 
 router.get('/users', getAllUsers);
 
-router.get('/data_sensors/all', authRequired, async (req, res) => {
+router.get('/data_sensors/all', validateToken, async (req, res) => {
     try {
       const allRecords = await data_sensorsSchema.find().populate('user');
       res.json(allRecords);
@@ -28,6 +28,6 @@ router.get('/data_sensors/all', authRequired, async (req, res) => {
     }
   });
 
-router.delete('/users/:userId', authRequired, deleteUser);
+router.delete('/users/:userId', validateToken, deleteUser);
 
 export default router;
