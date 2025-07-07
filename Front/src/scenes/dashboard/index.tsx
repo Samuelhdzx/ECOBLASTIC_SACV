@@ -35,7 +35,7 @@ const Dashboard = () => {
   const [monitoringStartTime, setMonitoringStartTime] = useState<Date | null>(null);
 
   // Obtener procesos activos
-  const { data: activeProcesses, refetch } = useGetActiveMonitoringQuery();
+  const { data: sensorData } = useGetSensorDataQuery(undefined);
   const [finalizeMonitoring] = useFinalizeMonitoringMutation();
 
   useEffect(() => {

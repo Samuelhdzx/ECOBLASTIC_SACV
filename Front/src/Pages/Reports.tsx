@@ -59,7 +59,7 @@ interface DistributionData {
 const Reports: React.FC = () => {
   const [dateRange, setDateRange] = useState('week');
   const [showFilters, setShowFilters] = useState(false);
-  const { data: temperatureData = [], isLoading, error } = useGetTemperaturesQuery(undefined, {
+  const { refetch } = useGetTemperaturesQuery(undefined, {
     pollingInterval: 3000, // Actualizar cada 3 segundos
     refetchOnMountOrArgChange: true
   });

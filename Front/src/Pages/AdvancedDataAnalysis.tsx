@@ -34,7 +34,7 @@ import ReportExamplesModal from '../components/ReportExamplesModal';
 const AdvancedDataAnalysis: React.FC = () => {
   console.log('AdvancedDataAnalysis component rendering...');
   
-  const { data: sensorData, isLoading, error } = useGetAllSensorDataForAnalysisQuery();
+  const { data: sensorData, isLoading, error } = useGetAllSensorDataForAnalysisQuery(undefined);
   const [selectedTimeframe, setSelectedTimeframe] = useState('all');
   const [showConclusions, setShowConclusions] = useState<{[key: string]: boolean}>({});
   const [showReportExamples, setShowReportExamples] = useState(false);

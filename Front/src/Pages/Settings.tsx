@@ -118,11 +118,11 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
 
   // Queries para datos reales
   const { data: users, isLoading: usersLoading, error: usersError } = useGetAllUsersQuery();
-  const { data: sensorData } = useGetSensorDataQuery();
-  const { data: productionMetrics } = useGetProductionMetricsQuery();
-  const { data: inventoryLevels } = useGetInventoryLevelsQuery();
-  const { data: qualityMetrics } = useGetQualityMetricsQuery();
-  const { data: maintenanceData } = useGetMaintenanceScheduleQuery();
+  const { data: sensorData } = useGetSensorDataQuery(undefined);
+  const { data: productionMetrics } = useGetProductionMetricsQuery(undefined);
+  const { data: inventoryLevels } = useGetInventoryLevelsQuery(undefined);
+  const { data: qualityMetrics } = useGetQualityMetricsQuery(undefined);
+  const { data: maintenanceData } = useGetMaintenanceScheduleQuery(undefined);
 
   // Mutations
   const [deleteUser] = useDeleteUserMutation();

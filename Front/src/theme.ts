@@ -1,145 +1,87 @@
 // theme.ts - Sistema de Diseño Ecoblastic Unificado
-import { createTheme, Theme, ThemeOptions } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 // 1) Define tus tokens de color para MODO OSCURO
 const tokensDark = {
   grey: {
-    100: "#f0f0f3",
-    200: "#e1e2e7",
-    300: "#d1d3da",
-    400: "#c2c5ce",
-    500: "#b3b6c2",
-    600: "#8f929b",
-    700: "#6b6d74",
-    800: "#48494e",
-    900: "#242427",
+    0: "#ffffff",
+    10: "#f6f6f6",
+    50: "#f0f0f0",
+    100: "#e0e0e0",
+    200: "#c2c2c2",
+    300: "#a3a3a3",
+    400: "#858585",
+    500: "#666666",
+    600: "#525252",
+    700: "#3d3d3d",
+    800: "#292929",
+    900: "#141414",
+    1000: "#000000",
   },
   primary: {
-    100: "#e4d0fc",
-    200: "#c9a1f9",
-    300: "#ae72f7",
-    400: "#9443f4",
-    500: "#9A48FD", // Morado principal
-    600: "#6e36b9",
-    700: "#52288a",
-    800: "#371a5c",
-    900: "#1b0c2e",
+    100: "#d3d4de",
+    200: "#a6a9be",
+    300: "#7a7f9d",
+    400: "#4d547d",
+    500: "#21295c",
+    600: "#191F45",
+    700: "#141937",
+    800: "#0d1025",
+    900: "#070812",
   },
   secondary: {
-    100: "#d1fcf6",
-    200: "#a3f9ed",
-    300: "#75f5e3",
-    400: "#47f2da",
-    500: "#14B8A6", // Teal
-    600: "#0e8d7f",
-    700: "#096259",
-    800: "#053632",
-    900: "#011b19",
-  },
-  tertiary: {
-    500: "#FBBF24", // Dorado/Ámbar
-  },
-  background: {
-    light: "#2d2d34",
-    main: "#1f2026", // Fondo oscuro principal
-    navbar: "#161618",
-    navbar_secondary: "#1a1a1f",
-    surface: "#2d2d34",
-    paper: "#1f2026",
-    alt1: "#252732",
-    alt2: "#1E1E24",
-    contrast: "#FFFFFF",
-  },
-  success: {
-    light: "#6EE7B7",
-    main: "#10B981", // Verde esmeralda
-    dark: "#047857",
-  },
-  warning: {
-    light: "#FCD34D",
-    main: "#F59E0B", // Ámbar
-    dark: "#B45309",
-  },
-  error: {
-    light: "#FCA5A5",
-    main: "#EF4444", // Rojo
-    dark: "#B91C1C",
-  },
-  info: {
-    light: "#93C5FD",
-    main: "#3B82F6", // Azul
-    dark: "#1D4ED8",
+    50: "#f0f0f0",
+    100: "#fff6e0",
+    200: "#ffedc2",
+    300: "#ffe3a3",
+    400: "#ffda85",
+    500: "#ffd166",
+    600: "#cca752",
+    700: "#997d3d",
+    800: "#665429",
+    900: "#332a14",
   },
 };
 
 // 2) Define tus tokens de color para MODO CLARO
 const tokensLight = {
   grey: {
-    100: "#1F2937", // Más oscuro para mejor contraste
-    200: "#374151",
-    300: "#4B5563",
-    400: "#6B7280",
-    500: "#9CA3AF",
-    600: "#D1D5DB",
-    700: "#E5E7EB",
-    800: "#F3F4F6",
-    900: "#F9FAFB",
+    0: "#000000",
+    10: "#141414",
+    50: "#292929",
+    100: "#3d3d3d",
+    200: "#525252",
+    300: "#666666",
+    400: "#858585",
+    500: "#a3a3a3",
+    600: "#c2c2c2",
+    700: "#e0e0e0",
+    800: "#f0f0f0",
+    900: "#f6f6f6",
+    1000: "#ffffff",
   },
   primary: {
-    100: "#F3EAFF",
-    200: "#E2D1FF",
-    300: "#C9A6FF",
-    400: "#AB74FF",
-    500: "#9A48FD", // Mantenemos el color principal
-    600: "#8132DB",
-    700: "#6925B9",
-    800: "#511997",
-    900: "#390C75",
+    100: "#070812",
+    200: "#0d1025",
+    300: "#141937",
+    400: "#191F45",
+    500: "#21295c",
+    600: "#4d547d",
+    700: "#7a7f9d",
+    800: "#a6a9be",
+    900: "#d3d4de",
   },
   secondary: {
-    100: "#CCFBF1",
-    200: "#99F6E4",
-    300: "#5EEAD4",
-    400: "#2DD4BF",
-    500: "#14B8A6", // Mantenemos el teal principal
-    600: "#0D9488",
-    700: "#0F766E",
-    800: "#115E59",
-    900: "#134E4A",
-  },
-  tertiary: {
-    500: "#F59E0B", // Ámbar ligeramente diferente
-  },
-  background: {
-    light: "#F8FAFF", // Fondo con sutil tono azulado
-    main: "#FFFFFF",
-    navbar: "#F1F5F9", // Navbar con tono gris azulado sutil
-    navbar_secondary: "#E2E8F0",
-    surface: "#FFFFFF", // Para tarjetas y elementos elevados
-    paper: "#F8FAFF", // Para fondos de secciones
-    alt1: "#EDF2F7",
-    alt2: "#E2E8F0",
-    contrast: "#1E293B", // Para elementos que necesiten alto contraste
-  },
-  success: {
-    light: "#A7F3D0",
-    main: "#10B981", // Verde esmeralda
-    dark: "#065F46",
-  },
-  warning: {
-    light: "#FDE68A",
-    main: "#F59E0B", // Ámbar
-    dark: "#D97706",
-  },
-  error: {
-    light: "#FEE2E2",
-    main: "#EF4444", // Rojo
-    dark: "#DC2626",
-  },
-  info: {
-    light: "#DBEAFE",
-    main: "#3B82F6", // Azul
-    dark: "#2563EB",
+    50: "#332a14",
+    100: "#665429",
+    200: "#997d3d",
+    300: "#cca752",
+    400: "#ffd166",
+    500: "#ffda85",
+    600: "#ffe3a3",
+    700: "#ffedc2",
+    800: "#fff6e0",
+    900: "#f0f0f0",
   },
 };
 
@@ -235,239 +177,74 @@ const zIndex = {
 };
 
 // 3) Función principal que retorna el theme según el modo
-export const getThemeSettings = (mode: "dark" | "light"): ThemeOptions => {
-  const tokens = mode === "dark" ? tokensDark : tokensLight;
-  const shadows = getShadows(mode);
-  const gradients = getGradients(mode);
-
+export const getThemeSettings = (mode: 'light' | 'dark') => {
+  const tokens = mode === 'dark' ? tokensDark : tokensLight;
+  
   return {
     palette: {
-      mode,
-      primary: {
-        ...tokens.primary,
-        main: tokens.primary[500],
-        light: tokens.primary[400],
-        dark: tokens.primary[600],
-        contrastText: '#FFFFFF',
-      },
-      secondary: {
-        ...tokens.secondary,
-        main: tokens.secondary[500],
-        light: tokens.secondary[400],
-        dark: tokens.secondary[600],
-        contrastText: '#FFFFFF',
-      },
-      success: {
-        main: tokens.success.main,
-        light: tokens.success.light,
-        dark: tokens.success.dark,
-        contrastText: '#FFFFFF',
-      },
-      warning: {
-        main: tokens.warning.main,
-        light: tokens.warning.light,
-        dark: tokens.warning.dark,
-        contrastText: '#FFFFFF',
-      },
-      error: {
-        main: tokens.error.main,
-        light: tokens.error.light,
-        dark: tokens.error.dark,
-        contrastText: '#FFFFFF',
-      },
-      info: {
-        main: tokens.info.main,
-        light: tokens.info.light,
-        dark: tokens.info.dark,
-        contrastText: '#FFFFFF',
-      },
-      grey: {
-        ...tokens.grey,
-        main: tokens.grey[500],
-      },
-      text: {
-        primary: mode === 'dark' ? tokens.grey[100] : tokens.grey[100],
-        secondary: mode === 'dark' ? tokens.grey[300] : tokens.grey[300],
-        disabled: mode === 'dark' ? tokens.grey[600] : tokens.grey[500],
-      },
-      background: {
-        default: tokens.background.main,
-        paper: tokens.background.paper,
-        light: tokens.background.light,
-        navbar: tokens.background.navbar,
-        navbar_secondary: tokens.background.navbar_secondary,
-        alt1: tokens.background.alt1,
-        alt2: tokens.background.alt2,
-        surface: tokens.background.surface,
-        contrast: tokens.background.contrast,
-      },
-      divider: mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
-      action: {
-        active: mode === 'dark' ? tokens.grey[300] : tokens.grey[400],
-        hover: mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)',
-        selected: mode === 'dark' ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.08)',
-        disabled: mode === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.26)',
-        disabledBackground: mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)',
-        focus: mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)',
-      },
+      mode: mode,
+      ...(mode === 'dark'
+        ? {
+            primary: {
+              main: tokens.primary[500],
+            },
+            secondary: {
+              main: tokens.secondary[500],
+            },
+            background: {
+              default: tokens.grey[900],
+              paper: tokens.grey[800],
+            },
+            text: {
+              primary: tokens.grey[100],
+              secondary: tokens.grey[200],
+            },
+          }
+        : {
+            primary: {
+              main: tokens.primary[500],
+            },
+            secondary: {
+              main: tokens.secondary[500],
+            },
+            background: {
+              default: tokens.grey[0],
+              paper: tokens.grey[10],
+            },
+            text: {
+              primary: tokens.grey[900],
+              secondary: tokens.grey[800],
+            },
+          }),
     },
     typography: {
-      fontFamily: ["Inter", "sans-serif"].join(","),
-      fontSize: 14,
-      fontWeightLight: 300,
-      fontWeightRegular: 400,
-      fontWeightMedium: 500,
-      fontWeightBold: 700,
+      fontFamily: ['Inter', 'sans-serif'].join(','),
+      fontSize: 12,
       h1: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
-        fontSize: 32,
-        fontWeight: 700,
-        lineHeight: 1.2,
-        letterSpacing: '-0.01em',
+        fontFamily: ['Inter', 'sans-serif'].join(','),
+        fontSize: 40,
       },
       h2: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
-        fontSize: 28,
-        fontWeight: 700,
-        lineHeight: 1.3,
-        letterSpacing: '-0.01em',
+        fontFamily: ['Inter', 'sans-serif'].join(','),
+        fontSize: 32,
       },
       h3: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
+        fontFamily: ['Inter', 'sans-serif'].join(','),
         fontSize: 24,
-        fontWeight: 700,
-        lineHeight: 1.4,
-        letterSpacing: '-0.01em',
       },
       h4: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
+        fontFamily: ['Inter', 'sans-serif'].join(','),
         fontSize: 20,
-        fontWeight: 600,
-        lineHeight: 1.4,
-        letterSpacing: '-0.01em',
       },
       h5: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
+        fontFamily: ['Inter', 'sans-serif'].join(','),
         fontSize: 16,
-        fontWeight: 600,
-        lineHeight: 1.4,
       },
       h6: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
+        fontFamily: ['Inter', 'sans-serif'].join(','),
         fontSize: 14,
-        fontWeight: 600,
-        lineHeight: 1.4,
-      },
-      subtitle1: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
-        fontSize: 16,
-        fontWeight: 500,
-        lineHeight: 1.5,
-      },
-      subtitle2: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
-        fontSize: 14,
-        fontWeight: 500,
-        lineHeight: 1.5,
-      },
-      body1: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
-        fontSize: 16,
-        fontWeight: 400,
-        lineHeight: 1.5,
-      },
-      body2: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
-        fontSize: 14,
-        fontWeight: 400,
-        lineHeight: 1.5,
-      },
-      button: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
-        fontSize: 14,
-        fontWeight: 600,
-        lineHeight: 1.5,
-        textTransform: 'none',
-        letterSpacing: '0.02em',
-      },
-      caption: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
-        fontSize: 12,
-        fontWeight: 400,
-        lineHeight: 1.5,
-      },
-      overline: {
-        fontFamily: ["Inter", "sans-serif"].join(","),
-        fontSize: 12,
-        fontWeight: 600,
-        lineHeight: 1.5,
-        textTransform: 'uppercase',
-        letterSpacing: '0.1em',
       },
     },
-    breakpoints: {
-      values: {
-        xs: 0,
-        sm: 600,
-        md: 900,
-        lg: 1200,
-        xl: 1536,
-      },
-    },
-    spacing: (factor: number) => `${spacing.md * factor}px`,
-    shape: {
-      borderRadius: borderRadius.md,
-    },
-    shadows: [
-      'none',
-      shadows.xs,
-      shadows.sm,
-      shadows.sm,
-      shadows.md,
-      shadows.md,
-      shadows.md,
-      shadows.lg,
-      shadows.lg,
-      shadows.lg,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-      shadows.xl,
-    ],
-    zIndex,
-    transitions: {
-      easing: {
-        easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
-        easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
-        easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
-        sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
-      },
-      duration: {
-        shortest: 150,
-        shorter: 200,
-        short: 250,
-        standard: 300,
-        complex: 375,
-        enteringScreen: 225,
-        leavingScreen: 195,
-      },
-    },
-    customShadows: shadows,
-    customGradients: gradients,
-    customSpacing: spacing,
-    customBorderRadius: borderRadius,
-    customTransitions: transitions,
   };
 };
 
