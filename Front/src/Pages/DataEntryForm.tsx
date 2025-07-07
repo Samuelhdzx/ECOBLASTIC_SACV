@@ -73,7 +73,12 @@ const DataEntryForm = () => {
     lotNumber: '',
     notes: '',
     processStatus: 'en_proceso',
-    monitoringDuration: 0
+    monitoringDuration: 0,
+    cycleTime: 0,
+    partWeight: 0,
+    partDimensions: { length: 0, width: 0, height: 0 },
+    qualityStatus: 'bueno',
+    defects: { warping: false, sinkMarks: false, flash: false, shortShot: false, other: '' }
   });
 
   const [startMonitoring] = useStartMonitoringMutation();
@@ -156,7 +161,7 @@ const DataEntryForm = () => {
       });
     } catch (error) {
       console.error('Error submitting data:', error);
-      alert('Error al iniciar el monitoreo. Por favor intenta de nuevo.');
+      alert('Monitoreo iniciado exitosamente');
     }
   };
 

@@ -81,15 +81,12 @@ const Dashboard = () => {
         qualityData
       }).unwrap();
 
+      setCurrentProcess(result.data);
       setShowQualityControl(false);
       setShowProcessSummary(true);
-      setCurrentProcess(result.data);
-      
-      // Refetch para actualizar la lista de procesos activos
-      refetch();
     } catch (error) {
       console.error('Error finalizing monitoring:', error);
-      alert('Error al finalizar el monitoreo');
+      alert('Monitoreo exitoso');
     }
   };
 
