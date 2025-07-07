@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Box, Typography, useTheme, IconButton, Menu, MenuItem, useMediaQuery } from '@mui/material';
 import { Menu as MenuIcon, Settings, FileText, LogOut } from 'lucide-react';
 import FlexBetween from '@/components/FlexBetween';
-import logo from 'front/public/img/LOGO.png';
+import logo from "../../../public/img/logo.png";
 
 const AdminNavbar = () => {
   const { palette } = useTheme();
