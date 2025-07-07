@@ -2,7 +2,7 @@
 import { Box, useMediaQuery, Typography, Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useGetActiveMonitoringQuery, useFinalizeMonitoringMutation } from '@/state/api';
+import { useGetActiveMonitoringQuery, useFinalizeMonitoringMutation, useGetSensorDataQuery } from '@/state/api';
 import Row1 from './Row1';
 import Row2 from './Row2';
 import Row3 from './Row3';
