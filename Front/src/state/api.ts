@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { API_BASE_URL } from '../config/api';
 
 export interface UserRecord {
   _id: string;
@@ -21,14 +22,15 @@ export interface TemperatureData {
 // Configuración de la URL base según el entorno
 const getBaseUrl = () => {
   if (import.meta.env.PROD) {
-    return 'https://ecoblastic-backend.onrender.com';
+    return 'https://ecoblastic-sacv.onrender.com';
   }
   return 'http://localhost:1337';
 };
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: getBaseUrl(),
+
+    baseUrl: API_BASE_URL,
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');

@@ -14,18 +14,25 @@ import cookieParser from "cookie-parser";
 //configs
 dotenv.config();
 const app = express();
+
+// Configuración CORS con las URLs correctas
+const corsOptions = {
+  origin: [
+    'https://ecoblastic-sacv-1.onrender.com', // Tu frontend URL
+    'https://ecoblastic-sacv.onrender.com',   // Tu backend URL
+    'http://localhost:3000',                   // Para desarrollo local
+    'http://localhost:5173'                    // Para Vite dev server
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(bodyParser.json());
-app.use(cors({
-    origin: [
-        'http://localhost:5173', 
-        'http://localhost:1337',
-        'https://ecoblastic-frontend.onrender.com',
-        'https://ecoblastic-backend.onrender.com'
-    ],
-    credentials: true
-}));
 app.use(helmet());
 app.use(cookieParser());
 app.use('/api', data_sensorsRoutes);
