@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import data_sensorsRoutes from "./src/routes/data_sensors.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import esp32Routes from "./src/routes/esp32.routes.js";
+import adminRoutes from "./src/routes/admin.routes.js";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
@@ -17,7 +18,12 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:1337'],
+    origin: [
+        'http://localhost:5173', 
+        'http://localhost:1337',
+        'https://ecoblastic-frontend.onrender.com',
+        'https://ecoblastic-backend.onrender.com'
+    ],
     credentials: true
 }));
 app.use(helmet());
@@ -25,6 +31,7 @@ app.use(cookieParser());
 app.use('/api', data_sensorsRoutes);
 app.use('/api', authRoutes);
 app.use('/api/esp32', esp32Routes);
+app.use('/api/admin', adminRoutes);
 
 //mongo db connection
 mongoose
@@ -90,6 +97,15 @@ app.get('/api/sensors', async (req, res) => {
         console.error('Error:', error);
         res.status(500).json({ error: 'Error al obtener datos' });
     }
+});
+
+// Ruta de prueba para verificar que el servidor está funcionando
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'ECOBLASTIC Backend API funcionando correctamente',
+        version: '1.0.0',
+        timestamp: new Date().toISOString()
+    });
 });
 
 const PORT = process.env.PORT || 3000;

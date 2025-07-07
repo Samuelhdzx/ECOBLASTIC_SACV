@@ -18,9 +18,17 @@ export interface TemperatureData {
   createdAt: string;
 }
 
+// Configuración de la URL base según el entorno
+const getBaseUrl = () => {
+  if (import.meta.env.PROD) {
+    return 'https://ecoblastic-backend.onrender.com';
+  }
+  return 'http://localhost:1337';
+};
+
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:1337',
+    baseUrl: getBaseUrl(),
     credentials: 'include',
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
