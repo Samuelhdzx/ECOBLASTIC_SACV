@@ -115,28 +115,28 @@ export const api = createApi({
     }),
 
     getProductionMetrics: builder.query({
-      query: () => '/api/production/metrics',
+      query: () => '/api/admin/production-metrics',
       providesTags: ['Production']
     }),
 
     getInventoryLevels: builder.query({
-      query: () => '/api/inventory/levels',
+      query: () => '/api/admin/inventory-levels',
       providesTags: ['Inventory']
     }),
 
     getQualityMetrics: builder.query({
-      query: () => '/api/quality/metrics',
+      query: () => '/api/admin/quality-metrics',
       providesTags: ['Quality']
     }),
 
     getMaintenanceSchedule: builder.query({
-      query: () => '/api/maintenance/schedule',
+      query: () => '/api/admin/maintenance-schedule',
       providesTags: ['Maintenance']
     }),
 
     updateMachineParams: builder.mutation({
       query: (params) => ({
-        url: '/api/production/params',
+        url: '/api/admin/machine-params',
         method: 'PUT',
         body: params,
       }),

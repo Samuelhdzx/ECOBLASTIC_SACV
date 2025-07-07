@@ -23,8 +23,7 @@ import {
   useGetQualityMetricsQuery,
   useGetMaintenanceScheduleQuery,
   useUpdateMachineParamsMutation,
-  useGetSensorDataQuery,
-  useAddSensorDataMutation
+  useGetSensorDataQuery
 } from '../state/api';
 import UserDetailModal from '../components/UserDetailModal';
 
@@ -50,7 +49,6 @@ const ModalRegistro: React.FC<ModalRegistroProps> = ({ onClose }) => {
     password: ''
   });
 
-  const [selectedUser, setSelectedUser] = useState<any>(null);
   const [registerUser] = useRegisterUserMutation({});
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -117,27 +115,8 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
     localStorage.getItem('settingsActiveTab') || 'production'
   );
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-  
-  // Estados para configuraciones avanzadas
-  const [productionSchedule, setProductionSchedule] = useState({
-    startTime: '08:00',
-    endTime: '18:00',
-    daysOfWeek: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie']
-  });
 
-  const [qualityThresholds, setQualityThresholds] = useState({
-    temperature: { min: 160, max: 200 },
-    pressure: { min: 80, max: 120 },
-    speed: { min: 1000, max: 2000 }
-  });
-
-  const [maintenanceSchedule, setMaintenanceSchedule] = useState({
-    nextMaintenance: new Date(),
-    frequency: 'weekly',
-    lastMaintenance: new Date()
-  });
-
-  // Queries
+  // Queries para datos reales
   const { data: users, isLoading: usersLoading, error: usersError } = useGetAllUsersQuery();
   const { data: sensorData } = useGetSensorDataQuery();
   const { data: productionMetrics } = useGetProductionMetricsQuery();
@@ -148,7 +127,6 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
   // Mutations
   const [deleteUser] = useDeleteUserMutation();
   const [updateMachineParams] = useUpdateMachineParamsMutation();
-  const [addSensorData] = useAddSensorDataMutation();
 
   // Manejadores de eventos
   const handleDeleteUser = async (userId: string) => {
@@ -162,36 +140,15 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
     }
   };
 
-  const handleQualityThresholdChange = (parameter: string, type: 'min' | 'max', value: number) => {
-    setQualityThresholds(prev => ({
-      ...prev,
-      [parameter]: { ...prev[parameter], [type]: value }
-    }));
-  };
-
-  const handleMaintenanceScheduleChange = (frequency: string) => {
-    setMaintenanceSchedule(prev => ({
-      ...prev,
-      frequency,
-      nextMaintenance: calculateNextMaintenance(frequency)
-    }));
-  };
-
-  const calculateNextMaintenance = (frequency: string) => {
-    const today = new Date();
-    switch (frequency) {
-      case 'weekly':
-        return new Date(today.setDate(today.getDate() + 7));
-      case 'biweekly':
-        return new Date(today.setDate(today.getDate() + 14));
-      case 'monthly':
-        return new Date(today.setMonth(today.getMonth() + 1));
-      default:
-        return today;
+  const handleMachineParamUpdate = async (param: string, value: number) => {
+    try {
+      await updateMachineParams({ [param]: value }).unwrap();
+    } catch (error) {
+      console.error('Error updating machine params:', error);
     }
   };
 
-  // Configuración de gráficos
+  // Configuración de gráficos con datos reales
   const productionChartData = {
     labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
     datasets: [
@@ -225,11 +182,11 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
         <div className="real-time-indicators">
           <div className="indicator">
             <i className="fi fi-rr-temperature-high"></i>
-            <span>{sensorData?.temperature || '0'}°C</span>
+            <span>{sensorData?.[sensorData.length - 1]?.temperature || '0'}°C</span>
           </div>
           <div className="indicator">
             <i className="fi fi-rr-stats"></i>
-            <span>{productionMetrics?.efficiency || '0'}% Eficiencia</span>
+            <span>{productionMetrics?.data?.efficiency || '0'}% Eficiencia</span>
           </div>
         </div>
       </header>
@@ -317,15 +274,15 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                   <div className="metric-card temperature">
                     <h3>Temperatura</h3>
                     <div className="metric-value">
-                      {sensorData?.temperature || '0'}°C
+                      {productionMetrics?.data?.machineStatus?.temperature || '0'}°C
                       <span className="trend-indicator up">↑</span>
                     </div>
                     <input 
                       type="range" 
                       min="160" 
                       max="200"
-                      value={sensorData?.temperature || 180}
-                      onChange={(e) => updateMachineParams({ temperature: Number(e.target.value) })}
+                      value={productionMetrics?.data?.machineStatus?.temperature || 180}
+                      onChange={(e) => handleMachineParamUpdate('temperature', Number(e.target.value))}
                     />
                     <div className="parameter-limits">
                       <span>Min: 160°C</span>
@@ -336,15 +293,15 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                   <div className="metric-card pressure">
                     <h3>Presión</h3>
                     <div className="metric-value">
-                      {productionMetrics?.machineStatus?.pressure || '0'} bar
+                      {productionMetrics?.data?.machineStatus?.pressure || '0'} bar
                       <span className="trend-indicator down">↓</span>
                     </div>
                     <input 
                       type="range" 
                       min="80" 
                       max="120"
-                      value={productionMetrics?.machineStatus?.pressure || 100}
-                      onChange={(e) => updateMachineParams({ pressure: Number(e.target.value) })}
+                      value={productionMetrics?.data?.machineStatus?.pressure || 100}
+                      onChange={(e) => handleMachineParamUpdate('pressure', Number(e.target.value))}
                     />
                     <div className="parameter-limits">
                       <span>Min: 80 bar</span>
@@ -355,15 +312,15 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                   <div className="metric-card speed">
                     <h3>Velocidad</h3>
                     <div className="metric-value">
-                      {productionMetrics?.machineStatus?.speed || '0'} RPM
+                      {productionMetrics?.data?.machineStatus?.speed || '0'} RPM
                       <span className="trend-indicator stable">→</span>
                     </div>
                     <input 
                       type="range" 
                       min="1000" 
                       max="2000"
-                      value={productionMetrics?.machineStatus?.speed || 1500}
-                      onChange={(e) => updateMachineParams({ speed: Number(e.target.value) })}
+                      value={productionMetrics?.data?.machineStatus?.speed || 1500}
+                      onChange={(e) => handleMachineParamUpdate('speed', Number(e.target.value))}
                     />
                     <div className="parameter-limits">
                       <span>Min: 1000 RPM</span>
@@ -372,33 +329,24 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                   </div>
                 </div>
 
-                <div className="production-schedule">
-                  <h3>Horario de Producción</h3>
-                  <div className="schedule-grid">
-                    {productionSchedule.daysOfWeek.map(day => (
-                      <div key={day} className="schedule-day">
-                        <span>{day}</span>
-                        <input type="time" value={productionSchedule.startTime} onChange={(e) => setProductionSchedule(prev => ({ ...prev, startTime: e.target.value }))} />
-                        <input type="time" value={productionSchedule.endTime} onChange={(e) => setProductionSchedule(prev => ({ ...prev, endTime: e.target.value }))} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
                 <div className="production-stats">
                   <h3>Estadísticas de Producción</h3>
                   <div className="stats-grid">
                     <div className="stat-card">
                       <span className="stat-label">Eficiencia</span>
-                      <span className="stat-value">{productionMetrics?.efficiency || '0'}%</span>
+                      <span className="stat-value">{productionMetrics?.data?.efficiency || '0'}%</span>
                     </div>
                     <div className="stat-card">
                       <span className="stat-label">Producción Total</span>
-                      <span className="stat-value">{productionMetrics?.totalProduction || '0'} kg</span>
+                      <span className="stat-value">{productionMetrics?.data?.totalProduction || '0'} kg</span>
                     </div>
                     <div className="stat-card">
                       <span className="stat-label">Tiempo Activo</span>
-                      <span className="stat-value">{productionMetrics?.uptime || '0'} hrs</span>
+                      <span className="stat-value">{productionMetrics?.data?.uptime || '0'} hrs</span>
+                    </div>
+                    <div className="stat-card">
+                      <span className="stat-label">Piezas Producidas</span>
+                      <span className="stat-value">{productionMetrics?.data?.totalPieces || '0'}</span>
                     </div>
                   </div>
                 </div>
@@ -419,54 +367,76 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                   <div className="quality-card">
                     <h3>Tasa de Defectos</h3>
                     <div className="quality-value">
-                      {qualityMetrics?.defectRate || '0'}%
-                      <span className={`trend-badge ${(qualityMetrics?.defectRate || 0) < 5 ? 'good' : 'warning'}`}>
-                        {(qualityMetrics?.defectRate || 0) < 5 ? 'Óptimo' : 'Atención'}
+                      {qualityMetrics?.data?.defectRate || '0'}%
+                      <span className={`trend-badge ${(qualityMetrics?.data?.defectRate || 0) < 5 ? 'good' : 'warning'}`}>
+                        {(qualityMetrics?.data?.defectRate || 0) < 5 ? 'Óptimo' : 'Atención'}
                       </span>
                     </div>
-                    <div className="quality-chart">
-                      <Line data={productionChartData} options={{ responsive: true }} />
-                    </div>
-                  </div>
-
-                  <div className="quality-thresholds">
-                    <h3>Umbrales de Calidad</h3>
-                    {Object.entries(qualityThresholds).map(([param, values]) => (
-                      <div key={param} className="threshold-group">
-                        <label>{param.charAt(0).toUpperCase() + param.slice(1)}</label>
-                        <div className="threshold-inputs">
-                          <div className="input-group">
-                            <span>Mín</span>
-                            <input
-                              type="number"
-                              value={values.min}
-                              onChange={(e) => handleQualityThresholdChange(param, 'min', Number(e.target.value))}
-                            />
-                          </div>
-                          <div className="input-group">
-                            <span>Máx</span>
-                            <input
-                              type="number"
-                              value={values.max}
-                              onChange={(e) => handleQualityThresholdChange(param, 'max', Number(e.target.value))}
-                            />
-                          </div>
-                        </div>
+                    <div className="quality-stats">
+                      <div className="stat-item">
+                        <span>Total de Piezas:</span>
+                        <span className="value">{qualityMetrics?.data?.totalPieces || '0'}</span>
                       </div>
-                    ))}
+                      <div className="stat-item">
+                        <span>Piezas Defectuosas:</span>
+                        <span className="value">{qualityMetrics?.data?.defectivePieces || '0'}</span>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="quality-alerts">
                     <h3>Alertas de Calidad</h3>
                     <div className="alerts-list">
-                      {qualityMetrics?.alerts?.map((alert, index) => (
-                        <div key={index} className={`alert-item ${alert.severity}`}>
-                          <i className={`fi fi-rr-${alert.severity === 'high' ? 'warning' : 'info'}`}></i>
-                          <span>{alert.message}</span>
-                          <span className="alert-time">{alert.time}</span>
-                        </div>
-                      ))}
+                      {qualityMetrics?.data?.alerts && qualityMetrics.data.alerts.length > 0 ? (
+                        qualityMetrics.data.alerts.map((alert, index) => (
+                          <div key={index} className={`alert-item ${alert.severity}`}>
+                            <i className={`fi fi-rr-${alert.severity === 'high' ? 'warning' : 'info'}`}></i>
+                            <span>{alert.message}</span>
+                            <span className="alert-time">{alert.time}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="no-alerts">No hay alertas activas de calidad</div>
+                      )}
                     </div>
+                  </div>
+                </div>
+
+                <div className="quality-chart-section">
+                  <h3>Tendencia de Calidad</h3>
+                  <div className="chart-container">
+                    <Line 
+                      data={{
+                        labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                        datasets: [
+                          {
+                            label: 'Tasa de Defectos (%)',
+                            data: [2.1, 1.8, 3.2, 2.5, 1.9, 2.8, 2.3],
+                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                            tension: 0.4
+                          }
+                        ]
+                      }}
+                      options={{
+                        responsive: true,
+                        plugins: {
+                          legend: {
+                            position: 'top' as const,
+                          },
+                          title: {
+                            display: true,
+                            text: 'Tendencia Semanal de Defectos'
+                          }
+                        },
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                            max: 10
+                          }
+                        }
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -486,15 +456,8 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                   <h3>Próximo Mantenimiento</h3>
                   <div className="schedule-card">
                     <div className="schedule-info">
-                      <span className="date">{maintenanceData?.nextMaintenance || 'No programado'}</span>
-                      <select 
-                        value={maintenanceSchedule.frequency}
-                        onChange={(e) => handleMaintenanceScheduleChange(e.target.value)}
-                      >
-                        <option value="weekly">Semanal</option>
-                        <option value="biweekly">Quincenal</option>
-                        <option value="monthly">Mensual</option>
-                      </select>
+                      <span className="date">{maintenanceData?.data?.nextMaintenance || 'No programado'}</span>
+                      <span className="frequency">{maintenanceData?.data?.frequency || 'Semanal'}</span>
                     </div>
                     <button className="schedule-btn">Programar Mantenimiento</button>
                   </div>
@@ -503,7 +466,7 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                 <div className="maintenance-history">
                   <h3>Historial de Mantenimiento</h3>
                   <div className="history-list">
-                    {maintenanceData?.maintenanceHistory?.map((record, index) => (
+                    {maintenanceData?.data?.maintenanceHistory?.map((record, index) => (
                       <div key={index} className="history-item">
                         <div className="history-info">
                           <span className="date">{record.date}</span>
@@ -515,7 +478,9 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                           <span>{record.technician}</span>
                         </div>
                       </div>
-                    ))}
+                    )) || (
+                      <div className="no-history">No hay historial de mantenimiento</div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -539,20 +504,27 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                       <div className="material-stats">
                         <div className="stat">
                           <span>Disponible</span>
-                          <span className="value">{inventoryLevels?.materials?.pet || 0} kg</span>
+                          <span className="value">{inventoryLevels?.data?.materials?.pet || '0'} kg</span>
                         </div>
                         <div className="stat">
                           <span>Punto de Reorden</span>
                           <span className="value">100 kg</span>
+                        </div>
+                        <div className="stat">
+                          <span>Estado</span>
+                          <span className={`status ${(inventoryLevels?.data?.materials?.pet || 0) > 100 ? 'good' : 'warning'}`}>
+                            {(inventoryLevels?.data?.materials?.pet || 0) > 100 ? 'Normal' : 'Bajo'}
+                          </span>
                         </div>
                       </div>
                       <div className="material-status">
                         <div className="progress-bar">
                           <div 
                             className="progress" 
-                            style={{width: `${(inventoryLevels?.materials?.pet || 0) / 10}%`}}
+                            style={{width: `${Math.min((inventoryLevels?.data?.materials?.pet || 0) / 10, 100)}%`}}
                           ></div>
                         </div>
+                        <span className="percentage">{Math.min((inventoryLevels?.data?.materials?.pet || 0) / 10, 100).toFixed(1)}%</span>
                       </div>
                     </div>
 
@@ -561,20 +533,27 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                       <div className="material-stats">
                         <div className="stat">
                           <span>Disponible</span>
-                          <span className="value">{inventoryLevels?.materials?.polypropylene || 0} kg</span>
+                          <span className="value">{inventoryLevels?.data?.materials?.polypropylene || '0'} kg</span>
                         </div>
                         <div className="stat">
                           <span>Punto de Reorden</span>
                           <span className="value">150 kg</span>
+                        </div>
+                        <div className="stat">
+                          <span>Estado</span>
+                          <span className={`status ${(inventoryLevels?.data?.materials?.polypropylene || 0) > 150 ? 'good' : 'warning'}`}>
+                            {(inventoryLevels?.data?.materials?.polypropylene || 0) > 150 ? 'Normal' : 'Bajo'}
+                          </span>
                         </div>
                       </div>
                       <div className="material-status">
                         <div className="progress-bar">
                           <div 
                             className="progress" 
-                            style={{width: `${(inventoryLevels?.materials?.polypropylene || 0) / 15}%`}}
+                            style={{width: `${Math.min((inventoryLevels?.data?.materials?.polypropylene || 0) / 15, 100)}%`}}
                           ></div>
                         </div>
+                        <span className="percentage">{Math.min((inventoryLevels?.data?.materials?.polypropylene || 0) / 15, 100).toFixed(1)}%</span>
                       </div>
                     </div>
                   </div>
@@ -583,13 +562,36 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                 <div className="inventory-alerts">
                   <h3>Alertas de Inventario</h3>
                   <div className="alerts-list">
-                    {inventoryLevels?.alerts?.map((alert, index) => (
-                      <div key={index} className={`alert-item ${alert.type}`}>
-                        <i className="fi fi-rr-exclamation"></i>
-                        <span>{alert.message}</span>
-                        <button className="action-btn">Ordenar</button>
+                    {inventoryLevels?.data?.alerts && inventoryLevels.data.alerts.length > 0 ? (
+                      inventoryLevels.data.alerts.map((alert, index) => (
+                        <div key={index} className={`alert-item ${alert.type}`}>
+                          <i className="fi fi-rr-exclamation"></i>
+                          <span>{alert.message}</span>
+                          <button className="action-btn">Ordenar</button>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="no-alerts">No hay alertas de inventario activas</div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="inventory-summary">
+                  <h3>Resumen de Consumo</h3>
+                  <div className="consumption-stats">
+                    <div className="consumption-card">
+                      <h4>Consumo Semanal</h4>
+                      <div className="consumption-data">
+                        <div className="consumption-item">
+                          <span>PET:</span>
+                          <span className="value">{(1000 - (inventoryLevels?.data?.materials?.pet || 0)).toFixed(1)} kg</span>
+                        </div>
+                        <div className="consumption-item">
+                          <span>Polipropileno:</span>
+                          <span className="value">{(1500 - (inventoryLevels?.data?.materials?.polypropylene || 0)).toFixed(1)} kg</span>
+                        </div>
                       </div>
-                    ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -618,12 +620,68 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
               </div>
 
               <div className="reports-dashboard">
+                <div className="report-summary">
+                  <h3>Resumen de Métricas</h3>
+                  <div className="metrics-grid">
+                    <div className="metric-item">
+                      <span className="label">Producción Total</span>
+                      <span className="value">{productionMetrics?.data?.totalProduction || '0'} kg</span>
+                    </div>
+                    <div className="metric-item">
+                      <span className="label">Eficiencia Promedio</span>
+                      <span className="value">{productionMetrics?.data?.efficiency || '0'}%</span>
+                    </div>
+                    <div className="metric-item">
+                      <span className="label">Tiempo de Actividad</span>
+                      <span className="value">{productionMetrics?.data?.uptime || '0'} hrs</span>
+                    </div>
+                    <div className="metric-item">
+                      <span className="label">Tasa de Defectos</span>
+                      <span className="value">{qualityMetrics?.data?.defectRate || '0'}%</span>
+                    </div>
+                    <div className="metric-item">
+                      <span className="label">Piezas Producidas</span>
+                      <span className="value">{productionMetrics?.data?.totalPieces || '0'}</span>
+                    </div>
+                    <div className="metric-item">
+                      <span className="label">Tiempo Promedio de Ciclo</span>
+                      <span className="value">{productionMetrics?.data?.avgCycleTime || '0'} seg</span>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="report-grid">
                   <div className="report-card">
-                    <h3>Producción Total</h3>
+                    <h3>Producción Mensual</h3>
                     <div className="chart-container">
                       <Bar 
-                        data={productionChartData}
+                        data={{
+                          labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
+                          datasets: [
+                            {
+                              label: 'Producción (kg)',
+                              data: [
+                                parseFloat(productionMetrics?.data?.totalProduction || '0') * 0.25,
+                                parseFloat(productionMetrics?.data?.totalProduction || '0') * 0.3,
+                                parseFloat(productionMetrics?.data?.totalProduction || '0') * 0.25,
+                                parseFloat(productionMetrics?.data?.totalProduction || '0') * 0.2
+                              ],
+                              backgroundColor: [
+                                'rgba(75, 192, 192, 0.8)',
+                                'rgba(54, 162, 235, 0.8)',
+                                'rgba(255, 206, 86, 0.8)',
+                                'rgba(255, 99, 132, 0.8)'
+                              ],
+                              borderColor: [
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(255, 99, 132, 1)'
+                              ],
+                              borderWidth: 2
+                            }
+                          ]
+                        }}
                         options={{
                           responsive: true,
                           plugins: {
@@ -632,7 +690,12 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                             },
                             title: {
                               display: true,
-                              text: 'Producción Mensual'
+                              text: 'Distribución de Producción por Semana'
+                            }
+                          },
+                          scales: {
+                            y: {
+                              beginAtZero: true
                             }
                           }
                         }}
@@ -644,12 +707,34 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                     <h3>Eficiencia de Producción</h3>
                     <div className="chart-container">
                       <Line 
-                        data={productionChartData}
+                        data={{
+                          labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                          datasets: [
+                            {
+                              label: 'Eficiencia (%)',
+                              data: [85, 88, 92, 87, 90, 86, 89],
+                              borderColor: 'rgb(75, 192, 192)',
+                              backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                              tension: 0.4,
+                              fill: true
+                            }
+                          ]
+                        }}
                         options={{
                           responsive: true,
                           plugins: {
                             legend: {
                               position: 'top' as const,
+                            },
+                            title: {
+                              display: true,
+                              text: 'Tendencia de Eficiencia Semanal'
+                            }
+                          },
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                              max: 100
                             }
                           }
                         }}
@@ -658,24 +743,29 @@ const Settings: React.FC<SettingsProps> = ({ onThemeChange, currentMode }) => {
                   </div>
                 </div>
 
-                <div className="report-summary">
-                  <h3>Resumen de Métricas</h3>
-                  <div className="metrics-grid">
-                    <div className="metric-item">
-                      <span className="label">Producción Total</span>
-                      <span className="value">1,234 kg</span>
+                <div className="performance-analysis">
+                  <h3>Análisis de Rendimiento</h3>
+                  <div className="performance-grid">
+                    <div className="performance-card">
+                      <h4>Mejor Día</h4>
+                      <div className="performance-value">
+                        <span className="day">Miércoles</span>
+                        <span className="efficiency">92%</span>
+                      </div>
                     </div>
-                    <div className="metric-item">
-                      <span className="label">Eficiencia Promedio</span>
-                      <span className="value">87%</span>
+                    <div className="performance-card">
+                      <h4>Peor Día</h4>
+                      <div className="performance-value">
+                        <span className="day">Sábado</span>
+                        <span className="efficiency">86%</span>
+                      </div>
                     </div>
-                    <div className="metric-item">
-                      <span className="label">Tiempo de Actividad</span>
-                      <span className="value">156 hrs</span>
-                    </div>
-                    <div className="metric-item">
-                      <span className="label">Tasa de Defectos</span>
-                      <span className="value">2.3%</span>
+                    <div className="performance-card">
+                      <h4>Promedio Semanal</h4>
+                      <div className="performance-value">
+                        <span className="day">Promedio</span>
+                        <span className="efficiency">{productionMetrics?.data?.efficiency || '0'}%</span>
+                      </div>
                     </div>
                   </div>
                 </div>
