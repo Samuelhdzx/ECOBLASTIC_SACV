@@ -4,6 +4,7 @@ import { Box, TextField, Button, Typography, Container, Paper } from '@mui/mater
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AdminDashboard from '@/Pages/AdminDashboard';
 import './Login.css';
+import { API_BASE_URL } from '../config/api';
 
 const AdminLoginPage = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const AdminLoginPage = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:1337/api/loginAdmin', {
+      const res = await fetch(`${API_BASE_URL}/loginAdmin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
