@@ -1,7 +1,7 @@
     // ============================================
     // Import Dependencies
     // ============================================
-    import User from "../models/user_model.js";
+    import User from "../models/user.js";
     import Admin from "../models/admin.js";
     import bcrypt from "bcryptjs";
     import { createAccessToken } from "../libs/jwt.js";
