@@ -178,13 +178,13 @@
 
             const token = await createAccessToken({ id: adminFound._id });
             res.cookie("token", token);
-            
             res.json({
                 id: adminFound._id,
                 username: adminFound.username,
                 adminId: adminFound.adminId,
                 createdAt: adminFound.createdAt,
                 updatedAt: adminFound.updatedAt,
+                token
             });
         } catch (error) {
             res.status(500).json({ message: error.message });
