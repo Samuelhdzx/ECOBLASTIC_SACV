@@ -25,6 +25,9 @@ const LoginPage = () => {
 
       if (res.ok) {
         localStorage.setItem('user', JSON.stringify(data));
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
         navigate('/inicio');
         window.location.reload();
       } else {
