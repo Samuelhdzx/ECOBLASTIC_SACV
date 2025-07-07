@@ -7,7 +7,8 @@
 
   // 2. COMPONENTES DE NAVEGACIÓN
   import Navbar from "@/scenes/navbar/index";
-  import NavbarPublic from "@/scenes/navbar/index";
+
+    import NavbarPublic from "@/scenes/navbar/index";
 
   // 3. PÁGINAS PÚBLICAS
   import Inicio from "@/scenes/Inicio/index";
