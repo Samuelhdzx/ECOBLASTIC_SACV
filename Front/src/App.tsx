@@ -7,8 +7,7 @@
 
   // 2. COMPONENTES DE NAVEGACIÓN
   import Navbar from "@/scenes/navbar/index";
-
-    import NavbarPublic from "@/scenes/navbar/index";
+  import NavbarPublic from "@/scenes/navbar/index";
 
   // 3. PÁGINAS PÚBLICAS
   import Inicio from "@/scenes/Inicio/index";
@@ -28,7 +27,7 @@
   import AllRecords from "./Pages/AllRecords";
   import Settings from "./Pages/Settings";
   import Help from "./Pages/Help";
-  import { UserRecords } from "./Pages/UserRecors";
+  // Removido UserRecords ya que no se usa
   import Predicciones from "./scenes/Predicciones/Predicciones";
   import AdvancedDataAnalysis from "./Pages/AdvancedDataAnalysis";
 
@@ -105,7 +104,7 @@
         setEstaAutenticado(!!localStorage.getItem('user'));
         setEsAdmin(!!localStorage.getItem('admin'));
       };
-      
+    
       window.addEventListener('authChange', manejarCambioAuth);
       return () => window.removeEventListener('authChange', manejarCambioAuth);
     }, []);
@@ -161,11 +160,6 @@
             <Dashboard />
           </LayoutProtegido>
         } />
-        {/* <Route path="/reports" element={
-          <LayoutProtegido>
-            <Reports />
-          </LayoutProtegido>
-        } /> */}
         <Route path="/predictions" element={
           <LayoutProtegido>
             <Predicciones/>
@@ -176,7 +170,6 @@
             <AllRecords />
           </LayoutProtegido>
         } />
-     
         <Route path="/manuals" element={
           <LayoutProtegido>
             <Manuales />
@@ -184,7 +177,7 @@
         } />
         <Route path="/help" element={
           <LayoutProtegido>
-            <Help />
+            <Help userType="user" />
           </LayoutProtegido>
         } />
         <Route path="/data-entry" element={
@@ -225,6 +218,11 @@
             <AdvancedDataAnalysis />
           </LayoutAdmin>
         } />
+        <Route path="/help" element={
+          <LayoutAdmin>
+            <Help userType="admin" />
+          </LayoutAdmin>
+        } />
         <Route path="*" element={<Navigate to="/admin-dashboard" replace />} />
       </Routes>
     );
@@ -234,7 +232,6 @@
         <BrowserRouter>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            {/* Envolvemos toda la aplicación en un Box con fondo blanco */}
             <Box
               width="100%"
               minHeight="100vh"
@@ -247,4 +244,5 @@
       </div>
     );
   }
+
   export default App;

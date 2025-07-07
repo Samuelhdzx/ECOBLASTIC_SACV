@@ -1,4 +1,6 @@
-const DataEntryForm: React.FC = () => {
+import React, { useState } from 'react';
+
+export const DataEntryForm: React.FC = () => {
   const [showMaterialSelection, setShowMaterialSelection] = useState(true);
   const [selectedMaterial, setSelectedMaterial] = useState('');
   const [selectedMold, setSelectedMold] = useState('');
@@ -59,7 +61,6 @@ const DataEntryForm: React.FC = () => {
       {showMaterialSelection ? (
         <MaterialMoldSelection />
       ) : (
-        // Tu formulario actual aquí
         <form className="monitoring-form">
           <h2>Monitoreo de {selectedMaterial} - {selectedMold}</h2>
           {/* Resto de tu formulario existente */}
