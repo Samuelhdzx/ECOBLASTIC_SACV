@@ -4,7 +4,7 @@ import {
 } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGetTemperaturesQuery } from '../state/api';
-import './reports.css';
+import './Reports.css';
 
 // Iconos SVG (para no depender de librerías externas)
 const DownloadIcon = () => (
