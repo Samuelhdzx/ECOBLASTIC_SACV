@@ -29,7 +29,6 @@ const getBaseUrl = () => {
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-
     baseUrl: API_BASE_URL,
     credentials: 'include',
     prepareHeaders: (headers) => {
@@ -44,7 +43,7 @@ export const api = createApi({
   endpoints: (builder) => ({
     getSensorData: builder.query({
       query: () => ({
-        url: '/api/data_sensors',
+        url: '/data_sensors',
         method: 'GET',
         credentials: 'include'
       }),
@@ -53,7 +52,7 @@ export const api = createApi({
 
     getAllSensorDataForAnalysis: builder.query({
       query: () => ({
-        url: '/api/data_sensors-analysis',
+        url: '/data_sensors-analysis',
         method: 'GET',
         credentials: 'include'
       }),
@@ -62,7 +61,7 @@ export const api = createApi({
 
     addSensorData: builder.mutation({
       query: (data) => ({
-        url: '/api/data_sensors',
+        url: '/data_sensors',
         method: 'POST',
         body: data,
       }),
@@ -71,7 +70,7 @@ export const api = createApi({
 
     startMonitoring: builder.mutation({
       query: (data) => ({
-        url: '/api/sensor-data',
+        url: '/sensor-data',
         method: 'POST',
         body: data,
       }),
@@ -80,7 +79,7 @@ export const api = createApi({
 
     finalizeMonitoring: builder.mutation({
       query: ({ id, qualityData }) => ({
-        url: `/api/sensor-data/${id}/finalize`,
+        url: `/sensor-data/${id}/finalize`,
         method: 'PUT',
         body: qualityData,
       }),
@@ -89,20 +88,20 @@ export const api = createApi({
 
     getActiveMonitoring: builder.query({
       query: () => ({
-        url: '/api/active-monitoring',
+        url: '/active-monitoring',
         method: 'GET',
       }),
       providesTags: ['SensorData']
     }),
 
     getAllUsers: builder.query({
-      query: () => '/api/users',
+      query: () => '/users',
       providesTags: ['Users']
     }),
 
     registerUser: builder.mutation<any, any>({
       query: (userData) => ({
-        url: '/api/register',
+        url: '/register',
         method: 'POST',
         body: userData,
       }),
@@ -111,7 +110,7 @@ export const api = createApi({
 
     deleteUser: builder.mutation({
       query: (userId) => ({
-        url: `/api/users/${userId}`,
+        url: `/users/${userId}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Users']
@@ -125,28 +124,28 @@ export const api = createApi({
     }),
 
     getProductionMetrics: builder.query({
-      query: () => '/api/admin/production-metrics',
+      query: () => '/admin/production-metrics',
       providesTags: ['Production']
     }),
 
     getInventoryLevels: builder.query({
-      query: () => '/api/admin/inventory-levels',
+      query: () => '/admin/inventory-levels',
       providesTags: ['Inventory']
     }),
 
     getQualityMetrics: builder.query({
-      query: () => '/api/admin/quality-metrics',
+      query: () => '/admin/quality-metrics',
       providesTags: ['Quality']
     }),
 
     getMaintenanceSchedule: builder.query({
-      query: () => '/api/admin/maintenance-schedule',
+      query: () => '/admin/maintenance-schedule',
       providesTags: ['Maintenance']
     }),
 
     updateMachineParams: builder.mutation({
       query: (params) => ({
-        url: '/api/admin/machine-params',
+        url: '/admin/machine-params',
         method: 'PUT',
         body: params,
       }),
@@ -155,7 +154,7 @@ export const api = createApi({
 
     getTemperatures: builder.query<TemperatureData[], void>({
       query: () => ({
-        url: '/api/sensors', // Cambiar a la misma ruta que usa Row3
+        url: '/sensors',
         method: 'GET',
         credentials: 'include'
       }),
