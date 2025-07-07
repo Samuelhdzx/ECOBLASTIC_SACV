@@ -114,37 +114,6 @@ const ProcessSummary: React.FC<ProcessSummaryProps> = ({ processData, onClose })
             </div>
           </div>
 
-          {/* Parámetros de Inyección */}
-          <div className="summary-section">
-            <h3 className="summary-title">
-              <span className="summary-icon">💉</span> Parámetros de Inyección
-            </h3>
-            {processData.injectionPressure > 0 && (
-              <div className="summary-item">
-                <span className="summary-label">Presión:</span>
-                <span className="summary-value">{processData.injectionPressure} bar</span>
-              </div>
-            )}
-            {processData.injectionSpeed > 0 && (
-              <div className="summary-item">
-                <span className="summary-label">Velocidad:</span>
-                <span className="summary-value">{processData.injectionSpeed} mm/s</span>
-              </div>
-            )}
-            {processData.holdingPressure > 0 && (
-              <div className="summary-item">
-                <span className="summary-label">Presión Mantenimiento:</span>
-                <span className="summary-value">{processData.holdingPressure} bar</span>
-              </div>
-            )}
-            {processData.cycleTime > 0 && (
-              <div className="summary-item">
-                <span className="summary-label">Ciclo Total:</span>
-                <span className="summary-value">{processData.cycleTime}s</span>
-              </div>
-            )}
-          </div>
-
           {/* Control de Calidad */}
           <div className="summary-section">
             <h3 className="summary-title">

@@ -19,22 +19,10 @@ interface FormData {
   // Datos de energía
   potentiometerEnergy: {
     used: number;
-    remaining: number;
   };
   injectorEnergy: {
     used: number;
-    remaining: number;
   };
-  
-  // Parámetros de inyección
-  injectionPressure: number;
-  injectionSpeed: number;
-  holdingPressure: number;
-  holdingTime: number;
-  
-  // Parámetros de enfriamiento
-  coolingTime: number;
-  coolingTemperature: number;
   
   // Control de calidad (se llena al final)
   cycleTime: number;
@@ -69,17 +57,6 @@ interface FormData {
   monitoringStartTime?: Date;
   monitoringEndTime?: Date;
   monitoringDuration?: number; // en segundos
-  
-  // --- NUEVOS CAMPOS AVANZADOS ---
-  materialUsado?: number;
-  materialDesperdiciado?: number;
-  costoMaterialUsado?: number;
-  costoMaterialDesperdiciado?: number;
-  tiempoEnfriamiento?: number;
-  tiempoOperacionEfectiva?: number;
-  numeroAlertasTemperatura?: number;
-  tiempoRespuestaAlertas?: number;
-  costoTotalPorPieza?: number;
 }
 
 const DataEntryForm = () => {
@@ -88,34 +65,15 @@ const DataEntryForm = () => {
   const [formData, setFormData] = useState<FormData>({
     polymerUsage: { pet: 0, polypropylene: 0 },
     moldUsage: { mold1: 0, mold2: 0, mold3: 0 },
-    potentiometerEnergy: { used: 0, remaining: 100 },
-    injectorEnergy: { used: 0, remaining: 100 },
-    injectionPressure: 0,
-    injectionSpeed: 0,
-    holdingPressure: 0,
-    holdingTime: 0,
-    coolingTime: 0,
-    coolingTemperature: 0,
-    cycleTime: 0,
-    partWeight: 0,
-    partDimensions: { length: 0, width: 0, height: 0 },
-    qualityStatus: 'bueno',
-    defects: { warping: false, sinkMarks: false, flash: false, shortShot: false, other: '' },
+    potentiometerEnergy: { used: 0 },
+    injectorEnergy: { used: 0 },
     operatorName: '',
     shift: 'mañana',
     batchNumber: '',
     lotNumber: '',
     notes: '',
     processStatus: 'en_proceso',
-    materialUsado: 0,
-    materialDesperdiciado: 0,
-    costoMaterialUsado: 0,
-    costoMaterialDesperdiciado: 0,
-    tiempoEnfriamiento: 0,
-    tiempoOperacionEfectiva: 0,
-    numeroAlertasTemperatura: 0,
-    tiempoRespuestaAlertas: 0,
-    costoTotalPorPieza: 0
+    monitoringDuration: 0
   });
 
   const [startMonitoring] = useStartMonitoringMutation();
@@ -211,7 +169,7 @@ const DataEntryForm = () => {
         ></div>
       </div>
       <div className="progress-steps">
-        {['Material', 'Molde', 'Energía', 'Inyección', 'Configuración'].map((stepName, index) => (
+        {['Material', 'Molde', 'Energía', 'Estimación', 'Configuración'].map((stepName, index) => (
           <div 
             key={index} 
             className={`progress-step ${step > index + 1 ? 'completed' : step === index + 1 ? 'active' : ''}`}
@@ -356,19 +314,6 @@ const DataEntryForm = () => {
                     ></div>
                   </div>
                 </div>
-                <div className="input-group">
-                  <label className="input-label">Energía Restante (%)</label>
-                  <input
-                    type="number"
-                    name="potentiometerEnergy.remaining"
-                    value={formData.potentiometerEnergy.remaining}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="100"
-                    required
-                  />
-                </div>
               </div>
               
               <div className="form-section">
@@ -394,19 +339,6 @@ const DataEntryForm = () => {
                     ></div>
                   </div>
                 </div>
-                <div className="input-group">
-                  <label className="input-label">Energía Restante (%)</label>
-                  <input
-                    type="number"
-                    name="injectorEnergy.remaining"
-                    value={formData.injectorEnergy.remaining}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="100"
-                    required
-                  />
-                </div>
               </div>
             </div>
             <div className="form-actions">
@@ -423,168 +355,33 @@ const DataEntryForm = () => {
     );
   }
 
-  // Paso 4: Parámetros de inyección
+  // Paso 4: Estimación de tiempo para monitorear
   if (step === 4) {
     return (
       <div className="form-container">
         {renderProgressBar()}
         <div className="step-content">
           <div className="step-header">
-            <h2>💉 Parámetros de Inyección</h2>
-            <p>Configura los parámetros del proceso de inyección</p>
+            <h2>⏳ Estimación de Tiempo para Monitorear</h2>
+            <p>Ingresa cuántos minutos crees que tardarás en el monitoreo</p>
           </div>
-          <form onSubmit={(e) => { e.preventDefault(); setStep(5); }} className="injection-form">
+          <form onSubmit={handleSubmit} className="time-estimation-form">
             <div className="form-grid">
-              <div className="form-section">
-                <h3 className="section-title">
-                  <span className="section-icon">⏱️</span> Tiempos
-                </h3>
-                <div className="input-group">
-                  <label className="input-label">Tiempo de Mantenimiento (s)</label>
-                  <input
-                    type="number"
-                    name="holdingTime"
-                    value={formData.holdingTime}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    step="0.1"
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Tiempo de Enfriamiento (s)</label>
-                  <input
-                    type="number"
-                    name="coolingTime"
-                    value={formData.coolingTime}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    step="0.1"
-                  />
-                </div>
-              </div>
-              
-              <div className="form-section">
-                <h3 className="section-title">
-                  <span className="section-icon">📊</span> Presiones y Velocidad
-                </h3>
-                <div className="input-group">
-                  <label className="input-label">Presión de Inyección (bar)</label>
-                  <input
-                    type="number"
-                    name="injectionPressure"
-                    value={formData.injectionPressure}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="2000"
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Presión de Mantenimiento (bar)</label>
-                  <input
-                    type="number"
-                    name="holdingPressure"
-                    value={formData.holdingPressure}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="2000"
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Velocidad de Inyección (mm/s)</label>
-                  <input
-                    type="number"
-                    name="injectionSpeed"
-                    value={formData.injectionSpeed}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="500"
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Temperatura de Enfriamiento (°C)</label>
-                  <input
-                    type="number"
-                    name="coolingTemperature"
-                    value={formData.coolingTemperature}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    min="0"
-                    max="100"
-                  />
-                </div>
+              <div className="input-group">
+                <label className="input-label">Estimación de tiempo (minutos)</label>
+                <input
+                  type="number"
+                  name="monitoringDuration"
+                  value={formData.monitoringDuration || ''}
+                  onChange={handleInputChange}
+                  className="input-field"
+                  min="1"
+                  required
+                />
               </div>
             </div>
             <div className="form-actions">
               <button type="button" onClick={() => setStep(3)} className="btn-secondary">
-                ← Anterior
-              </button>
-              <button type="submit" className="btn-primary">
-                Siguiente →
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
-  // Paso 5: Configuración final (agregar campos avanzados)
-  if (step === 5) {
-    return (
-      <div className="form-container">
-        {renderProgressBar()}
-        <div className="step-content">
-          <div className="step-header">
-            <h2>⚙️ Configuración Final</h2>
-            <p>Completa los datos avanzados para el análisis profesional</p>
-          </div>
-          <form onSubmit={handleSubmit} className="final-form">
-            <div className="form-grid">
-              {/* Campos avanzados */}
-              <div className="input-group">
-                <label className="input-label">Material Usado (kg)</label>
-                <input type="number" name="materialUsado" value={formData.materialUsado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
-              </div>
-              <div className="input-group">
-                <label className="input-label">Material Desperdiciado (kg)</label>
-                <input type="number" name="materialDesperdiciado" value={formData.materialDesperdiciado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
-              </div>
-              <div className="input-group">
-                <label className="input-label">Costo Material Usado (MXN)</label>
-                <input type="number" name="costoMaterialUsado" value={formData.costoMaterialUsado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
-              </div>
-              <div className="input-group">
-                <label className="input-label">Costo Material Desperdiciado (MXN)</label>
-                <input type="number" name="costoMaterialDesperdiciado" value={formData.costoMaterialDesperdiciado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
-              </div>
-              <div className="input-group">
-                <label className="input-label">Tiempo de Enfriamiento (s)</label>
-                <input type="number" name="tiempoEnfriamiento" value={formData.tiempoEnfriamiento} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
-              </div>
-              <div className="input-group">
-                <label className="input-label">Tiempo de Operación Efectiva (min)</label>
-                <input type="number" name="tiempoOperacionEfectiva" value={formData.tiempoOperacionEfectiva} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
-              </div>
-              <div className="input-group">
-                <label className="input-label">Número de Alertas de Temperatura</label>
-                <input type="number" name="numeroAlertasTemperatura" value={formData.numeroAlertasTemperatura} onChange={handleInputChange} className="input-field" min="0" step="1" required />
-              </div>
-              <div className="input-group">
-                <label className="input-label">Tiempo de Respuesta ante Alertas (s)</label>
-                <input type="number" name="tiempoRespuestaAlertas" value={formData.tiempoRespuestaAlertas} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
-              </div>
-              <div className="input-group">
-                <label className="input-label">Costo Total por Pieza (MXN)</label>
-                <input type="number" name="costoTotalPorPieza" value={formData.costoTotalPorPieza} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
-              </div>
-            </div>
-            <div className="form-actions">
-              <button type="button" onClick={() => setStep(4)} className="btn-secondary">
                 ← Anterior
               </button>
               <button type="submit" className="btn-primary">

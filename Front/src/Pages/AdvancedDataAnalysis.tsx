@@ -307,7 +307,7 @@ const AdvancedDataAnalysis: React.FC = () => {
           </Card>
         </Grid>
 
-        {/* KPIs Avanzados */}
+        {/* KPIs Avanzados: Solo Material Usado y Desperdiciado, sin costos ni alertas */}
         <Grid item xs={12} sm={6} md={3}>
           <Card className="kpi-card">
             <CardContent>
@@ -339,45 +339,6 @@ const AdvancedDataAnalysis: React.FC = () => {
             <CardContent>
               <Box display="flex" alignItems="center" justifyContent="space-between">
                 <Box>
-                  <Typography variant="h6" color="textSecondary">Costo Material Usado</Typography>
-                  <Typography variant="h4" className="kpi-value">${stats.totalCostoMaterialUsado.toFixed(2)}</Typography>
-                </Box>
-                <AttachMoney className="kpi-icon" />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className="kpi-card">
-            <CardContent>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Box>
-                  <Typography variant="h6" color="textSecondary">Costo Desperdicio</Typography>
-                  <Typography variant="h4" className="kpi-value">${stats.totalCostoMaterialDesperdiciado.toFixed(2)}</Typography>
-                </Box>
-                <TrendingDown className="kpi-icon" />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className="kpi-card">
-            <CardContent>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Box>
-                  <Typography variant="h6" color="textSecondary">Costo Prom. por Pieza</Typography>
-                  <Typography variant="h4" className="kpi-value">${stats.avgCostoTotalPorPieza.toFixed(2)}</Typography>
-                </Box>
-                <AttachMoney className="kpi-icon" />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className="kpi-card">
-            <CardContent>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Box>
                   <Typography variant="h6" color="textSecondary">Tiempo Enfriamiento Prom.</Typography>
                   <Typography variant="h4" className="kpi-value">{stats.avgTiempoEnfriamiento.toFixed(1)} s</Typography>
                 </Box>
@@ -395,32 +356,6 @@ const AdvancedDataAnalysis: React.FC = () => {
                   <Typography variant="h4" className="kpi-value">{stats.avgTiempoOperacionEfectiva.toFixed(1)} min</Typography>
                 </Box>
                 <Speed className="kpi-icon" />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className="kpi-card">
-            <CardContent>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Box>
-                  <Typography variant="h6" color="textSecondary">Alertas Temperatura</Typography>
-                  <Typography variant="h4" className="kpi-value">{stats.totalAlertasTemperatura}</Typography>
-                </Box>
-                <Info className="kpi-icon" />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className="kpi-card">
-            <CardContent>
-              <Box display="flex" alignItems="center" justifyContent="space-between">
-                <Box>
-                  <Typography variant="h6" color="textSecondary">Tiempo Resp. Alertas</Typography>
-                  <Typography variant="h4" className="kpi-value">{stats.avgTiempoRespuestaAlertas.toFixed(1)} s</Typography>
-                </Box>
-                <Info className="kpi-icon" />
               </Box>
             </CardContent>
           </Card>
@@ -606,10 +541,7 @@ const AdvancedDataAnalysis: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-      </Grid>
 
-      {/* Gráficos avanzados de campos nuevos */}
-      <Grid container spacing={3} className="charts-grid">
         {/* Gráfico de barras: Material usado vs desperdiciado */}
         <Grid item xs={12} md={6}>
           <Card className="chart-card">
@@ -633,29 +565,6 @@ const AdvancedDataAnalysis: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        {/* Gráfico de líneas: Costos */}
-        <Grid item xs={12} md={6}>
-          <Card className="chart-card">
-            <CardContent>
-              <Typography variant="h6" gutterBottom>Costos de Material</Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={[
-                  { name: 'Usado', costo: stats.totalCostoMaterialUsado },
-                  { name: 'Desperdiciado', costo: stats.totalCostoMaterialDesperdiciado }
-                ]}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
-                  <XAxis dataKey="name" stroke="#c7d2fe" />
-                  <YAxis stroke="#c7d2fe" />
-                  <RechartsTooltip />
-                  <Line type="monotone" dataKey="costo" stroke="#6366f1" strokeWidth={2} />
-                </LineChart>
-              </ResponsiveContainer>
-              <Alert severity="info" sx={{ mt: 2 }}>
-                <strong>Conclusión:</strong> El costo de desperdicio representa {(stats.totalCostoMaterialDesperdiciado / stats.totalCostoMaterialUsado * 100).toFixed(1)}% del costo total de material usado.
-              </Alert>
-            </CardContent>
-          </Card>
-        </Grid>
         {/* Gráfico de líneas: Tiempos */}
         <Grid item xs={12} md={6}>
           <Card className="chart-card">
@@ -664,8 +573,7 @@ const AdvancedDataAnalysis: React.FC = () => {
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={[
                   { name: 'Enfriamiento', tiempo: stats.avgTiempoEnfriamiento },
-                  { name: 'Operación Efectiva', tiempo: stats.avgTiempoOperacionEfectiva },
-                  { name: 'Respuesta Alertas', tiempo: stats.avgTiempoRespuestaAlertas }
+                  { name: 'Operación Efectiva', tiempo: stats.avgTiempoOperacionEfectiva }
                 ]}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
                   <XAxis dataKey="name" stroke="#c7d2fe" />
@@ -676,28 +584,6 @@ const AdvancedDataAnalysis: React.FC = () => {
               </ResponsiveContainer>
               <Alert severity="info" sx={{ mt: 2 }}>
                 <strong>Conclusión:</strong> El tiempo de operación efectiva es clave para la eficiencia global.
-              </Alert>
-            </CardContent>
-          </Card>
-        </Grid>
-        {/* Gráfico de barras: Alertas */}
-        <Grid item xs={12} md={6}>
-          <Card className="chart-card">
-            <CardContent>
-              <Typography variant="h6" gutterBottom>Alertas de Temperatura</Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={[
-                  { name: 'Alertas', cantidad: stats.totalAlertasTemperatura }
-                ]}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
-                  <XAxis dataKey="name" stroke="#c7d2fe" />
-                  <YAxis stroke="#c7d2fe" />
-                  <RechartsTooltip />
-                  <Bar dataKey="cantidad" fill="#f472b6" />
-                </BarChart>
-              </ResponsiveContainer>
-              <Alert severity="info" sx={{ mt: 2 }}>
-                <strong>Conclusión:</strong> Se recomienda minimizar el número de alertas para evitar paros de línea.
               </Alert>
             </CardContent>
           </Card>

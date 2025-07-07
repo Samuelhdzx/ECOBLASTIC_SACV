@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
-import AssessmentIcon from '@mui/icons-material/Assessment';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import AdminNavbar from '@/scenes/navbar/AdminNavbar';
 import './AdminDashboard.css';
@@ -57,12 +56,6 @@ const AdminDashboard: React.FC = () => {
                 <SettingsIcon sx={{ fontSize: 50 }} />
                 <h3>Configuración del Sistema</h3>
                 <p>Gestión y control de parámetros</p>
-              </Link>
-
-              <Link to="/reports" className="admin-feature-card">
-                <AssessmentIcon sx={{ fontSize: 50 }} />
-                <h3>Reportes y Análisis</h3>
-                <p>Estadísticas y métricas del sistema</p>
               </Link>
 
               <Link to="/advanced-analysis" className="admin-feature-card">
