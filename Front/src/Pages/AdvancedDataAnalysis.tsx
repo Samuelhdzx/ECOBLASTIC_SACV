@@ -26,6 +26,9 @@ import {
 } from '@mui/icons-material';
 import { useGetAllSensorDataForAnalysisQuery } from '@/state/api';
 import './AdvancedDataAnalysis.css';
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
+} from 'recharts';
 
 const AdvancedDataAnalysis: React.FC = () => {
   console.log('AdvancedDataAnalysis component rendering...');
@@ -179,6 +182,9 @@ const AdvancedDataAnalysis: React.FC = () => {
 
   console.log('Rendering main component with stats:', stats);
 
+  // Paleta de colores
+  const COLORS = ['#a78bfa', '#6366f1', '#7c3aed', '#312e81', '#818cf8', '#c7d2fe', '#f472b6', '#facc15'];
+
   return (
     <Box className="advanced-analysis-container">
       {/* Header */}
@@ -266,81 +272,182 @@ const AdvancedDataAnalysis: React.FC = () => {
         </Grid>
       </Grid>
 
-      {/* Gráficos Simplificados */}
+      {/* Gráficos Profesionales */}
       <Grid container spacing={3} className="charts-grid">
-        {/* Gráfico de Materiales */}
+        {/* 1. Barras apiladas: Defectos vs Buenas por Operador */}
         <Grid item xs={12} md={6}>
           <Card className="chart-card">
             <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6">Distribución de Materiales</Typography>
-                <Tooltip title="Ver conclusiones">
-                  <IconButton 
-                    onClick={() => toggleConclusion('materials')}
-                    className="conclusion-button"
-                    size="small"
-                  >
-                    <Info />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-              
-              <Box p={3} textAlign="center">
-                <Typography variant="h4" color="primary" gutterBottom>
-                  PET: {stats.petUsage} | PP: {stats.polypropyleneUsage}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Total de piezas analizadas
-                </Typography>
-              </Box>
-
-              {showConclusions.materials && (
-                <Alert severity="info" sx={{ mt: 2 }}>
-                  <strong>Análisis de Materiales:</strong> PET representa el {(stats.petUsage / stats.totalPieces * 100).toFixed(1)}% del uso total, 
-                  mientras que Polipropileno representa el {(stats.polypropyleneUsage / stats.totalPieces * 100).toFixed(1)}%. 
-                  Esto sugiere una preferencia por PET en la producción actual.
-                </Alert>
-              )}
+              <Typography variant="h6" gutterBottom>Producción y Defectos por Operador</Typography>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={Object.entries(stats.operatorStats).map(([name, d]: [string, any]) => ({
+                  name,
+                  Buenas: d.total - d.defective,
+                  Defectuosas: d.defective
+                }))}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
+                  <XAxis dataKey="name" stroke="#c7d2fe" />
+                  <YAxis stroke="#c7d2fe" />
+                  <RechartsTooltip />
+                  <Legend />
+                  <Bar dataKey="Buenas" stackId="a" fill="#6366f1" />
+                  <Bar dataKey="Defectuosas" stackId="a" fill="#f472b6" />
+                </BarChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> El operador con mayor eficiencia es {Object.entries(stats.operatorStats).reduce((best, [name, d]: [string, any]) => d.efficiency > best.efficiency ? { name, efficiency: d.efficiency } : best, { name: '', efficiency: 0 }).name}.
+              </Alert>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Gráfico de Calidad */}
+        {/* 2. Barras apiladas: Defectos vs Buenas por Molde */}
         <Grid item xs={12} md={6}>
           <Card className="chart-card">
             <CardContent>
-              <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6">Distribución de Calidad</Typography>
-                <Tooltip title="Ver conclusiones">
-                  <IconButton 
-                    onClick={() => toggleConclusion('quality')}
-                    className="conclusion-button"
-                    size="small"
-                  >
-                    <Info />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-              
-              <Box p={3} textAlign="center">
-                <Typography variant="h4" color="primary" gutterBottom>
-                  Excelente: {stats.totalExcellent} | Bueno: {stats.totalGood}
-                </Typography>
-                <Typography variant="h6" color="error" gutterBottom>
-                  Defectuoso: {stats.totalDefective}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Distribución de calidad
-                </Typography>
-              </Box>
+              <Typography variant="h6" gutterBottom>Producción y Defectos por Molde</Typography>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={[
+                  { name: 'Molde 1', Buenas: stats.mold1Usage - (stats.totalDefective/3), Defectuosas: stats.totalDefective/3 },
+                  { name: 'Molde 2', Buenas: stats.mold2Usage - (stats.totalDefective/3), Defectuosas: stats.totalDefective/3 },
+                  { name: 'Molde 3', Buenas: stats.mold3Usage - (stats.totalDefective/3), Defectuosas: stats.totalDefective/3 }
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
+                  <XAxis dataKey="name" stroke="#c7d2fe" />
+                  <YAxis stroke="#c7d2fe" />
+                  <RechartsTooltip />
+                  <Legend />
+                  <Bar dataKey="Buenas" stackId="a" fill="#7c3aed" />
+                  <Bar dataKey="Defectuosas" stackId="a" fill="#f472b6" />
+                </BarChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> El molde más utilizado es {['Molde 1', 'Molde 2', 'Molde 3'][[stats.mold1Usage, stats.mold2Usage, stats.mold3Usage].indexOf(Math.max(stats.mold1Usage, stats.mold2Usage, stats.mold3Usage))]}.
+              </Alert>
+            </CardContent>
+          </Card>
+        </Grid>
 
-              {showConclusions.quality && (
-                <Alert severity="info" sx={{ mt: 2 }}>
-                  <strong>Análisis de Calidad:</strong> La tasa de defectos es del {stats.defectRate.toFixed(1)}%, 
-                  con un {(stats.totalExcellent / stats.totalPieces * 100).toFixed(1)}% de piezas excelentes. 
-                  La calidad general es {(stats.qualityRate).toFixed(1)}%.
-                </Alert>
-              )}
+        {/* 3. Líneas múltiples: Tendencia de Temperatura y Energía */}
+        <Grid item xs={12} md={6}>
+          <Card className="chart-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>Tendencia de Temperatura y Energía</Typography>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={stats.tempVariations}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
+                  <XAxis dataKey="date" stroke="#c7d2fe" />
+                  <YAxis stroke="#c7d2fe" />
+                  <RechartsTooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="temperature" stroke="#a78bfa" strokeWidth={2} name="Temperatura" />
+                </LineChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> La temperatura promedio es de {stats.avgTemperature.toFixed(1)}°C.
+              </Alert>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* 4. Radar: Eficiencia de Operadores */}
+        <Grid item xs={12} md={6}>
+          <Card className="chart-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>Eficiencia de Operadores</Typography>
+              <ResponsiveContainer width="100%" height={300}>
+                <RadarChart data={Object.entries(stats.operatorStats).map(([name, d]: [string, any]) => ({ name, Eficiencia: d.efficiency }))}>
+                  <PolarGrid stroke="#312e81" />
+                  <PolarAngleAxis dataKey="name" stroke="#c7d2fe" />
+                  <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="#c7d2fe" />
+                  <Radar name="Eficiencia" dataKey="Eficiencia" stroke="#6366f1" fill="#6366f1" fillOpacity={0.6} />
+                  <Legend />
+                </RadarChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> El operador más eficiente es {Object.entries(stats.operatorStats).reduce((best, [name, d]: [string, any]) => d.efficiency > best.efficiency ? { name, efficiency: d.efficiency } : best, { name: '', efficiency: 0 }).name}.
+              </Alert>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* 5. Pie/Donut: Distribución de Materiales */}
+        <Grid item xs={12} md={4}>
+          <Card className="chart-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>Distribución de Materiales</Typography>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie data={[
+                    { name: 'PET', value: stats.petUsage },
+                    { name: 'Polipropileno', value: stats.polypropyleneUsage }
+                  ]} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#a78bfa" label>
+                    <Cell key="PET" fill="#a78bfa" />
+                    <Cell key="PP" fill="#6366f1" />
+                  </Pie>
+                  <RechartsTooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> PET representa el {(stats.petUsage / stats.totalPieces * 100).toFixed(1)}% del uso total.
+              </Alert>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* 6. Pie/Donut: Distribución de Calidad */}
+        <Grid item xs={12} md={4}>
+          <Card className="chart-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>Distribución de Calidad</Typography>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie data={[
+                    { name: 'Excelente', value: stats.totalExcellent },
+                    { name: 'Bueno', value: stats.totalGood },
+                    { name: 'Regular', value: stats.totalRegular },
+                    { name: 'Defectuoso', value: stats.totalDefective }
+                  ]} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                    <Cell key="Excelente" fill="#6366f1" />
+                    <Cell key="Bueno" fill="#a78bfa" />
+                    <Cell key="Regular" fill="#818cf8" />
+                    <Cell key="Defectuoso" fill="#f472b6" />
+                  </Pie>
+                  <RechartsTooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> La calidad excelente representa el {(stats.totalExcellent / stats.totalPieces * 100).toFixed(1)}% del total.
+              </Alert>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* 7. Pie/Donut: Distribución de Moldes */}
+        <Grid item xs={12} md={4}>
+          <Card className="chart-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>Distribución de Moldes</Typography>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie data={[
+                    { name: 'Molde 1', value: stats.mold1Usage },
+                    { name: 'Molde 2', value: stats.mold2Usage },
+                    { name: 'Molde 3', value: stats.mold3Usage }
+                  ]} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                    <Cell key="Molde 1" fill="#7c3aed" />
+                    <Cell key="Molde 2" fill="#6366f1" />
+                    <Cell key="Molde 3" fill="#a78bfa" />
+                  </Pie>
+                  <RechartsTooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> El molde más utilizado es {['Molde 1', 'Molde 2', 'Molde 3'][[stats.mold1Usage, stats.mold2Usage, stats.mold3Usage].indexOf(Math.max(stats.mold1Usage, stats.mold2Usage, stats.mold3Usage))]}.
+              </Alert>
             </CardContent>
           </Card>
         </Grid>
