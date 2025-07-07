@@ -45,6 +45,17 @@ const generateTestData = () => {
     // Tiempo de ciclo entre 45-90 segundos
     const cycleTime = 45 + Math.random() * 45;
     
+    // Datos avanzados para KPIs
+    const materialUsado = Number((0.05 + Math.random() * 0.2).toFixed(2)); // 0.05-0.25 kg
+    const materialDesperdiciado = Number((materialUsado * (qualityStatus === 'defectuoso' ? 0.2 + Math.random() * 0.3 : 0.05 + Math.random() * 0.1)).toFixed(2));
+    const costoMaterialUsado = Number((materialUsado * 25 + Math.random() * 10).toFixed(2)); // $25/kg
+    const costoMaterialDesperdiciado = Number((materialDesperdiciado * 25 + Math.random() * 5).toFixed(2));
+    const tiempoEnfriamiento = Math.floor(20 + Math.random() * 40); // 20-60 s
+    const tiempoOperacionEfectiva = Math.floor(15 + Math.random() * 10); // 15-25 min
+    const numeroAlertasTemperatura = qualityStatus === 'defectuoso' ? Math.floor(1 + Math.random() * 3) : Math.floor(Math.random() * 2);
+    const tiempoRespuestaAlertas = Number((5 + Math.random() * 15).toFixed(2)); // 5-20 s
+    const costoTotalPorPieza = Number(((costoMaterialUsado + costoMaterialDesperdiciado) / (1 + Math.random() * 2)).toFixed(2));
+    
     const data = {
       polymerUsage: {
         pet: isPET ? 1 : 0,
@@ -95,7 +106,16 @@ const generateTestData = () => {
       monitoringEndTime: date,
       monitoringDuration: monitoringDuration,
       temperature: temperature,
-      user: "674347b376448614a6680e7a"
+      user: "674347b376448614a6680e7a",
+      materialUsado,
+      materialDesperdiciado,
+      costoMaterialUsado,
+      costoMaterialDesperdiciado,
+      tiempoEnfriamiento,
+      tiempoOperacionEfectiva,
+      numeroAlertasTemperatura,
+      tiempoRespuestaAlertas,
+      costoTotalPorPieza
     };
     
     testData.push(data);

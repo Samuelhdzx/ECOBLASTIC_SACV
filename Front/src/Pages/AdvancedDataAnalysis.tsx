@@ -29,6 +29,7 @@ import './AdvancedDataAnalysis.css';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, LineChart, Line, PieChart, Pie, Cell, ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis
 } from 'recharts';
+import ReportExamplesModal from '../components/ReportExamplesModal';
 
 const AdvancedDataAnalysis: React.FC = () => {
   console.log('AdvancedDataAnalysis component rendering...');
@@ -36,6 +37,7 @@ const AdvancedDataAnalysis: React.FC = () => {
   const { data: sensorData, isLoading, error } = useGetAllSensorDataForAnalysisQuery();
   const [selectedTimeframe, setSelectedTimeframe] = useState('all');
   const [showConclusions, setShowConclusions] = useState<{[key: string]: boolean}>({});
+  const [showReportExamples, setShowReportExamples] = useState(false);
 
   console.log('Sensor data:', sensorData);
   console.log('Loading:', isLoading);
@@ -117,6 +119,17 @@ const AdvancedDataAnalysis: React.FC = () => {
       const avgPotentiometerEnergy = data.reduce((sum: number, item: any) => sum + (item.potentiometerEnergy?.used || 0), 0) / data.length;
       const avgInjectorEnergy = data.reduce((sum: number, item: any) => sum + (item.injectorEnergy?.used || 0), 0) / data.length;
 
+      // 7. Análisis de campos avanzados
+      const totalMaterialUsado = data.reduce((sum: number, item: any) => sum + (item.materialUsado || 0), 0);
+      const totalMaterialDesperdiciado = data.reduce((sum: number, item: any) => sum + (item.materialDesperdiciado || 0), 0);
+      const totalCostoMaterialUsado = data.reduce((sum: number, item: any) => sum + (item.costoMaterialUsado || 0), 0);
+      const totalCostoMaterialDesperdiciado = data.reduce((sum: number, item: any) => sum + (item.costoMaterialDesperdiciado || 0), 0);
+      const avgTiempoEnfriamiento = data.reduce((sum: number, item: any) => sum + (item.tiempoEnfriamiento || 0), 0) / data.length;
+      const avgTiempoOperacionEfectiva = data.reduce((sum: number, item: any) => sum + (item.tiempoOperacionEfectiva || 0), 0) / data.length;
+      const totalAlertasTemperatura = data.reduce((sum: number, item: any) => sum + (item.numeroAlertasTemperatura || 0), 0);
+      const avgTiempoRespuestaAlertas = data.reduce((sum: number, item: any) => sum + (item.tiempoRespuestaAlertas || 0), 0) / data.length;
+      const avgCostoTotalPorPieza = data.reduce((sum: number, item: any) => sum + (item.costoTotalPorPieza || 0), 0) / data.length;
+
       const stats = {
         totalPieces,
         totalDefective,
@@ -135,6 +148,15 @@ const AdvancedDataAnalysis: React.FC = () => {
         tempVariations,
         avgPotentiometerEnergy,
         avgInjectorEnergy,
+        totalMaterialUsado,
+        totalMaterialDesperdiciado,
+        totalCostoMaterialUsado,
+        totalCostoMaterialDesperdiciado,
+        avgTiempoEnfriamiento,
+        avgTiempoOperacionEfectiva,
+        totalAlertasTemperatura,
+        avgTiempoRespuestaAlertas,
+        avgCostoTotalPorPieza,
         defectRate: (totalDefective / totalPieces) * 100,
         qualityRate: ((totalExcellent + totalGood) / totalPieces) * 100
       };
@@ -184,6 +206,20 @@ const AdvancedDataAnalysis: React.FC = () => {
 
   // Paleta de colores
   const COLORS = ['#a78bfa', '#6366f1', '#7c3aed', '#312e81', '#818cf8', '#c7d2fe', '#f472b6', '#facc15'];
+
+  // Funciones para exportar (puedes implementar la lógica real o dejar como placeholder)
+  const handleExportPDF = () => {
+    alert('Funcionalidad de exportación a PDF próximamente.');
+  };
+  const handleExportExcel = () => {
+    alert('Funcionalidad de exportación a Excel próximamente.');
+  };
+  const handleShowReportExamples = () => {
+    setShowReportExamples(true);
+  };
+  const handleCloseReportExamples = () => {
+    setShowReportExamples(false);
+  };
 
   return (
     <Box className="advanced-analysis-container">
@@ -266,6 +302,125 @@ const AdvancedDataAnalysis: React.FC = () => {
                   </Typography>
                 </Box>
                 <Thermostat className="kpi-icon" />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* KPIs Avanzados */}
+        <Grid item xs={12} sm={6} md={3}>
+          <Card className="kpi-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h6" color="textSecondary">Material Usado</Typography>
+                  <Typography variant="h4" className="kpi-value">{stats.totalMaterialUsado.toFixed(2)} kg</Typography>
+                </Box>
+                <Build className="kpi-icon" />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card className="kpi-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h6" color="textSecondary">Material Desperdiciado</Typography>
+                  <Typography variant="h4" className="kpi-value">{stats.totalMaterialDesperdiciado.toFixed(2)} kg</Typography>
+                </Box>
+                <TrendingDown className="kpi-icon" />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card className="kpi-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h6" color="textSecondary">Costo Material Usado</Typography>
+                  <Typography variant="h4" className="kpi-value">${stats.totalCostoMaterialUsado.toFixed(2)}</Typography>
+                </Box>
+                <AttachMoney className="kpi-icon" />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card className="kpi-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h6" color="textSecondary">Costo Desperdicio</Typography>
+                  <Typography variant="h4" className="kpi-value">${stats.totalCostoMaterialDesperdiciado.toFixed(2)}</Typography>
+                </Box>
+                <TrendingDown className="kpi-icon" />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card className="kpi-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h6" color="textSecondary">Costo Prom. por Pieza</Typography>
+                  <Typography variant="h4" className="kpi-value">${stats.avgCostoTotalPorPieza.toFixed(2)}</Typography>
+                </Box>
+                <AttachMoney className="kpi-icon" />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card className="kpi-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h6" color="textSecondary">Tiempo Enfriamiento Prom.</Typography>
+                  <Typography variant="h4" className="kpi-value">{stats.avgTiempoEnfriamiento.toFixed(1)} s</Typography>
+                </Box>
+                <Speed className="kpi-icon" />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card className="kpi-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h6" color="textSecondary">Tiempo Operación Efectiva</Typography>
+                  <Typography variant="h4" className="kpi-value">{stats.avgTiempoOperacionEfectiva.toFixed(1)} min</Typography>
+                </Box>
+                <Speed className="kpi-icon" />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card className="kpi-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h6" color="textSecondary">Alertas Temperatura</Typography>
+                  <Typography variant="h4" className="kpi-value">{stats.totalAlertasTemperatura}</Typography>
+                </Box>
+                <Info className="kpi-icon" />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card className="kpi-card">
+            <CardContent>
+              <Box display="flex" alignItems="center" justifyContent="space-between">
+                <Box>
+                  <Typography variant="h6" color="textSecondary">Tiempo Resp. Alertas</Typography>
+                  <Typography variant="h4" className="kpi-value">{stats.avgTiempoRespuestaAlertas.toFixed(1)} s</Typography>
+                </Box>
+                <Info className="kpi-icon" />
               </Box>
             </CardContent>
           </Card>
@@ -453,6 +608,102 @@ const AdvancedDataAnalysis: React.FC = () => {
         </Grid>
       </Grid>
 
+      {/* Gráficos avanzados de campos nuevos */}
+      <Grid container spacing={3} className="charts-grid">
+        {/* Gráfico de barras: Material usado vs desperdiciado */}
+        <Grid item xs={12} md={6}>
+          <Card className="chart-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>Material Usado vs Desperdiciado</Typography>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={[
+                  { name: 'Usado', kg: stats.totalMaterialUsado },
+                  { name: 'Desperdiciado', kg: stats.totalMaterialDesperdiciado }
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
+                  <XAxis dataKey="name" stroke="#c7d2fe" />
+                  <YAxis stroke="#c7d2fe" />
+                  <RechartsTooltip />
+                  <Bar dataKey="kg" fill="#a78bfa" />
+                </BarChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> El desperdicio representa {(stats.totalMaterialDesperdiciado / stats.totalMaterialUsado * 100).toFixed(1)}% del material usado.
+              </Alert>
+            </CardContent>
+          </Card>
+        </Grid>
+        {/* Gráfico de líneas: Costos */}
+        <Grid item xs={12} md={6}>
+          <Card className="chart-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>Costos de Material</Typography>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={[
+                  { name: 'Usado', costo: stats.totalCostoMaterialUsado },
+                  { name: 'Desperdiciado', costo: stats.totalCostoMaterialDesperdiciado }
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
+                  <XAxis dataKey="name" stroke="#c7d2fe" />
+                  <YAxis stroke="#c7d2fe" />
+                  <RechartsTooltip />
+                  <Line type="monotone" dataKey="costo" stroke="#6366f1" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> El costo de desperdicio representa {(stats.totalCostoMaterialDesperdiciado / stats.totalCostoMaterialUsado * 100).toFixed(1)}% del costo total de material usado.
+              </Alert>
+            </CardContent>
+          </Card>
+        </Grid>
+        {/* Gráfico de líneas: Tiempos */}
+        <Grid item xs={12} md={6}>
+          <Card className="chart-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>Tiempos Promedio</Typography>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={[
+                  { name: 'Enfriamiento', tiempo: stats.avgTiempoEnfriamiento },
+                  { name: 'Operación Efectiva', tiempo: stats.avgTiempoOperacionEfectiva },
+                  { name: 'Respuesta Alertas', tiempo: stats.avgTiempoRespuestaAlertas }
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
+                  <XAxis dataKey="name" stroke="#c7d2fe" />
+                  <YAxis stroke="#c7d2fe" />
+                  <RechartsTooltip />
+                  <Line type="monotone" dataKey="tiempo" stroke="#f472b6" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> El tiempo de operación efectiva es clave para la eficiencia global.
+              </Alert>
+            </CardContent>
+          </Card>
+        </Grid>
+        {/* Gráfico de barras: Alertas */}
+        <Grid item xs={12} md={6}>
+          <Card className="chart-card">
+            <CardContent>
+              <Typography variant="h6" gutterBottom>Alertas de Temperatura</Typography>
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={[
+                  { name: 'Alertas', cantidad: stats.totalAlertasTemperatura }
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#312e81" />
+                  <XAxis dataKey="name" stroke="#c7d2fe" />
+                  <YAxis stroke="#c7d2fe" />
+                  <RechartsTooltip />
+                  <Bar dataKey="cantidad" fill="#f472b6" />
+                </BarChart>
+              </ResponsiveContainer>
+              <Alert severity="info" sx={{ mt: 2 }}>
+                <strong>Conclusión:</strong> Se recomienda minimizar el número de alertas para evitar paros de línea.
+              </Alert>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
       {/* Resumen Ejecutivo */}
       <Card className="summary-card">
         <CardContent>
@@ -486,6 +737,19 @@ const AdvancedDataAnalysis: React.FC = () => {
           </Grid>
         </CardContent>
       </Card>
+
+      {/* Botones de exportación y ejemplos de reporte */}
+      <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
+        <button className="export-btn" onClick={handleExportPDF}>Exportar PDF</button>
+        <button className="export-btn" onClick={handleExportExcel}>Exportar Excel</button>
+        <button className="export-btn" onClick={handleShowReportExamples}>Ver Ejemplos de Reporte</button>
+        <a href="/diccionario_datos_ecoblastic.pdf" target="_blank" rel="noopener noreferrer" className="export-btn">Diccionario de Datos</a>
+      </Box>
+
+      {/* Modal de ejemplos de reporte */}
+      {showReportExamples && (
+        <ReportExamplesModal onClose={handleCloseReportExamples} />
+      )}
     </Box>
   );
 };

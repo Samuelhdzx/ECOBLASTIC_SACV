@@ -69,6 +69,17 @@ interface FormData {
   monitoringStartTime?: Date;
   monitoringEndTime?: Date;
   monitoringDuration?: number; // en segundos
+  
+  // --- NUEVOS CAMPOS AVANZADOS ---
+  materialUsado?: number;
+  materialDesperdiciado?: number;
+  costoMaterialUsado?: number;
+  costoMaterialDesperdiciado?: number;
+  tiempoEnfriamiento?: number;
+  tiempoOperacionEfectiva?: number;
+  numeroAlertasTemperatura?: number;
+  tiempoRespuestaAlertas?: number;
+  costoTotalPorPieza?: number;
 }
 
 const DataEntryForm = () => {
@@ -95,7 +106,16 @@ const DataEntryForm = () => {
     batchNumber: '',
     lotNumber: '',
     notes: '',
-    processStatus: 'en_proceso'
+    processStatus: 'en_proceso',
+    materialUsado: 0,
+    materialDesperdiciado: 0,
+    costoMaterialUsado: 0,
+    costoMaterialDesperdiciado: 0,
+    tiempoEnfriamiento: 0,
+    tiempoOperacionEfectiva: 0,
+    numeroAlertasTemperatura: 0,
+    tiempoRespuestaAlertas: 0,
+    costoTotalPorPieza: 0
   });
 
   const [startMonitoring] = useStartMonitoringMutation();
@@ -513,7 +533,7 @@ const DataEntryForm = () => {
     );
   }
 
-  // Paso 5: Configuración final e información del operador
+  // Paso 5: Configuración final (agregar campos avanzados)
   if (step === 5) {
     return (
       <div className="form-container">
@@ -521,88 +541,54 @@ const DataEntryForm = () => {
         <div className="step-content">
           <div className="step-header">
             <h2>⚙️ Configuración Final</h2>
-            <p>Completa la información del operador y configuración</p>
+            <p>Completa los datos avanzados para el análisis profesional</p>
           </div>
-          <form onSubmit={handleSubmit} className="final-config-form">
-            <div className="form-section">
-              <h3 className="section-title">
-                <span className="section-icon">👤</span> Información del Operador
-              </h3>
-              <div className="operator-grid">
-                <div className="input-group">
-                  <label className="input-label">Nombre del Operador</label>
-                  <input
-                    type="text"
-                    name="operatorName"
-                    value={formData.operatorName}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    placeholder="Ingresa tu nombre"
-                    required
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Turno</label>
-                  <select
-                    name="shift"
-                    value={formData.shift}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    required
-                  >
-                    <option value="mañana">Mañana</option>
-                    <option value="tarde">Tarde</option>
-                    <option value="noche">Noche</option>
-                  </select>
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Número de Lote</label>
-                  <input
-                    type="text"
-                    name="lotNumber"
-                    value={formData.lotNumber}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    placeholder="Ej: LOT-2024-001"
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-label">Número de Batch</label>
-                  <input
-                    type="text"
-                    name="batchNumber"
-                    value={formData.batchNumber}
-                    onChange={handleInputChange}
-                    className="input-field"
-                    placeholder="Ej: BATCH-001"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <div className="form-section">
-              <h3 className="section-title">
-                <span className="section-icon">📝</span> Notas Iniciales
-              </h3>
+          <form onSubmit={handleSubmit} className="final-form">
+            <div className="form-grid">
+              {/* Campos avanzados */}
               <div className="input-group">
-                <label className="input-label">Notas del Proceso</label>
-                <textarea
-                  name="notes"
-                  value={formData.notes}
-                  onChange={handleInputChange}
-                  className="textarea-field"
-                  rows={4}
-                  placeholder="Agrega cualquier observación importante sobre el proceso..."
-                />
+                <label className="input-label">Material Usado (kg)</label>
+                <input type="number" name="materialUsado" value={formData.materialUsado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Material Desperdiciado (kg)</label>
+                <input type="number" name="materialDesperdiciado" value={formData.materialDesperdiciado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Costo Material Usado (MXN)</label>
+                <input type="number" name="costoMaterialUsado" value={formData.costoMaterialUsado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Costo Material Desperdiciado (MXN)</label>
+                <input type="number" name="costoMaterialDesperdiciado" value={formData.costoMaterialDesperdiciado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Tiempo de Enfriamiento (s)</label>
+                <input type="number" name="tiempoEnfriamiento" value={formData.tiempoEnfriamiento} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Tiempo de Operación Efectiva (min)</label>
+                <input type="number" name="tiempoOperacionEfectiva" value={formData.tiempoOperacionEfectiva} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Número de Alertas de Temperatura</label>
+                <input type="number" name="numeroAlertasTemperatura" value={formData.numeroAlertasTemperatura} onChange={handleInputChange} className="input-field" min="0" step="1" required />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Tiempo de Respuesta ante Alertas (s)</label>
+                <input type="number" name="tiempoRespuestaAlertas" value={formData.tiempoRespuestaAlertas} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+              </div>
+              <div className="input-group">
+                <label className="input-label">Costo Total por Pieza (MXN)</label>
+                <input type="number" name="costoTotalPorPieza" value={formData.costoTotalPorPieza} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
               </div>
             </div>
-            
             <div className="form-actions">
               <button type="button" onClick={() => setStep(4)} className="btn-secondary">
                 ← Anterior
               </button>
               <button type="submit" className="btn-primary">
-                <span className="button-icon">🚀</span> Iniciar Monitoreo
+                Finalizar Monitoreo
               </button>
             </div>
           </form>

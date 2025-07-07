@@ -1,0 +1,167 @@
+# DICCIONARIO DE DATOS - SISTEMA ECOBLASTIC_DEF
+
+## 1. INFORMACIÓN GENERAL
+- **Sistema**: ECOBLASTIC_DEF - Monitoreo Industrial de Inyección de Plásticos
+- **Versión**: 1.0
+- **Fecha**: 2024
+- **Descripción**: Sistema de monitoreo en tiempo real para procesos de inyección de plásticos
+
+## 2. TABLA PRINCIPAL: data_sensors
+
+### 2.1 CAMPOS BÁSICOS DEL PROCESO
+
+| Campo | Tipo | Requerido | Descripción | Unidad/Rango |
+|-------|------|-----------|-------------|--------------|
+| polymerUsage.pet | Number | Sí | Uso de material PET | 0 o 1 |
+| polymerUsage.polypropylene | Number | Sí | Uso de material Polipropileno | 0 o 1 |
+| moldUsage.mold1 | Number | Sí | Uso del molde 1 | 0 o 1 |
+| moldUsage.mold2 | Number | Sí | Uso del molde 2 | 0 o 1 |
+| moldUsage.mold3 | Number | Sí | Uso del molde 3 | 0 o 1 |
+
+### 2.2 DATOS DE ENERGÍA
+
+| Campo | Tipo | Requerido | Descripción | Unidad/Rango |
+|-------|------|-----------|-------------|--------------|
+| potentiometerEnergy.used | Number | Sí | Energía usada del potenciómetro | 0-100% |
+| potentiometerEnergy.remaining | Number | Sí | Energía restante del potenciómetro | 0-100% |
+| injectorEnergy.used | Number | Sí | Energía usada del inyector | 0-100% |
+| injectorEnergy.remaining | Number | Sí | Energía restante del inyector | 0-100% |
+
+### 2.3 PARÁMETROS DE INYECCIÓN
+
+| Campo | Tipo | Requerido | Descripción | Unidad/Rango |
+|-------|------|-----------|-------------|--------------|
+| injectionPressure | Number | No | Presión de inyección | 0-2000 bar |
+| injectionSpeed | Number | No | Velocidad de inyección | 0-500 mm/s |
+| holdingPressure | Number | No | Presión de mantenimiento | 0-2000 bar |
+| holdingTime | Number | No | Tiempo de mantenimiento | 0-60 segundos |
+
+### 2.4 PARÁMETROS DE ENFRIAMIENTO
+
+| Campo | Tipo | Requerido | Descripción | Unidad/Rango |
+|-------|------|-----------|-------------|--------------|
+| coolingTime | Number | No | Tiempo de enfriamiento | 0-300 segundos |
+| coolingTemperature | Number | No | Temperatura de enfriamiento | 20-40°C |
+
+### 2.5 CONTROL DE CALIDAD
+
+| Campo | Tipo | Requerido | Descripción | Unidad/Rango |
+|-------|------|-----------|-------------|--------------|
+| cycleTime | Number | No | Tiempo total del ciclo | 0-600 segundos |
+| partWeight | Number | No | Peso de la pieza | 0-1000 gramos |
+| partDimensions.length | Number | No | Longitud de la pieza | 0-500 mm |
+| partDimensions.width | Number | No | Ancho de la pieza | 0-500 mm |
+| partDimensions.height | Number | No | Alto de la pieza | 0-500 mm |
+| qualityStatus | String | No | Estado de calidad | ['excelente', 'bueno', 'regular', 'defectuoso'] |
+| defects.warping | Boolean | No | Defecto de deformación | true/false |
+| defects.sinkMarks | Boolean | No | Defecto de hundimiento | true/false |
+| defects.flash | Boolean | No | Defecto de rebaba | true/false |
+| defects.shortShot | Boolean | No | Defecto de llenado incompleto | true/false |
+| defects.other | String | No | Otros defectos | Texto libre |
+
+### 2.6 INFORMACIÓN DEL OPERADOR
+
+| Campo | Tipo | Requerido | Descripción | Unidad/Rango |
+|-------|------|-----------|-------------|--------------|
+| operatorName | String | No | Nombre del operador | Texto libre |
+| shift | String | No | Turno de trabajo | ['mañana', 'tarde', 'noche'] |
+| batchNumber | String | No | Número de batch | Texto libre |
+| lotNumber | String | No | Número de lote | Texto libre |
+
+### 2.7 CAMPOS AVANZADOS (KPIs)
+
+| Campo | Tipo | Requerido | Descripción | Unidad/Rango |
+|-------|------|-----------|-------------|--------------|
+| materialUsado | Number | No | Material usado en el proceso | 0-1000 kg |
+| materialDesperdiciado | Number | No | Material desperdiciado | 0-1000 kg |
+| costoMaterialUsado | Number | No | Costo del material usado | 0-100000 MXN |
+| costoMaterialDesperdiciado | Number | No | Costo del material desperdiciado | 0-100000 MXN |
+| tiempoEnfriamiento | Number | No | Tiempo de enfriamiento | 0-300 segundos |
+| tiempoOperacionEfectiva | Number | No | Tiempo de operación efectiva | 0-480 minutos |
+| numeroAlertasTemperatura | Number | No | Número de alertas de temperatura | 0-100 |
+| tiempoRespuestaAlertas | Number | No | Tiempo de respuesta a alertas | 0-300 segundos |
+| costoTotalPorPieza | Number | No | Costo total por pieza | 0-1000 MXN |
+
+### 2.8 METADATOS Y CONTROL
+
+| Campo | Tipo | Requerido | Descripción | Unidad/Rango |
+|-------|------|-----------|-------------|--------------|
+| date | Date | Sí | Fecha y hora del registro | Automático |
+| user | ObjectId | No | ID del usuario | Referencia a User |
+| notes | String | No | Notas y observaciones | Texto libre |
+| processStatus | String | No | Estado del proceso | ['en_proceso', 'monitoreando', 'completado', 'pausado', 'cancelado'] |
+| monitoringStartTime | Date | No | Tiempo de inicio del monitoreo | Automático |
+| monitoringEndTime | Date | No | Tiempo de fin del monitoreo | Automático |
+| monitoringDuration | Number | No | Duración del monitoreo | 0-86400 segundos |
+| temperature | Number | No | Temperatura del sensor | 0-300°C |
+
+## 3. RELACIONES ENTRE TABLAS
+
+### 3.1 TABLA USERS
+- **Relación**: 1:N (Un usuario puede tener múltiples registros de sensores)
+- **Campo de enlace**: data_sensors.user → users._id
+
+## 4. ÍNDICES RECOMENDADOS
+
+- **Índice principal**: _id (automático)
+- **Índice de fecha**: date (para consultas por período)
+- **Índice de usuario**: user (para filtros por usuario)
+- **Índice de estado**: processStatus (para filtros por estado)
+- **Índice compuesto**: date + user (para consultas de usuario por fecha)
+
+## 5. VALIDACIONES Y RESTRICCIONES
+
+### 5.1 VALIDACIONES DE NEGOCIO
+- Al menos un material debe estar seleccionado (PET o Polipropileno)
+- Al menos un molde debe estar seleccionado
+- La suma de energías usadas y restantes debe ser 100%
+- Los tiempos no pueden ser negativos
+- Las temperaturas deben estar en rangos operativos
+
+### 5.2 INTEGRIDAD REFERENCIAL
+- El campo user debe existir en la tabla users si se proporciona
+- Los estados de calidad deben ser valores válidos del enum
+
+## 6. EJEMPLOS DE CONSULTAS
+
+### 6.1 CONSULTA DE PRODUCTIVIDAD
+```javascript
+db.data_sensors.aggregate([
+  { $match: { processStatus: "completado" } },
+  { $group: {
+    _id: "$operatorName",
+    totalPiezas: { $sum: 1 },
+    defectos: { $sum: { $cond: [{ $eq: ["$qualityStatus", "defectuoso"] }, 1, 0] } }
+  }}
+])
+```
+
+### 6.2 CONSULTA DE COSTOS
+```javascript
+db.data_sensors.aggregate([
+  { $match: { processStatus: "completado" } },
+  { $group: {
+    _id: null,
+    totalCostoUsado: { $sum: "$costoMaterialUsado" },
+    totalCostoDesperdiciado: { $sum: "$costoMaterialDesperdiciado" },
+    costoPromedioPorPieza: { $avg: "$costoTotalPorPieza" }
+  }}
+])
+```
+
+## 7. MANTENIMIENTO Y LIMPIEZA
+
+### 7.1 POLÍTICA DE RETENCIÓN
+- **Datos de producción**: 2 años
+- **Datos de calidad**: 5 años
+- **Logs de sistema**: 1 año
+
+### 7.2 BACKUP
+- **Frecuencia**: Diario
+- **Retención**: 30 días
+- **Ubicación**: Servidor secundario
+
+---
+
+**Documento generado automáticamente por el sistema ECOBLASTIC_DEF**
+**Versión**: 1.0 | **Fecha**: 2024 | **Autor**: Sistema Automático 

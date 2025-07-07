@@ -24,7 +24,16 @@ const QualityControl: React.FC<QualityControlProps> = ({ onComplete, onBack, mon
       shortShot: false,
       other: ''
     },
-    additionalNotes: ''
+    additionalNotes: '',
+    materialUsado: 0,
+    materialDesperdiciado: 0,
+    costoMaterialUsado: 0,
+    costoMaterialDesperdiciado: 0,
+    tiempoEnfriamiento: 0,
+    tiempoOperacionEfectiva: 0,
+    numeroAlertasTemperatura: 0,
+    tiempoRespuestaAlertas: 0,
+    costoTotalPorPieza: 0
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -221,6 +230,48 @@ const QualityControl: React.FC<QualityControlProps> = ({ onComplete, onBack, mon
                 />
               </div>
             </div>
+          </div>
+        </div>
+        
+        <div className="form-section">
+          <h3 className="section-title">
+            <span className="section-icon">📊</span> Datos Avanzados del Proceso
+          </h3>
+          <div className="input-group">
+            <label className="input-label">Material Usado (kg)</label>
+            <input type="number" name="materialUsado" value={qualityData.materialUsado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+          </div>
+          <div className="input-group">
+            <label className="input-label">Material Desperdiciado (kg)</label>
+            <input type="number" name="materialDesperdiciado" value={qualityData.materialDesperdiciado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+          </div>
+          <div className="input-group">
+            <label className="input-label">Costo Material Usado (MXN)</label>
+            <input type="number" name="costoMaterialUsado" value={qualityData.costoMaterialUsado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+          </div>
+          <div className="input-group">
+            <label className="input-label">Costo Material Desperdiciado (MXN)</label>
+            <input type="number" name="costoMaterialDesperdiciado" value={qualityData.costoMaterialDesperdiciado} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+          </div>
+          <div className="input-group">
+            <label className="input-label">Tiempo de Enfriamiento (s)</label>
+            <input type="number" name="tiempoEnfriamiento" value={qualityData.tiempoEnfriamiento} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+          </div>
+          <div className="input-group">
+            <label className="input-label">Tiempo de Operación Efectiva (min)</label>
+            <input type="number" name="tiempoOperacionEfectiva" value={qualityData.tiempoOperacionEfectiva} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+          </div>
+          <div className="input-group">
+            <label className="input-label">Número de Alertas de Temperatura</label>
+            <input type="number" name="numeroAlertasTemperatura" value={qualityData.numeroAlertasTemperatura} onChange={handleInputChange} className="input-field" min="0" step="1" required />
+          </div>
+          <div className="input-group">
+            <label className="input-label">Tiempo de Respuesta ante Alertas (s)</label>
+            <input type="number" name="tiempoRespuestaAlertas" value={qualityData.tiempoRespuestaAlertas} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
+          </div>
+          <div className="input-group">
+            <label className="input-label">Costo Total por Pieza (MXN)</label>
+            <input type="number" name="costoTotalPorPieza" value={qualityData.costoTotalPorPieza} onChange={handleInputChange} className="input-field" min="0" step="0.01" required />
           </div>
         </div>
         

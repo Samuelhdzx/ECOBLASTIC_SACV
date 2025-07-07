@@ -87,7 +87,18 @@ const data_sensorsSchema = mongoose.Schema({
     monitoringDuration: { type: Number, required: false }, // en segundos
     
     // Temperatura del sensor (viene automáticamente del sensor)
-    temperature: { type: Number, required: false }
+    temperature: { type: Number, required: false },
+    
+    // --- NUEVOS CAMPOS PARA KPIs AVANZADOS ---
+    materialUsado: { type: Number, required: false }, // kg
+    materialDesperdiciado: { type: Number, required: false }, // kg
+    costoMaterialUsado: { type: Number, required: false }, // MXN o USD
+    costoMaterialDesperdiciado: { type: Number, required: false }, // MXN o USD
+    tiempoEnfriamiento: { type: Number, required: false }, // segundos
+    tiempoOperacionEfectiva: { type: Number, required: false }, // minutos
+    numeroAlertasTemperatura: { type: Number, required: false },
+    tiempoRespuestaAlertas: { type: Number, required: false }, // segundos
+    costoTotalPorPieza: { type: Number, required: false }, // MXN o USD
 });
 
 export default mongoose.model('DataSensors', data_sensorsSchema)
