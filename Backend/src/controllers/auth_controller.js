@@ -72,6 +72,7 @@
                 email: userFound.email,
                 createdAt: userFound.createdAt,
                 updatedAt: userFound.updatedAt,
+                token
             });
         } catch (error) {
             res.status(500).json({ message: error.message });
