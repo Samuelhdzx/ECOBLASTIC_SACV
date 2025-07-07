@@ -28,6 +28,9 @@ const AdminLoginPage = () => {
       if (res.ok) {
         localStorage.setItem('admin', JSON.stringify(data));
         localStorage.setItem('isAdmin', 'true');
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
         navigate('/admin-dashboard');  // Nueva ruta para el panel administrativo
         window.location.reload();
       }
